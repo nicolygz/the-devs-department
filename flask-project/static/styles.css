@@ -2,16 +2,18 @@
     margin: 0;
     padding: 0;
     top: 0;
-
 }
+
 body {
     font-family: 'Ubuntu';
 }
+
 .navbar-ul-none{
     list-style-type:none;
     margin-right: 5rem;
     column-gap: 1rem;
 }
+
 .navbar-ul-none > li > a{
 
     text-decoration: none;
@@ -20,6 +22,7 @@ body {
     font-weight: bold;
     font-size: 20px;
 }
+
 .navbar{
 
     background-color: #2a4b91;
@@ -37,6 +40,7 @@ body {
     align-items: center;
 
 }
+
 .content{
     min-height: 80vh;
 }
