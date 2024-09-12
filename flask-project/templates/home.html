@@ -2,7 +2,16 @@
 
 {% block title %}Página Inicial{% endblock %}
 
-{% block content %}
-    <h1>Bem-vindo à Página Inicial</h1>
-    <p>Este é o conteúdo da página inicial.</p>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+<link rel="stylesheet" href="../static/home.css">
 {% endblock %}
+
+{% block content %}
+    <section class="intro">
+        <h1>Seja bem-vindo!</h1>
+        <p>O desafio é criar uma plataforma web que disponibilize informações sobre o desempenho dos vereadores da cidade durante o atual mandato. A plataforma visa oferecer aos eleitores dados claros e acessíveis para ajudar na tomada de decisões nas próximas eleições municipais. O desafio é criar uma plataforma web que disponibilize informações sobre o desempenho dos vereadores da cidade durante o atual mandato. A plataforma visa oferecer aos eleitores dados claros e acessíveis para ajudar na tomada de decisões nas próximas eleições municipais.</p>
+        <div class="button"><a href="#" class="btn">Comece por aqui</a></div>
+    </section>
+{% endblock %}
+
