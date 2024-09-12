@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 
+{% block extra_css%} 
+<link rel="stylesheet" href="{{ url_for('static', filename='pagProp.css') }}">
+<link rel="stylesheet" href="../static/pagProp.css">
+{% endblock %}
+
 {% block title %}Proposições{% endblock %}
 
 {% block content %}
     <main class="propositions">
         <h1>PROPOSIÇÃO N° 123/2024</h1>
+        <p>Tenha uma visão geral do desempenho dos vereadores, faltas no período e proposições apresentadas.</p>
         <section class="ProposicaoItem">
-            <h3>Autor</h3>
+            <h3>Autor:</h3>
             <section class="ProposicaoInfos">
-                <h3>Título da Proposição n°</h3>
-                <h3>Situação Atual:</h3>
-                <h3>Data:</h3>
+                <h3>Título da Proposição n° xxx/2024</h3>
+                <h3>Situação Atual: Aprovada</h3>
+                <h3>Data: dd/mm/aaaa</h3>
                 <section class="ProposicaoDesc">
                     <p>Descrição da Proposição</p>
                 </section>

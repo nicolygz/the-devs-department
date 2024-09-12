@@ -1,0 +1,8 @@
+.propositions{
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+  row-gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}

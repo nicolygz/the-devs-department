@@ -6,6 +6,7 @@
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="../static/styles.css">
+    {% block extra_css%} {% endblock %}
     <title>{% block title %}Meu App{% endblock %}</title>
 </head>
 <body>
@@ -14,7 +15,7 @@
         <nav class="navbar flex-container">
             <ul class="navbar-ul-none flex-container">
                 <li><a href="#">Home</a></li>
-                <li><a href="#">Proposições</a></li>
+                <li><a href="pagina-proposicao.html">Proposições</a></li>
                 <li><a href="#">Visão Geral</a></li>
                 <li><a href="#">Lista de Vereadores</a></li>
             </ul>
