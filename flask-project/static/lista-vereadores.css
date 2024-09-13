@@ -1,0 +1,128 @@
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0 100px;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    gap: 40px;
+}
+
+.card {
+    width: 225px;
+    min-width: 180px;
+    min-height: auto;
+    background-color: white;
+    border: 0.5px solid #D2D4D4;
+    border-radius: 18px;
+    display: grid;
+    grid-template-rows: 75% 15% 10%;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img img {
+    display: block;
+    border-radius: inherit;
+    width: 100%;
+    min-width: 100%;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-footer {
+    display: flex;
+    align-items: top;
+    justify-content: center;
+}
+
+.filtro-container {
+    display: flex;
+    gap: 10px;
+    text-align: center;
+    justify-content: space-around;
+    grid-template-columns: 80% 20%;
+}
+
+.search-container {
+    width: 500px;
+    border: 1px solid #D2D4D4;
+    border-radius: 18px;
+    padding: 10px 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    margin-left: 10px;
+    color: #999;
+    font-size: 18px;
+}
+
+.filter-icon {
+    margin-right: 10px;
+    color: #999;
+    font-size: 18px;
+}
+
+.search-input {
+    flex: 1; /* Faz o input ocupar o máximo de espaço disponível */
+    padding: 0px 8px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-input::placeholder {
+    color: #999;
+    font-size: 16px;
+}
+
+.content-flex {
+    padding-top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+}
+
+.custom-button {
+    cursor: pointer;
+    width: 9vw;
+    min-width: 120px;
+    padding: 10px 8px;
+    border: 0.5px solid #D2D4D4;
+    border-radius: 18px;
+    background-color: #FFA100;
+    color: #193D87;
+    font-family: 'Ubuntu';
+    font-weight: 900;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.resultados-encontrados {
+    display: flex;
+    justify-content: center;
+    color: #999;
+}
