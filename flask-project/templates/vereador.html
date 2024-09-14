@@ -5,13 +5,40 @@
 {% block extra_css %}
     <link rel="stylesheet" href="../static/lista-vereadores.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='vereador.css') }}">
+    
+
+    
 {% endblock %}
 
 {% block content %}
     <div class="bg">
         <div style="padding-top: 80px;">
-        <!-- AQUI DENTRO VAI TODO O CONTEUDO (la ele)  -->
+            <div class="container" id="box">       
+                <h1 class="item1"> Ver. Milton Vieira Filho </h1>
+                    <div>Imagem do Vereador</div>
+                    <div class="container">
+                        <div class="menu">
+                            <button onclick="showContent('resumo')">Resumo Político</button>
+                            <button onclick="showContent('proposicoes')">Proposições (92)</button>
+                        </div>
+                        <div id="resumo" class="content1">
+                            <h3>Resumo Político</h3>
+                            <p>resumo aqui</p>
+                        </div>
+                        <div id="proposicoes" class="content1" style="display: none;">
+                            <h3>Proposições</h3>
+                            <p>Aqui você pode listar as 92 proposições feitas pelo vereador.</p>
+                        </div>
+                    </div>
+                
+                    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+ 
+                
+                </div>
+            </div>
+               
         </div>
-    </div>
 
+
+    
 {% endblock %}
