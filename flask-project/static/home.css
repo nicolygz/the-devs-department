@@ -2,43 +2,74 @@
     background-color: #EEF3FF;
     margin: 0 auto;
 }
+section {
+    margin: auto;
+    width: 80%;
+    max-width: 1470px;
+}
 
 .intro {
     display: flex;
     flex-direction: column;
-    margin: 0 10%; 
+    padding-top: 10%;
 }
 
 .intro h1 {
     text-align: center;
     font-size: 72px;
-    margin-top: 10%;
 }
 
 .intro p {
     text-align: left;
-    font-size: 25px;
-    margin-top: 5%;
+    font-size: 24px;
+    margin-top: 10%;
 }
 
 .intro a {
     display: inline-block;
-    padding: 25px;
+    text-align: center;
     background-color: #2A4B91;
     color: white;
     text-decoration: none;
     border: none;
+    padding: 25px;
     border-radius: 50px;
     width: 250px;
     font-size: 20px;
-    text-align: center; 
 }
-
 
 .button { 
     display: block; 
     margin: 0 auto;
-    margin-top: 10%;
+    padding-top: 5%;
 }
 
+@media (max-width: 660px) {
+    .intro h1 {
+        font-size: 64px; 
+    }
 
+    .intro p {
+        font-size: 21px; 
+    }
+
+    .intro a {
+        width: 200px;  
+        
+    }
+}
+
+@media (max-width: 480px) {
+    .intro h1 {
+        font-size: 41px; 
+    }
+
+    .intro p {
+        font-size: 16px; 
+    }
+
+    .intro a {
+        width: 150px;
+        font-size: 18px;
+    }
+}
