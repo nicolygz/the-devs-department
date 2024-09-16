@@ -60,7 +60,6 @@
     gap: 10px;
     text-align: center;
     justify-content: space-around;
-    grid-template-columns: 80% 20%;
 }
 
 .search-container {
@@ -68,7 +67,6 @@
     border: 1px solid #D2D4D4;
     border-radius: 18px;
     padding: 10px 8px;
-    position: relative;
     display: flex;
     align-items: center;
 }
@@ -125,4 +123,17 @@
     display: flex;
     justify-content: center;
     color: #999;
+}
+
+/* PARA TELAS MENORES*/
+@media screen and (max-width: 800px) {
+    .search-container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 350px;
+    }
+
+    .filtro-container {
+        flex-wrap: wrap;
+    }
 }
