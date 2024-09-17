@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/pagina-proposicao.html')
+@app.route('/pagina-proposicao')
 def pagVer():
     return render_template('pagina-proposicao.html')
 
