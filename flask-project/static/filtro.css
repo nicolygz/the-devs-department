@@ -1,0 +1,70 @@
+.filtro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .filtro-digito {
+    border-radius: 20px;
+    border: 1px solid #e2e4e4;
+    color: #c4c6cc;
+    width: 1000px;
+    height: 30px;
+    padding-left: 10px;
+  }
+
+  .filtro-bf {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+  }
+  
+  .btn-buscar, .btn-filtrar, .btn-tipo, .btn-mocao {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+  }
+  
+  .btn-buscar {
+    background-color: #ffa100;
+    color: #000000;
+  }
+  
+  .btn-filtrar {
+    background-color: #ffffff;
+    color: #405e9d;
+    border: 1px solid #ccc;
+  }
+  
+  .btn-tipo {
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 146px;
+    height: 40px;
+    text-align: center;
+
+  }
+
+  .btn-mocao {
+    background-color: #2a4b91;
+    border: 1px solid #ccc;
+    color: #e7ebf2;
+    width: 146px;
+    height: 40px;
+    text-align: center;
+
+  }
+  
+  .filtro-data {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #21438c
+  }
+  
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
