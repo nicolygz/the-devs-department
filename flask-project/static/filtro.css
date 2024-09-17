@@ -8,11 +8,15 @@
   .filtro-digito {
     border-radius: 20px;
     border: 1px solid #e2e4e4;
-    color: #c4c6cc;
+    color: #000000;
     width: 80%;
     height: 30px;
     padding-left: 10px;
   }
+
+::placeholder {
+  color: #c4c6cc
+}
 
   .filtro-bf {
         display: flex;
@@ -20,6 +24,10 @@
         gap: 30px;
   }
   
+  input[type="date"] {
+    color: blue
+  }
+
   .btn-buscar, .btn-filtrar, .btn-tipo, .btn-mocao {
     padding: 10px 20px;
     border: none;
@@ -47,14 +55,8 @@
 
   }
 
-  .btn-mocao {
+  .btn-tipo:hover, .ativo {
     background-color: #2a4b91;
-    border: 1px solid #ccc;
-    color: #e7ebf2;
-    width: 146px;
-    height: 40px;
-    text-align: center;
-
   }
   
   .filtro-data {
