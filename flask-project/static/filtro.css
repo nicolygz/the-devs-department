@@ -41,7 +41,7 @@
   border: none;
   border-radius: 6.25rem;
   cursor: pointer;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: bold;
   box-shadow: 0.2rem 0.2rem 0.2rem gray;
 }
@@ -65,7 +65,7 @@
 }
 
 .lei {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .btn-tipo:hover, .ativo {
