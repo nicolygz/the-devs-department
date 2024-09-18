@@ -11,22 +11,26 @@
   width: 100%;
   row-gap: 2rem;
   margin-top: 3rem;
+  padding: 0;
 }
 
 .list-title{
   font-size: 3rem;
   color: #2a4b91;
+  text-align: center;
 }
 
 .pag-descricao{
   font-size: 1.2rem;
   align-self: center;
+  text-align: center;
 }
 
 .prop-infos{
   display: flex;
   flex-direction: column;
   row-gap: 1.5rem;
+  width: 65%;
 }
 
 .link-pagProp{
@@ -54,8 +58,19 @@
   font-size: 1rem;
 }
 
-.situation{
+.situation-aprovada{
   color: #FFA100;
+}
+
+.situation-negada{
+  color: #d82424;
+}
+
+.descricao{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: justify;
 }
 
 .btn-pags{

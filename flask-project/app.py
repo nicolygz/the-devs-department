@@ -10,9 +10,9 @@ def home():
 def pagVer():
     return render_template('pagina-proposicao.html')
 
-@app.route('/proposicoes.html')
+@app.route('/proposicoes')
 def listProp():
-    return render_template('proposicoes.html')
+    return render_template('filtro.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

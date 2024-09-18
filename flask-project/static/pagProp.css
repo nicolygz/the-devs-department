@@ -11,6 +11,7 @@
     width: 100%;
     row-gap: 3rem;
     margin-top: 3rem;
+    padding: 0;
   }
   
   .backAnc{
@@ -59,6 +60,7 @@
   .ProposicaoDesc{
     font-size: 1.1rem;
     align-self: center;
+    text-align: justify;
   }
   
   /*Responsividade*/
@@ -101,7 +103,7 @@
   
     .ProposicaoDesc{
       font-size: 0.9rem;
-      text-align: center;
+      text-align: justify;
   
     }
   
@@ -126,6 +128,6 @@
   
     .ProposicaoDesc{
       font-size: 1.2rem;
-      text-align: center;
+      text-align: justify;
     }
   }
