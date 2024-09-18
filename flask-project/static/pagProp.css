@@ -1,3 +1,8 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+
 .propositions{
     display: flex;
     flex-direction: column;
@@ -79,6 +84,10 @@
       text-align: center;
     }
   
+    .Author {
+      text-align: center;
+    }
+
     .ProposicaoInfos{
       flex-direction: column;
       justify-content: space-around;
@@ -119,41 +128,4 @@
       font-size: 1.2rem;
       text-align: center;
     }
-    
   }
-  
-  @media screen and (max-width:2560px) {
-  
-    .propositions{
-      row-gap: 5rem;
-      margin-top: 5rem;
-    }
-  
-    .backAnc{
-      font-size: 2.5rem;
-    }
-  
-    .PropTitle{
-      font-size: 5rem;
-    }
-  
-    .txtProp{
-      font-size: 2.5rem;
-    }
-  
-    .Author{
-      font-size: 3rem;
-    }
-  
-    .PropDetails{
-      font-size: 2.5rem;
-      column-gap: 1rem;
-    }
-  
-    .ProposicaoDesc{
-      font-size: 2.5rem;
-      text-align: center;
-    }
-    
-  }
-  
