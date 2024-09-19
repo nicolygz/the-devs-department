@@ -24,4 +24,5 @@ function showContent(contentType) {
 document.getElementById('resumo').classList.add('show');
 document.getElementById('resumo').style.display = 'block';
 
+const stars = document.querySelectorAll('.stars input');
 
