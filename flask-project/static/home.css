@@ -12,6 +12,7 @@ section {
     display: flex;
     flex-direction: column;
     padding-top: 5%;
+    gap: 15px;
 }
 
 .intro h1 {
@@ -55,6 +56,7 @@ section {
     .intro p {
         font-size: 21px;
         padding-top: 5%; 
+        text-align: justify;
     }
 
     .intro a {
