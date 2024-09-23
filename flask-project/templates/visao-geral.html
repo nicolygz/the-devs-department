@@ -1,14 +1,92 @@
 {% extends 'base.html' %}
 
 {% block title %}Visao Geral{% endblock %}
-
+{% block extra_css %}
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='geral.css') }}">
+    <link rel="stylesheet" href="../static/geral.css">
+    {% endblock %}
 {% block content %}
 
     <div class="bg-onda">
         <div style="padding-top: 80px;">
-            <!-- AQUI DENTRO VAI TODO O CONTEUDO (la ele)  -->
-            <h1>Bem-vindo à Visão Geral</h1>
-            <p>Este é o conteúdo do visão geral.</p>
+
+                <div class="chart-container">
+                    <h3>POPULARIDADE</h3>
+                    <canvas id="grafico1"></canvas>
+                </div>
+            
+                <div class="chart-container">
+                    <h3>QUANTIDADE DE PROPOSIÇÕES</h3>
+                    <canvas id="grafico2"></canvas>
+                </div>
+            
+            
+                <div class="chart-container">
+                    <h3>PREPOSIÇÕES</h3>
+                    <canvas id="grafico3"></canvas>
+                </div>
+            
+                <div class="chart-container">
+                    <h3>PARTICIPAÇÃO</h3>
+                    <canvas id="grafico4"></canvas>
+                </div>
+            
+                <script>
+                    const config = {
+                        type: 'bar',
+                        data: {
+                            labels: ['10', '30', '50', '75', '100', '130'],
+                            datasets: [{
+                                label: '',
+                                data: [5, 10, 8, 12, 6, 14], 
+                                backgroundColor: 'rgba(128, 128, 128, 0.8)',
+                                borderWidth: 1,
+                                borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        display: true
+                                    }
+                                },
+                                y: {
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        display: false
+                                    },
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    };
+            
+                    var ctx1 = document.getElementById('grafico1').getContext('2d');
+                    var grafico1 = new Chart(ctx1, config);
+            
+                    var ctx2 = document.getElementById('grafico2').getContext('2d');
+                    var grafico2 = new Chart(ctx2, config);
+            
+                    var ctx3 = document.getElementById('grafico3').getContext('2d');
+                    var grafico3 = new Chart(ctx3, config);
+            
+                    var ctx4 = document.getElementById('grafico4').getContext('2d');
+                    var grafico4 = new Chart(ctx4, config);
+                </script>
         </div>
     </div>
 
