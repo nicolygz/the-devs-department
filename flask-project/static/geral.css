@@ -22,3 +22,77 @@ h3 {
 canvas {
     background-color: #f0f0f0;
 }
+
+.filtro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    padding: 1.25rem;
+  }
+
+  .filtro-digito {
+    border-radius: 1.25rem;
+    border: 1px solid #e2e4e4;
+    color: #000000;
+    width: 80%;
+    height: 1.875rem;
+    padding-left: 0.625rem;
+  }
+
+::placeholder {
+  color: #c4c6cc
+}
+
+  .filtro-bf {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.875rem;
+  }
+  
+
+  .btn-buscar, .btn-filtrar, .btn-tipo {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 6.25rem;
+    cursor: pointer;
+  }
+  
+  .btn-buscar {
+    background-color: #ffa100;
+    color: #000000;
+  }
+  
+
+  .btn-tipo {
+    background-color: white;
+    color: #2a4b91;
+    border: 1px solid #ccc;
+    width: 9.125rem;
+    height: 2.5rem;
+    text-align: center;
+
+  }
+
+  .btn-tipo:hover, .ativo {
+    background-color: #2a4b91;
+    color: white;
+  }
+  
+  .filtro-data {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: #21438c
+  }
+
+  #data-inicio, #data-fim {
+    border: 1px solid #e2e4e4;
+    border-radius: 6.25rem;
+    height: 2rem;
+    width: 7.5rem;
+  }
+
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
