@@ -44,10 +44,8 @@ body {
 }
 
 footer{
-    position: relative;
     text-align: center;
     height: 5rem;
-    z-index: 1;
 }
 
 main {
@@ -68,10 +66,7 @@ main {
 }
 
 .bg-onda {
-    background-image: url(../static/imagens/bg-onda.jpg);
-    background-repeat: no-repeat;
     background-size: cover;
-    position: absolute; /* Para permitir a expansão */
     top: 0;
     left: 0;
     width: 100%;

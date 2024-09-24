@@ -4,19 +4,31 @@
     grid-template-columns: 5fr 5fr;
     gap: 20px;
     justify-items: center;
-    margin: 10px;
+    margin: 100px;
 }
 
 .chart-container {
-    width: 190px;
-    height: 270px;
+    width: 250px;
+    height: 300px;
     position: relative;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  font-size: 30px;
+  align-items: center;
+  padding: 16%;
 }
 
 h3 {
     text-align: center;
-    font-size: 10px;
+    font-size: 25px;
     font-weight: bold;
+    margin: 10px;
 }
 
 canvas {
@@ -95,4 +107,17 @@ canvas {
 .break {
     flex-basis: 100%;
     height: 0;
+}
+@media (max-width: 768px) {
+  .gallery img {
+      flex: 1 1 calc(50% - 20px);
+      max-width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery img {
+      flex: 1 1 100%;
+      max-width: 100%;
+  }
 }

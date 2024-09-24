@@ -37,29 +37,39 @@
             </article>
             <script src="{{ url_for('static', filename='js/filtro.js') }}"></script>
         
+       <section class="grid-container">
        
-       
+        <div class="grid-item">
             <div class="chart-container">
                 <h3>POPULARIDADE</h3>
                 <canvas id="grafico1"></canvas>
             </div>
+        </div>
         
+        <div class="grid-item">
             <div class="chart-container">
-                <h3>QUANTIDADE DE PROPOSIÇÕES</h3>
+                <h3>QUANTIDADE  DE PROPOSIÇÕES</h3>
                 <canvas id="grafico2"></canvas>
             </div>
+        </div>
         
-        
+        <div class="grid-item">
             <div class="chart-container">
                 <h3>PREPOSIÇÕES</h3>
                 <canvas id="grafico3"></canvas>
             </div>
-        
+        </div>
+
+        <div class="grid-item">
             <div class="chart-container">
                 <h3>PARTICIPAÇÃO</h3>
                 <canvas id="grafico4"></canvas>
             </div>
+        </div>
         
+
+       </section>
+
             <script>
                 const config = {
                     type: 'bar',
@@ -118,5 +128,5 @@
 
         </div>
     </div>
-
+    <br><br>
 {% endblock %}
