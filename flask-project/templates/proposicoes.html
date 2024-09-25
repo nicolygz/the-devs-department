@@ -1,0 +1,72 @@
+{% extends 'base.html' %} {% block extra_css%}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='listProp.css') }}"
+/>
+<link rel="stylesheet" href="../static/listProp.css" />
+{% endblock %} {% block title %}Lista de Proposições{% endblock %} {% block
+content %}
+<main class="list-prop">
+  <h1 class="list-title">PROPOSIÇÕES APRESENTADAS</h1>
+  <p class="pag-descricao">
+    Tenha uma visão geral do desempenho dos vereadores, faltas no período e
+    proposições apresentadas
+  </p>
+  <section class="navBar">{% block filtro %} {% endblock %}</section>
+  <section class="prop-infos">
+    <section class="proposicao">
+      <section class="detalhes-prop title">
+        <h4>Título da Proposição:</h4>
+        <p>n° xxx/2024</p>
+      </section>
+      <section class="detalhes-prop situation-negada">
+        <h4>Situação Atual:</h4>
+        <p>Aprovada</p>
+      </section>
+      <section class="detalhes-prop date">
+        <h4>Data:</h4>
+        <p>dd/mm/aaaa</p>
+      </section>
+    </section>
+    <section class="descricao">
+      <a href="pagina-proposicao.html" class="link-pagProp">
+        <p class="descricao-prop">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+          incidunt assumenda debitis nulla aliquid consequuntur?
+        </p>
+      </a>
+    </section>
+  </section>
+  <section class="prop-infos">
+    <section class="proposicao">
+      <section class="detalhes-prop title">
+        <h4>Título da Proposição:</h4>
+        <p>n° xxx/2024</p>
+      </section>
+      <section class="detalhes-prop situation-aprovada">
+        <h4>Situação Atual:</h4>
+        <p>Aprovada</p>
+      </section>
+      <section class="detalhes-prop date">
+        <h4>Data:</h4>
+        <p>dd/mm/aaaa</p>
+      </section>
+    </section>
+    <section class="descricao">
+      <a href="pagina-proposicao.html" class="link-pagProp">
+        <p class="descricao-prop">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
+          incidunt assumenda debitis nulla aliquid consequuntur?
+        </p>
+      </a>
+    </section>
+  </section>
+  <nav class="btn-pags">
+    <p class="arrow">&LeftTriangle;</p>
+    <button class="btn in-use">1</button>
+    <button class="btn notIn-use">2</button>
+    <button class="btn notIn-use">3</button>
+    <p class="arrow">&RightTriangle;</p>
+  </nav>
+</main>
+{% endblock %}

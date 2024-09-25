@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
-    {% block extra_css %} {% endblock %}
-
     <link rel="stylesheet" href="../static/styles.css">
-    <title>{% block title %}{% endblock %}</title>
+    {% block extra_css%} {% endblock %}
+    <title>{% block title %}Meu App{% endblock %}</title>
 </head>
 <body>
      <!-- Header Geral -->
      <header>
         <nav class="navbar flex-container">
             <ul class="navbar-ul-none flex-container">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="#">Proposições</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="{{'proposicoes'}}">Proposições</a></li>
                 <li><a href="#">Visão Geral</a></li>
                 <li><a href="#">Lista de Vereadores</a></li>
             </ul>
