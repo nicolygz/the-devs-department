@@ -3,15 +3,172 @@
 {% block title %}Pagina Vereador{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="../static/lista-vereadores.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vereador.css') }}">
+<link rel="stylesheet" href="../static/lista-vereadores.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='vereador.css') }}">
+
+
+
 {% endblock %}
 
 {% block content %}
-    <div class="bg">
-        <div style="padding-top: 80px;">
-        <!-- AQUI DENTRO VAI TODO O CONTEUDO (la ele)  -->
+<div class="bg">
+    <div style="padding-top: 80px;">
+        <div class="container" id="box">
+            <h1 class="item1"> Ver. Milton Vieira Filho </h1>
+            <div>
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-img">
+                            <a href="#"><img src="../static/imagens/foto-vereador.png" alt=""></a>
+                        </div>
+                        <div class="stars_card">
+                            <label for="star5" title="5 estrelas">★</label>
+                            <label for="star4" title="4 estrelas">★</label>
+                            <label for="star3" title="3 estrelas">☆</label>
+                            <label for="star2" title="2 estrelas">☆</label>                          
+                            <label for="star1" title="1 estrela">☆</label>
+                            <a id="notas_estrela">2.0</a>
+                        </div>
+                        <div class="card-footer">MDB</div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="menu">
+                    <button onclick="showContent('resumo')">Resumo Político</button>
+                    <button onclick="showContent('proposicoes')">Proposições (92)</button>
+                </div>
+                <div id="resumo" class="content1">
+                    <section>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At, incidunt facere neque debitis
+                            eum
+                            sunt nobis molestiae natus placeat doloremque, tempore animi, repellendus vel excepturi
+                            molestias? Quam, nisi eum! Aliquid?</p>
+                        <br>
+                        <h3>Título para alguma coisa</h3>
+                        <br>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, praesentium consequatur
+                            tempora fuga exercitationem voluptates omnis nobis aliquid. Quasi distinctio velit molestiae
+                            non provident fugit numquam rem iusto, libero labore? </p>
+                    </section>
+                </div>
+                <div id="proposicoes" class="content1" style="display: none;">
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto reprehenderit ipsam ipsa,
+                        tenetur ex illum commodi, temporibus, laboriosam sint modi maiores. Praesentium quidem veniam
+                        velit alias sint vel ducimus maxime?Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                        Consectetur dolorem ipsum molestiae laboriosam eius quibusdam officia modi sit, voluptate omnis
+                        hic perspiciatis impedit accusantium qui quos quas delectus cum! Fugiat!maxime? Lorem ipsum
+                        dolor sit, amet consectetur adipisicing elit. Sit deleniti tempore quae repellat quaerat placeat
+                        rerum nobis incidunt cumque facilis perferendis veniam accusamus blanditiis, accusantium autem
+                        neque dolor ex fuga?</p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="grid-container" id="traço"></div>
+
+    <div class="container" id="box_frequencia">
+        <div class="cabeçalho">
+            <div class="title">Frequência em Plenário</div>
+        </div>
+        <div class="bar-container">
+            <div class="label">Presenças:</div>
+            <div class="bar">
+                <div class="progress" style="width: 98%;"></div>
+            </div>
+            <div class="percentage">98%</div>
+        </div>
+        <div class="bar-container">
+            <div class="label">Ausências:</div>
+            <div class="bar">
+                <div class="progress" style="width: 10%; background-color: gray;"></div>
+            </div>
+            <div class="percentage">2</div>
+        </div>
+        <div class="bar-container">
+            <div class="label">Ausências justificadas:</div>
+            <div class="bar">
+                <div class="progress" style="width: 100%;"></div>
+            </div>
+            <div class="percentage">2/2</div>
+        </div>
+        <div class="note">⭐ Este vereador está entre os 2% que menos faltam</div>
+
+    </div>
+    <br></br>
+
+    <div class="container" id="box_participaçao">
+        <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
+        <div class="comissao-item">
+            <strong>CARGO: Suplente de Relator</strong>
+            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
+        </div>
+        <div class="comissao-item">
+            <strong>CARGO: Suplente de Relator</strong>
+            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
+        </div>
+        <div class="comissao-item">
+            <strong>CARGO: Suplente de Relator</strong>
+            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
+        </div>
+    </div>
+    <br><br>
+
+    <div class="container" id="box_votaçao">
+        <div id="container">
+        <h2 id="QUESTÕES-CHAVE">VOTAÇÃO EM QUESTÕES-CHAVE</h2>
+        <div class="graphic-placeholder">
+            <p>Gráfico Placeholder</p>
+        </div>
+        </div>
+        <br>
+        <br>
+        <br>
+    </div>
+    <br><br>
+
+        <div class="comment-section">
+            <h2>Comentários</h2>
+            <div class="comment">
+                <p><strong>José Carlos</strong> comentou em <span>20/08/2022</span></p>
+                <p>Esses caras são uns sem vergonha! Usam o dinheiro público para fazer bagunça.</p>
+            </div>
+    
+            <div class="comment-form">
+                <h3>Dê sua opinião:</h3>
+                <div class="rating">
+                    <span>Nota:</span>
+                    <div class="stars">
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label for="star5" title="5 estrelas">★</label>
+    
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label for="star4" title="4 estrelas">★</label>
+    
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label for="star3" title="3 estrelas">★</label>
+    
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label for="star2" title="2 estrelas">★</label>
+    
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label for="star1" title="1 estrela">★</label>
+                    </div>
+                </div>
+                <textarea placeholder="Digite aqui seu comentário..."></textarea>
+                <button type="submit" id="botao_estrela">Publicar</button>
+            </div>
+        </div>
+    
+        <script src="script.js"></script>
+    </div>
+
+    <br><br>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</div>
+
+
+
 
 {% endblock %}
