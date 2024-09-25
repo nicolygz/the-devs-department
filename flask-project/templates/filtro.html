@@ -1,13 +1,13 @@
-{% extends 'base.html' %}
-
-{% block title %}Filtro{% endblock %}
+{% extends 'proposicoes.html' %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='filtro.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='listProp.css') }}">
+<link rel="stylesheet" href="../static/listProp.css">
+<link rel="stylesheet" href="../static/respofiltro.css">
 {% endblock %}
 
-{% block content %}
-
+{% block filtro %}
     <article class="filtro">
         <input class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor">
         <article class="filtro-bf">
@@ -25,7 +25,7 @@
         <article class="filtro-tipo">
             <button class="btn-tipo">Requerimento</button>
             <button class="btn-tipo">Moção</button>
-            <button class="btn-tipo">Projeto de Lei</button>
+            <button class="btn-tipo lei">Projeto de Lei</button>
         </article>
     </article>
     <script src="{{ url_for('static', filename='js/filtro.js') }}"></script>

@@ -9,15 +9,16 @@
     {% block extra_css %} {% endblock %}
 
     <link rel="stylesheet" href="../static/styles.css">
-    <title>{% block title %}{% endblock %}</title>
+    {% block extra_css%} {% endblock %}
+    <title>{% block title %}Meu App{% endblock %}</title>
 </head>
 <body>
      <!-- Header Geral -->
      <header>
         <nav class="navbar flex-container">
             <ul class="navbar-ul-none flex-container">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="#">Proposições</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="{{'proposicoes'}}">Proposições</a></li>
                 <li><a href="#">Visão Geral</a></li>
                 <li><a href="#">Lista de Vereadores</a></li>
             </ul>

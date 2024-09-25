@@ -18,8 +18,12 @@ def lista_vereadores():
 def pagina_vereador():
     return render_template('vereador.html')
 
-@app.route('/filtro')
-def pagina_filtro():
+@app.route('/pagina-proposicao.html')
+def pagVer():
+    return render_template('pagina-proposicao.html')
+
+@app.route('/proposicoes')
+def listProp():
     return render_template('filtro.html')
 
 if __name__ == "__main__":
