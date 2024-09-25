@@ -30,6 +30,8 @@ body {
     width: 100%;
     height: 5rem;
     justify-content: flex-end;
+    position: absolute;
+    z-index: 1;
 }
 
 .flex-container{
@@ -40,6 +42,7 @@ body {
 }
 .content{
     min-height: 80vh;
+    padding-top: 80px;
 }
 
 footer{
@@ -62,7 +65,29 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+}
+
+/* PARA TELAS MENORES*/
+@media screen and (max-width: 800px) {
+
+    .flex-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .navbar {
+        height: 160px;
+    }
+
+    .navbar-ul-none {
+        margin: 0;
+    }
+
+    .content {
+        padding-top: 180px;
+    }
 }
 
 .bg-onda {
@@ -76,4 +101,3 @@ main {
     height: 100%;
     z-index: -1;
 }
-
