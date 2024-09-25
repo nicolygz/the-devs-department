@@ -4,7 +4,7 @@ API-FATEC-1-SEM
 Cliente: Masanori
 PO : Pedro Vaz
 Master: Nicoly
-Integrantes do Grupo •⁠ ⁠Issame •⁠ ⁠⁠Tati •⁠ ⁠⁠Guilherme •⁠ ⁠⁠Otávio •⁠ ⁠⁠Pedro Martins •⁠ ⁠⁠Tiago Freitas
+Integrantes do Grupo •⁠ ⁠Issami •⁠ ⁠⁠Tati •⁠ ⁠⁠Guilherme •⁠ ⁠⁠Otávio •⁠ ⁠⁠Pedro Martins •⁠ ⁠⁠Tiago Freitas
 
 # Projeto: Acompanhamento do Desempenho dos Vereadores em Exercício
 
