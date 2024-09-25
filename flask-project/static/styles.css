@@ -59,7 +59,6 @@ main {
     background-image: url(../static/imagens/lg-perfil-bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    position: absolute; /* Para permitir a expansão */
     top: 0;
     left: 0;
     width: 100%;
