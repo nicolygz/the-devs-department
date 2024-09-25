@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Filtro{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='filtro.css') }}">
+{% endblock %}
+
+{% block content %}
+
+    <article class="filtro">
+        <input class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor">
+        <article class="filtro-bf">
+            <button class="btn-buscar">Buscar</button>
+            <button class="btn-filtrar">Filtrar</button>
+        </article>
+        <article class="break"></article>
+        <article class="filtro-data">
+            <label for="data-inicio">No período:</label>
+            <input type="date" id="data-inicio"> 
+            <label for="data-fim">Até:</label>
+            <input type="date" id="data-fim">
+        </article>
+
+        <article class="filtro-tipo">
+            <button class="btn-tipo">Requerimento</button>
+            <button class="btn-tipo">Moção</button>
+            <button class="btn-tipo">Projeto de Lei</button>
+        </article>
+    </article>
+    <script src="{{ url_for('static', filename='js/filtro.js') }}"></script>
+{% endblock %}
