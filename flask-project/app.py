@@ -18,7 +18,7 @@ def lista_vereadores():
 def pagina_vereador():
     return render_template('vereador.html')
 
-@app.route('/pagina-proposicao.html')
+@app.route('/pagina-proposicao')
 def pagVer():
     return render_template('pagina-proposicao.html')
 
