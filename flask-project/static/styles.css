@@ -8,8 +8,9 @@ body {
     font-family: 'Ubuntu';
 }
 .navbar-ul-none{
-    list-style-type:none;
+    list-style-type: none;
     margin-right: 5rem;
+    margin-left: 1rem;
     column-gap: 1rem;
 }
 .navbar-ul-none > li > a{
@@ -75,3 +76,4 @@ main {
     height: 100%;
     z-index: -1;
 }
+

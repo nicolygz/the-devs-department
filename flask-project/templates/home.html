@@ -2,7 +2,15 @@
 
 {% block title %}Página Inicial{% endblock %}
 
-{% block content %}
-    <h1>Bem-vindo à Página Inicial</h1>
-    <p>Este é o conteúdo da página inicial.</p>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 {% endblock %}
+
+{% block content %}
+    <section class="intro">
+        <h1>Seja bem-vindo!</h1>
+        <p><strong>Portal de transparência de São José dos Campos: </strong>Descubra como seus vereadores estão realmente atuando e impactando a cidade. Nossa plataforma oferece uma visão detalhada e acessível das ações e realizações dos vereadores em exercício. Informações claras e baseadas em fatos estão aqui para ajudar você a tomar decisões informadas e engajadas nas próximas eleições. Veja o trabalho real de seus representantes e participe ativamente da política local.</p>
+        <div class="button"><a href="#" class="btn">Comece por aqui</a></div>
+    </section>
+{% endblock %}
+
