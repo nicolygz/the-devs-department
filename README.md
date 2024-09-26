@@ -44,8 +44,8 @@ Adicionar video e documentos nessa seção
 
 ## Tecnologias Utilizadas
 
-*Figma
-*Flask
+* Flask
+* Figma
 * Jira Software
 * Microsoft Excel
 * VS CODE
