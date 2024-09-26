@@ -49,7 +49,7 @@ Adicionar video e documentos nessa seção
 * Jira Software
 * Microsoft Excel
 * VS CODE
-* HTML5
+* HTML
 * CSS
 * Github
 
@@ -59,7 +59,7 @@ Adicionar video e documentos nessa seção
 - [x] Validação com o cliente;
 - [x] Definição de Estilos Globais. ;
 - [x] Desenvolver o design;
-- [x] Escolha cores e fontes;
+- [x] ;
 - [x] Teste e revise;
 - [ ] Documente instruções de uso;
 - [ ] Criação do vídeo;
@@ -106,8 +106,8 @@ Adicionar video e documentos nessa seção
 
 |  Dev Team  | Pedro Henrique   [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)]((https://www.linkedin.com/in/pedro-henrique-martins-55a0752a4?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/szkuramoto)   |
 
-|  Dev Team  | Guilherme almeida |      
-[![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/gustavo-almeida-camargo?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/laviniappiratello)   |
+|  Dev Team  | Guilherme almeida | [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/gustavo-almeida-camargo?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/laviniappiratello)   |      
+
 
 |  Dev Team  |  Gustavo almeida  |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/gustavo-almeida-camargo?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/ViniciusLimaCabraleSouza)   |
 
