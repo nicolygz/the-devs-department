@@ -1,83 +1,125 @@
-# the-devs-department
+# Aprendizado por Projeto Integrado (API) - Template
 
-API-FATEC-1-SEM
-Cliente: Masanori
-PO : Pedro Vaz
-Master: Nicoly
-Integrantes do Grupo •⁠ ⁠Issami •⁠ ⁠⁠Tati •⁠ ⁠⁠Guilherme •⁠ ⁠⁠Otávio •⁠ ⁠⁠Pedro Martins •⁠ ⁠⁠Tiago Freitas
 
-# Projeto: Acompanhamento do Desempenho dos Vereadores em Exercício
+Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividade, Autonomia, Colaboração e Entrega de Resultados dos estudantes envolvidos
 
-## Descrição
-O desafio é criar uma plataforma web que disponibilize informações sobre o desempenho dos vereadores da cidade durante o atual mandato. A plataforma visa oferecer aos eleitores dados claros e acessíveis para ajudar na tomada de decisões nas próximas eleições municipais.
+# Índice
+* [Objetivo do Projeto](#objetivo-do-projeto)
+* [Funcionalidades e registros (vídeos e apresentações) das sprints](#funcionalidades-e-registros-(vídeos-e-apresentações)-das-sprints)
+* [Backlog do produto](#Backlog-do-produto)
+* [Competências desenvolvidas](#competências-desenvolvidas)
+* [Autores](#autores)
 
-## Funcionalidades Principais
-- **Perfil Individual de Cada Vereador**
-  - Presença nas Sessões
-  - Proposições Apresentadas
-  - Projetos de Lei Aprovados
-  - Posicionamento em Votações
-  - Participação em Comissões
-- **Busca e Filtros**
-- **Painel de Estatísticas**
-- **Comentários e Feedback do Eleitorado**
+# Projeto (API) 
+Projeto pedagógico alicerçado na Metodologia API para ensino-aprendizado focado no desenvolvimento de competências e fundamentada nos pilares de aprendizado com problemas reais (RPBL), validação externa e mentalidade ágil. 
+Uso de estratégias para entender o problema, conceber uma solução viável ao desenvolver e implementar o MVP seguido de sua operação (CDIO). 
+Os resultados dos projetos devem obedecer ao Aviso Legal disponível no site da Fatec SJC com definição das datas do kickoff e das sprints
 
-## Backlog do Produto
-### MVP (Minimum Viable Product)
-1. Página de perfil individual do vereador.
-2. Exibição do percentual de presença nas sessões.
-3. Listagem de proposições apresentadas.
-4. Listagem de projetos de lei aprovados com links.
-5. Implementação da busca por nome.
+Sprint | Previsão | Status|
+|------|--------|------|
 
-### Funcionalidades Prioritárias
-6. Exibição de como o vereador votou em questões-chave.
-7. Informação sobre a participação em comissões.
-8. Implementação de filtros avançados de busca.
-9. Desenvolvimento do painel de estatísticas.
+Update README.md
+|Kick Off | 02/09/2024 | concluido|
+|01 | 29/09/2024 | concluido|
+|02|  27/10/2024 | em progresso |
+|03| 24/11/2024 | a fazer|
+|Feira de Soluções| 12/12 |a fazer |
 
-### Funcionalidades de Interatividade
-10. Sistema de comentários e feedback do eleitorado.
-11. Sistema de classificação (rating) para vereadores.
+# Objetivo do Projeto
+Este projeto tem como objetivo ajudar e facilitar na utilização da plataforma GitHub, visando:
+* Centralizar os trabalhos e projetos;
+* Organizar e estruturar as informações;
+* Versionar e controlar as alterações;
+* Facilitar o compartilhamento e feedback;
+* Desenvolver habilidades técnicas.
 
-### Melhorias e Manutenção
-12. Refinamento das visualizações gráficas no painel de estatísticas.
-13. Implementação de atualizações automáticas para os dados dos vereadores.
-14. Melhorias na interface do usuário com base no feedback.
+# Funcionalidades e registros (vídeos e apresentações) das sprints
 
-## Sprint 1: Criação das Telas
+Apresentação das funcionalidades
+Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário do sistema:
 
-### Tarefas
-1. **Tela de Login e Autenticação**
-   - Design da Interface de Login.
-   - Integração com Backend (Placeholder).
-   
-2. **Tela de Perfil Individual do Vereador**
-   - Criação da Página de Perfil.
-   - Sessão de Presença nas Sessões.
-   - Sessão de Proposições Apresentadas.
-   - Sessão de Projetos de Lei Aprovados.
-   - Sessão de Posicionamento em Votações.
-   - Sessão de Participação em Comissões.
-   
-3. **Tela de Busca e Filtros**
-   - Barra de Busca. (Na página inicial a busca deve ser associada a apenas o nome do Vereador)
-   - Filtros para Pesquisa Avançada.
+Adicionar video e documentos nessa seção
 
-4. **Painel de Estatísticas**
-   - Design do Painel.
-   - Protótipos de Gráficos.
+[![Nome do Vídeo](https://img.youtube.com/vi/pBy1zgt0XPc/0.jpg)](https://www.youtube.com/embed/pBy1zgt0XPc)
 
-5. **Tela de Comentários e Feedback**
-   - Área de Comentários (Dentro do perfil do vereador).
+## Tecnologias Utilizadas
 
-6. **Navegação e Menu Principal**
-   - Design do Menu de Navegação.
-   - Fluxo de Navegação entre as Telas.
+* Jira Software
+* Microsoft Excel
+* Slack
+1 minute ago
 
-7. **Estilo e Temas Globais**
-   - Definição de Estilos Globais. (Fontes, tamanho de fontes, cores, temas)
-   - Aplicação dos Estilos às Telas Criadas.
+Update README.md
+* VS CODE
+* HTML5
+* CSS3
+* Figma
+* Word
+* Github
+3 weeks ago
 
-8. **Revisão e Ajustes**
-   - Coleta de Feedback Inicial e Ajustes. Fazer isso junto ao Masanori.
+Update README.md
+
+
+
+# Backlog do produto
+
+## Sprint 1. Concepção
+- [x] Defina o propósito do template;
+- [x] Identifique os elementos principais;
+- [x] Esboce o layout;
+- [x] Escolha cores e fontes;
+- [x] Desenvolva o design;
+- [ ] Teste e revise;
+- [ ] Documente instruções de uso;
+- [ ] Criação do vídeo;
+- [ ] Finalize e aprovação.
+
+## Sprint 2. Desenvolvimento do Projeto
+- [ ] Documento passo a passo;
+- [ ] Vídeo passo a passo;
+- [ ] Treinamento com os professores;
+- [ ] Treinamento com os alunos;
+- [ ] Monitoramento e ajustes.
+      
+## Sprint 3 . Implementação
+- [x] Defina o propósito do template;
+- [x] Identifique os elementos principais;
+- [x] Esboce o layout;
+- [x] Escolha cores e fontes;
+- [x] Desenvolva o design;
+- [ ] Teste e revise;
+- [ ] Documente instruções de uso;
+- [ ] Criação do vídeo;
+- [ ] Finalize e aprovação.
+  
+# Competências desenvolvidas
+
+## Hard Skill (saber tecnológico)
+<details>
+<summary>Hard Skills desenvolvidas</summary>
+  
+| Tecnologia/Metodologia | Classificação |
+| ---------------------- | ------------- |
+| GitHub | ★ ★ ★ ★ ★ ★ ★ ☆ ☆ ☆ |
+| Gestão de Projetos | ★ ★ ★ ★ ★ ★ ☆ ☆ ☆ ☆ |
+| Scrum Master | ★ ★ ★ ★ ★ ★ ★ ☆ ☆ ☆ |
+| Prodct Owner | ★ ★ ★ ★ ★ ★ ★ ☆ ☆ ☆ |
+| Markdown | ★ ★ ★ ★ ★ ★ ★ ☆ ☆ ☆ |
+| Git Projects | ★ ★ ★ ★ ★ ★ ★ ☆ ☆ ☆ |
+ 
+
+# Autores
+|    Função     | Nome                                  |                                                                                                                                                      LinkedIn & GitHub                                                                                                                                                      |
+| :-----------: | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+1 minute ago
+
+Update README.md
+| Product Owner |   Lucas Guerra         |     [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-guerra000/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/lucasguerra12)              |
+| Scrum Master  | Gabriel Pinelli |      [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/gabriel-pinelli-analista/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/Tocaccelli)     |
+| Dev Team   |Emanuelle Oliveira        |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/emanuelle-oliveira-ab9716296/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/Emanuelle-olv)        |
+|  Dev Team  | Francisco Rafael Pires   |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/francisco-rafael-pires-755958163/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/franciscorafaelpires)                                              
+|  Dev Team  | Fábio Kenjy                 |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/fabio-kenjy/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/FabioKenjjy)     |
+|  Dev Team  | Maria Isabel Kuramoto Souza|   [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)]((https://www.linkedin.com/in/maria-isabel-kuramoto-souza-0997b7318?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/szkuramoto)   |
+|  Dev Team  | Lavínia Piratello Pansutti dos Anjos  |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://br.linkedin.com/in/lavinia-piratello-6a82101b1?trk=people-guest_people_search-card) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/laviniappiratello)   |
+|  Dev Team  | Vinicius Lima Cabral e Souza  |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/vinicius-lima-cabral-e-souza-7794b3287/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/ViniciusLimaCabraleSouza)   |
