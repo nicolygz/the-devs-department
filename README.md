@@ -1,98 +1,77 @@
-# Aprendizado por Projeto Integrado (API) 
+# The Devs Department
 
+Bem-vindo ao projeto da THE DEVS DEPARTMENT! Este projeto foi desenvolvido como projeto de API do 1º Semestre de DSM da Fatec São José dos Campos.
 
-Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividade, Autonomia, Colaboração e Entrega de Resultados dos estudantes envolvidos
+#### Nosso [contato](#autores) está no final do ReadMe!
+
+Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividade, Autonomia, Colaboração e Entrega de Resultados dos estudantes envolvidos.
 
 # Índice
+* [Projeto](#projeto)
+* [Cronograma das Sprints](#cronograma-de-sprints)
 * [Objetivo do Projeto](#objetivo-do-projeto)
-* [Backlog do produto](#Backlog-do-produto)
-* [Competências desenvolvidas](#competências-desenvolvidas)
-* [Autores](#autores)
-* [Competências desenvolvidas](#competências-desenvolvidas)
+* [Funcionalidades e registros](#apresentação-das-funcionalidades)
+* [Tecnologias utilizadas](#tecnologias-utilizadas)
+* [Backlog do produto](#backlog-do-produto)
+* [Burndown das Sprints](#burndown-das-sprints)
+* [Apresentação da equipe](#apresentação-da-equipe-e-funções)
+* [Entre em Contato!](#apresentação-da-equipe-e-funções)
+* [Links Úteis](#links-úteis)
 
-# Projeto (API) 
-Projeto pedagógico alicerçado na Metodologia API para ensino-aprendizado focado no desenvolvimento de competências e fundamentada nos pilares de aprendizado com problemas reais (RPBL), validação externa e mentalidade ágil. 
-Uso de estratégias para entender o problema, conceber uma solução viável ao desenvolver e implementar o MVP seguido de sua operação (CDIO). 
-Os resultados dos projetos devem obedecer ao Aviso Legal disponível no site da Fatec SJC com definição das datas do kickoff e das sprints
+# Projeto
 
+Imagine, como seria bom se houvesse um site que comparasse as performances dos nossos vereadores de São José dos Campos?  
+Pois bem, esse projeto colhe os dados fornecidos pelo site da prefeitura a respeito das proposições, assiduidade, participação em comissões de cada vereador e de uma forma interativa, compara o seu mandato. Aliás, você pode ainda avaliar o trabalho do seu vereador!  
+
+# Cronograma de Sprints
 Sprint | Previsão | Status|
 |------|--------|------|
-
 |Kick Off | 02/09/2024 | concluido|
-
 |01 | 29/09/2024 | concluido|
-
-|02|  27/10/2024 | em andamento |
-
+|02|  27/10/2024 | em progresso |
 |03| 24/11/2024 | a fazer|
-
 |Feira de Soluções| 12/12 |a fazer |
 
+
 # Objetivo do Projeto
-Este projeto tem como objetivo ajudar e facilitar na utilização da plataforma GitHub, visando:
-* Desenvolver habilidades técnicas.
-* Centralizar os trabalhos e projetos;
-* Organizar e estruturar as informações;
-* Versionar e controlar as alterações;
-* Facilitar o compartilhamento e feedback;
+
+Esse projeto tem como objetivo colocar em prática os conhecimentos aprendidos em sala de aula, tais como metodologia Srum, análise de requisitos de clientes, lógica de programação, design de interface, entre muitas outras hard skills que estão visíveis no item [Tecnologias Utilizadas](#tecnologias-utilizadas).
 
 
-# Funcionalidades e registros (vídeos e apresentações) das sprints
+# Apresentação das funcionalidades
 
-Apresentação das funcionalidades
-Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário do sistema:
+Confira a seguir uma demonstração das funcionalidades:
 
-[![Projeto API](https://img.youtube.com/vi/pBy1zgt0XPc/0.jpg)](https://www.youtube.com/embed/pBy1zgt0XPc)
+[![Nome do Vídeo](https://img.youtube.com/vi/pBy1zgt0XPc/0.jpg)](https://www.youtube.com/embed/pBy1zgt0XPc) 
 
-## Tecnologias Utilizadas
+# Tecnologias Utilizadas
 
-* Flask
-* Figma
-* Jira Software
-* Microsoft Excel
-* VS CODE
-* HTML
-* CSS
-* Github
-* J.S
-* Python
-* 
+**Tecnologias de Programação (hardskills)**
+- Html
+- CSS
+- Flask
+- Python
+- Javascript  
 
-# Backlog do produto
+**Softwares de Apoio** 
+- Jira
+- Figma
+- Microsoft Excel
+- Visual Studio Code (VSC)
 
-## Sprint 1. Defininir funcionalidades
-- [x] Validação com o cliente;
-- [x] Definição de Estilos Globais. ;
-- [x] Desenvolver o design;
-- [x] Teste e revise;
-- [x] Criação do vídeo;
-- [x] Finalização;
+# [Backlog Do Produto](misc/backlog.pdf) 
+- [download](misc/backlog.pdf)
+![](misc/backlog.pdf)
 
-## Sprint 2. Desenvolvimento do Projeto
-- [ ] Aplicação do backend;
-- [ ] Raspagem de dados;
-- [ ] Treinamento com os professores;
-- [ ] Video explicativo;
-- [ ] Monitoramento e ajustes.
-      
-## Sprint 3 . Ajustes e finalização
-- [x] Defina o propósito do template;
-- [x] Identifique os elementos principais;
-- [ ] Teste e revise;
-- [ ] Documente instruções de uso;
-- [ ] Criação do vídeo;
-- [ ] Finalize e aprovação.
-  
-# Competências desenvolvidas
+*encontra-se também na pasta [misc](/misc) desse repositório.*
 
-## Hard Skill (saber tecnológico)
-<details>
-<summary>Hard Skills desenvolvidas</summary>
-- qualquer coisa
-</details>
-  
+# Burndown das sprints
+!incluir print do jira (Nicoly)
 
-# Autores
+# Apresentação da equipe e funções
+![Foto do Grupo](misc/imagens/foto-grupo.jpeg)
+
+
 |    Função     | Nome                                  |                                                                                                                                                      LinkedIn & GitHub                                                                                                                                                      |
 | :-----------: | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | Product Owner |   Pedro Alves         |     [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/pedro-alves-579a93140/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/pphvaz)              |
@@ -104,3 +83,8 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 |  Dev Team  | Tatiane Oliveira  |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/tatiane-oliveira-a66789296/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/TatianeOliveira8)   |
 |  Dev Team  | Issami Umeoka  |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/issami-umeoka-786716226/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/IssamiU)   |
 |  Dev Team  | Tiago Freitas  |         [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/tiago-freitas-74730b2a9/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/tiagow2)   |
+
+# Links Úteis
+
+- [Jira do Projeto](https://guedesdeabreunicoly.atlassian.net/jira/software/projects/SCRUM/boards/1)
+- [Vídeo Apresentação - Sprint 1](youtube.com)
