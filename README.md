@@ -5,7 +5,7 @@ Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividad
 
 # Índice
 * [Objetivo do Projeto](#objetivo-do-projeto)
-* [Funcionalidades e registros (vídeos e apresentações) das sprints](#funcionalidades-e-registros-(vídeos-e-apresentações)-das-sprints)
+* [Funcionalidades e registros (vídeos e apresentações) das sprints](#Funcionalidades-e-registros-(vídeos e apresentações)-das-sprints)
 * [Backlog do produto](#Backlog-do-produto)
 * [Competências desenvolvidas](#competências-desenvolvidas)
 * [Autores](#autores)
@@ -18,20 +18,24 @@ Os resultados dos projetos devem obedecer ao Aviso Legal disponível no site da 
 Sprint | Previsão | Status|
 |------|--------|------|
 
-Update README.md
 |Kick Off | 02/09/2024 | concluido|
+
 |01 | 29/09/2024 | concluido|
-|02|  27/10/2024 | em progresso |
+
+|02|  27/10/2024 | em andamento |
+
 |03| 24/11/2024 | a fazer|
+
 |Feira de Soluções| 12/12 |a fazer |
 
 # Objetivo do Projeto
 Este projeto tem como objetivo ajudar e facilitar na utilização da plataforma GitHub, visando:
+* Desenvolver habilidades técnicas.
 * Centralizar os trabalhos e projetos;
 * Organizar e estruturar as informações;
 * Versionar e controlar as alterações;
 * Facilitar o compartilhamento e feedback;
-* Desenvolver habilidades técnicas.
+
 
 # Funcionalidades e registros (vídeos e apresentações) das sprints
 
@@ -59,8 +63,7 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 - [x] Desenvolver o design;
 - [x] ;
 - [x] Teste e revise;
-- [ ] Documente instruções de uso;
-- [ ] Criação do vídeo;
+- [x] Criação do vídeo;
 - [ ] Finalize e aprovação.
 
 ## Sprint 2. Desenvolvimento do Projeto
@@ -73,9 +76,6 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 ## Sprint 3 . Ajustes e finalização
 - [x] Defina o propósito do template;
 - [x] Identifique os elementos principais;
-- [x] Esboce o layout;
-- [x] Escolha cores e fontes;
-- [x] Desenvolva o design;
 - [ ] Teste e revise;
 - [ ] Documente instruções de uso;
 - [ ] Criação do vídeo;
