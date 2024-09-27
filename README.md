@@ -89,6 +89,7 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 <details>
 <summary>Hard Skills desenvolvidas</summary>
 - qualquer coisa
+</details>
   
 
 # Autores
