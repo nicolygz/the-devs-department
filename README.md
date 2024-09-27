@@ -88,6 +88,7 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 ## Hard Skill (saber tecnológico)
 <details>
 <summary>Hard Skills desenvolvidas</summary>
+- qualquer coisa
   
 
 # Autores
