@@ -6,6 +6,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="../static/geral.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='geral.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='filtro.css') }}">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="/flask-project/static/js/js.js">
 {% endblock %}
@@ -13,33 +14,37 @@
 {% block content %}
 
 <div class="bg-onda">
-    <div style="padding-top: 80px;">
+    <div class="page" style="padding-top: 80px;">
 
         <article class="filtro">
-            <input class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor">
-            <article class="filtro-bf">
-                <button class="btn-buscar">Buscar</button>
-                <button class="btn-filtrar">Filtrar</button>
-            </article>
-            <article class="break"></article>
-            <article class="filtro-data">
-                <label for="data-inicio">No período:</label>
-                <input type="date" id="data-inicio">
-                <label for="data-fim">Até:</label>
-                <input type="date" id="data-fim">
-            </article>
-
-            <article class="filtro-tipo">
-                <button class="btn-tipo">Requerimento</button>
-                <button class="btn-tipo">Moção</button>
-                <button class="btn-tipo">Projeto de Lei</button>
-            </article>
+            <div class="filtro-flex">
+                <input class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor">
+                <article class="filtro-bf">
+                    <button class="btn-buscar">Buscar</button>
+                    <button class="btn-filtrar">Filtrar</button>
+                </article>
+            </div>
+            <div class="filtro-flex">
+                <article class="filtro-data">
+                    <label for="data-inicio">No período:</label>
+                    <input type="date" id="data-inicio">
+                    <label for="data-fim">Até:</label>
+                    <input type="date" id="data-fim">
+                </article>
+    
+                <article class="filtro-tipo">
+                    <button class="btn-tipo">Requerimento</button>
+                    <button class="btn-tipo">Moção</button>
+                    <button class="btn-tipo">Projeto de Lei</button>
+                </article>
+            </div>
+            
         </article>
         <script src="{{ url_for('static', filename='js/filtro.js') }}"></script>
 
-        <section class="grid-container">
+        <section class="flex-container-graph">
 
-            <div class="grid-item">
+            <div class="flex-item">
                 <div class="chart-container">
                     <h3>POPULARIDADE</h3>
                     <canvas id="grafico1"></canvas>
@@ -47,7 +52,7 @@
             </div>
 
 
-            <div class="grid-item">
+            <div class="flex-item">
                 <div class="chart-container">
                     <h3>QUANTIDADE DE PROPOSIÇÕES</h3>
                     <canvas id="grafico2"></canvas>
@@ -55,14 +60,14 @@
             </div>
 
 
-            <div class="grid-item">
+            <div class="flex-item">
                 <div class="chart-container">
                     <h3>PROPOSIÇÕES</h3>
                     <canvas id="grafico3"></canvas>
                 </div>
             </div>
 
-            <div class="grid-item">
+            <div class="flex-item">
                 <div class="chart-container">
                     <h3>PARTICIPAÇÃO</h3>
                     <canvas id="grafico4"></canvas>
