@@ -8,6 +8,7 @@ Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividad
 * [Backlog do produto](#Backlog-do-produto)
 * [Competências desenvolvidas](#competências-desenvolvidas)
 * [Autores](#autores)
+* [Competências desenvolvidas](#competências-desenvolvidas)
 
 # Projeto (API) 
 Projeto pedagógico alicerçado na Metodologia API para ensino-aprendizado focado no desenvolvimento de competências e fundamentada nos pilares de aprendizado com problemas reais (RPBL), validação externa e mentalidade ágil. 
@@ -53,6 +54,9 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 * HTML
 * CSS
 * Github
+* J.S
+* Python
+* 
 
 # Backlog do produto
 
