@@ -62,7 +62,7 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 - [x] Desenvolver o design;
 - [x] Teste e revise;
 - [x] Criação do vídeo;
-- [ ] Finalize e aprovação.
+- [x] Finalização;
 
 ## Sprint 2. Desenvolvimento do Projeto
 - [ ] Aplicação do backend;
