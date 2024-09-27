@@ -5,7 +5,6 @@ Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividad
 
 # Índice
 * [Objetivo do Projeto](#objetivo-do-projeto)
-* [Funcionalidades e registros (vídeos e apresentações) das sprints](#Funcionalidades-e-registros-(vídeos e apresentações)-das-sprints)
 * [Backlog do produto](#Backlog-do-produto)
 * [Competências desenvolvidas](#competências-desenvolvidas)
 * [Autores](#autores)
@@ -61,7 +60,6 @@ Confira a seguir uma demonstraão das funcionalidades para cada tipo de usuário
 - [x] Validação com o cliente;
 - [x] Definição de Estilos Globais. ;
 - [x] Desenvolver o design;
-- [x] ;
 - [x] Teste e revise;
 - [x] Criação do vídeo;
 - [ ] Finalize e aprovação.
