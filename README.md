@@ -42,7 +42,7 @@ Esse projeto tem como objetivo colocar em prática os conhecimentos aprendidos e
 
 Confira a seguir uma demonstração das funcionalidades:
 
-[![Nome do Vídeo](https://i9.ytimg.com/vi_webp/Mvr1f5ndZ1o/mq2.webp?sqp=CNyZ3bcG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CIAC0AWKAgwIABABGCQgQih_MA8=&rs=AOn4CLBpz1gMxz-iDAgYxGqZ9eRdXJrGoQ)](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)
+[![Nome do Vídeo](https://i9.ytimg.com/vi_webp/Mvr1f5ndZ1o/mq2.webp?sqp=CJTL5bcG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CIAC0AWKAgwIABABGCQgQih_MA8=&rs=AOn4CLCgMXzMF-jHD6QPBvyyDU9fsI3_MA)](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)
 
 # Tecnologias Utilizadas
 
@@ -66,7 +66,7 @@ Confira a seguir uma demonstração das funcionalidades:
 *encontra-se também na pasta [misc](/misc) desse repositório.*
 
 # Burndown das sprints
-!incluir print do jira (Nicoly)
+![Burndown Sprint1](misc/imagens/burndown-sprint1.png)
 
 # Apresentação da equipe e funções
 ![Foto do Grupo](misc/imagens/foto-grupo.jpeg)
@@ -87,4 +87,4 @@ Confira a seguir uma demonstração das funcionalidades:
 # Links Úteis
 
 - [Jira do Projeto](https://guedesdeabreunicoly.atlassian.net/jira/software/projects/SCRUM/boards/1)
-- [Vídeo Apresentação - Sprint 1](youtube.com)
+- [Vídeo Apresentação - Sprint 1](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)
