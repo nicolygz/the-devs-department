@@ -21,33 +21,14 @@
     </div>
     <div class="resultados-encontrados">21 resultados encontrados</div>
     <div class="card-container">
+        {% for vereador in vereadores %}
         <div class="card">
             <div class="card-img">
-                <a href="/vereador"><img src="../static/imagens/foto-vereador.png" alt=""></a>
+                <a href="/vereador"><img src="{{ vereador[9] }}" alt=""></a>
             </div>
-            <div class="card-content">NOME DO VEREADOR</div>
-            <div class="card-footer">MDB</div>
+            <div class="card-content">{{ vereador[1] }}</div>
+            <div class="card-footer">{{ vereador[2] }}</div>
         </div>
-        <div class="card">
-            <div class="card-img">
-                <a href="/vereador"><img src="../static/imagens/foto-vereador.png" alt=""></a>
-            </div>
-            <div class="card-content">NOME DO VEREADOR</div>
-            <div class="card-footer">MDB</div>
-        </div>
-        <div class="card">
-            <div class="card-img">
-                <a href="/vereador"><img src="../static/imagens/foto-vereador.png" alt=""></a>
-            </div>
-            <div class="card-content">NOME DO VEREADOR</div>
-            <div class="card-footer">MDB</div>
-        </div>
-        <div class="card">
-            <div class="card-img">
-                <a href="/vereador"><img src="../static/imagens/foto-vereador.png" alt=""></a>
-            </div>
-            <div class="card-content">NOME DO VEREADOR</div>
-            <div class="card-footer">MDB</div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

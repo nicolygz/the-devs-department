@@ -22,7 +22,6 @@ body {
 }
 .navbar{
     background-color: #2a4b91;
-    position: absolute;
     margin: 0;
     top: 0;
     width: 100%;
@@ -41,7 +40,6 @@ body {
 }
 .content{
     min-height: 80vh;
-    padding-top: 80px;
 }
 
 footer{
