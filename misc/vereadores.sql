@@ -3,7 +3,7 @@ use vereadoresDB;
 
 DROP TABLE IF EXISTS vereadores;
 create table vereadores (
-	ver_id mediumint primary key auto_increment,
+	ver_id mediumint primary key,
     ver_nome varchar(50) not null,
     ver_partido varchar(50) not null,
     ver_tel1 varchar(20),
@@ -11,8 +11,8 @@ create table vereadores (
     ver_celular varchar(50),
     ver_email varchar(40) not null,
     ver_gabinete varchar(25),
-    ver_posicionamento varchar(25) not null check(ver_posicionamento in ('esquerda', 'centro', 'direita')),
-    ver_foto LONGBLOB
+    ver_posicionamento varchar(255),
+    ver_foto varchar(255)
 );
 
 create table assiduidade (
