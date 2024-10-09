@@ -1,8 +1,13 @@
+import sys
+import os
 from flask import Flask, render_template
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from rapagem_dados import *
+
 
 app = Flask(__name__)
 
