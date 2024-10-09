@@ -8,21 +8,28 @@ app = Flask(__name__)
 
 id_vereadores = [35,238,38,247,40,43,246,44,45,47,244,242,243,245,50,240,234,249,239,55,237]
 
-# MySQL Configuration
-app.config['MYSQL_HOST'] = 'localhost' 
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pedro'
-app.config['MYSQL_DATABASE'] = 'vereadoresDB'
-
 # Create a MySQL connection
 def get_db_connection():
     connection = mysql.connector.connect(
         host=app.config['MYSQL_HOST'],
         user=app.config['MYSQL_USER'],
         password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DATABASE']
+        database=app.config['MYSQL_DATABASE'],
+        port=app.config.get('MYSQL_PORT')  # Fetch the port from config
     )
     return connection
+
+@app.route('/test_connection')
+def test_connection():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT DATABASE();')
+        result = cursor.fetchone()
+        conn.close()
+        return f"Connected to database: {result[0]}"
+    except Exception as e:
+        return str(e)
 
 @app.route('/')
 def home():
@@ -46,8 +53,6 @@ def lista_vereadores():
     # Clean up
     cursor.close()
     connection.close()
-
-    print(f"vereadores")
 
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
@@ -132,7 +137,7 @@ def get_vereadores(id):
             ver_id = id['action'].split('id=')[-1]
         ver_foto = soup.find('img', class_='w-auto mw-100 m-auto')['src']
         ver_nome = soup.find('div', id="nome_parlamentar").text.strip()
-        ver_partido = soup.find('span', id="partido").text.strip()
+        ver_partido = soup.find('span', id="partido").text.split("(")[-1][0:-1]
         ver_tel1 = ""
         ver_tel2 = ""
         ver_celular = ""
@@ -166,7 +171,7 @@ def get_vereadores(id):
             "ver_tel2":ver_tel2, 
             "ver_celular":ver_celular, 
             "ver_email":ver_email, 
-            "ver_foto":ver_foto        
+            "ver_foto":ver_foto
         }
 
         return vereador

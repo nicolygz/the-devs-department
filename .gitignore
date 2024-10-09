@@ -1,3 +1,4 @@
 .DS_Store
 __pycache__
 flask-project/__pycache__/app.cpython-312.pyc
+.env
