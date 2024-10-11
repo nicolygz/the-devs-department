@@ -12,7 +12,7 @@ def get_api_assiduidade(ID):
 
     if response.status_code == 200:
         data = response.json()
-        
+
         try:    
             db_connection = mysql.connector.connect(
                 host="[SEGREDO]",           
@@ -27,33 +27,43 @@ def get_api_assiduidade(ID):
                 frequencia = parlamentar.get("frequenciaPlenario", [])
                 anos_filtrados = range(2021, 2025)
 
-                presencas = {}
-                faltas = {}
-                faltas_justificadas = {}
-
                 for ano in anos_filtrados:
+                    presenca = 0
+                    faltas = 0
+                    justificada = 0
+
+                    # Coletar dados de presença, faltas e justificativas
                     for situacao in frequencia:
                         ano_data = next((item for item in situacao["frequenciaSituacaoAnos"] if item["ano"] == ano), None)
                         if ano_data:
                             quantidade = int(ano_data["quantidade"])
                             if situacao["frequenciaSituacaoNome"] == "Presente":
-                                presencas[ano] = quantidade
+                                presenca = quantidade
                             elif situacao["frequenciaSituacaoNome"] == "Falta":
-                                faltas[ano] = quantidade
+                                faltas = quantidade
                             elif situacao["frequenciaSituacaoNome"] == "Falta Justificada":
-                                faltas_justificadas[ano] = quantidade
+                                justificada = quantidade
 
-                    insert_query = """
-                    INSERT INTO assiduidade (ver_id, ano, presenca, faltas, justif)
-                    VALUES (%s, %s, %s, %s, %s)
+                    # Verificar se os dados já existem
+                    check_query = """
+                    SELECT COUNT(*) FROM assiduidade 
+                    WHERE ver_id = %s AND ano = %s
                     """
-                    cursor.execute(insert_query, (
-                        parlamentar_id,
-                        ano,
-                        presencas.get(ano, 0),
-                        faltas.get(ano, 0),
-                        faltas_justificadas.get(ano, 0)
-                    ))
+                    cursor.execute(check_query, (parlamentar_id, ano))
+                    exists = cursor.fetchone()[0]
+
+                    if exists == 0:  # Se não existir, insere os dados
+                        insert_query = """
+                        INSERT INTO assiduidade (ver_id, ano, presenca, faltas, justif)
+                        VALUES (%s, %s, %s, %s, %s)
+                        """
+                        cursor.execute(insert_query, (
+                            parlamentar_id,
+                            ano,
+                            presenca,
+                            faltas,
+                            justificada
+                        ))
 
             db_connection.commit()
 
@@ -64,7 +74,8 @@ def get_api_assiduidade(ID):
                 cursor.close()
                 db_connection.close()
 
-        return f"Dados inseridos para o parlamentar ID {ID}."
+        return f"Dados processados para o parlamentar ID {ID}."
     else:
         return f"Erro ao fazer a solicitação: {response.status_code}"
-    
+
+print(get_api_assiduidade(35))
