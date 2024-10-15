@@ -19,7 +19,7 @@
             <button type="button" class="custom-button">Pesquisar</button>
         </form>
     </div>
-    <div class="resultados-encontrados">21 resultados encontrados</div>
+    <div class="resultados-encontrados">{{ vereadores|length }} resultados encontrados</div>
     <div class="card-container">
         {% for vereador in vereadores %}
         <div class="card">
