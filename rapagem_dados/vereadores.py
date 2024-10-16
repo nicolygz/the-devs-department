@@ -1,114 +1,63 @@
 from flask import Flask, render_template
 import mysql.connector
 import requests
-from bs4 import BeautifulSoup
 import json
+ # URL da página
 
-app = Flask(__name__)
+url = "https://camarasempapel.camarasjc.sp.gov.br//api/publico/parlamentar/?pg=1&qtd=30"
 
-# Configurações do banco de dados
-db_config = {
-    'host': '[SEGREDO]',
-    'user': '[SEGREDO]',
-    'password': '[SEGREDO]',
-    'database': '[SEGREDO]'
-}
+def get_vereadores(url):
+    print(url)
+    response = requests.get(url)
 
-def connect_to_db():
-    return mysql.connector.connect(**db_config)
+    if response.status_code == 200:
 
-# Supondo que você tenha um valor para `id`
-id_value = '35'  # Defina o ID aqui
-
-# URL da página
-url = 'https://camarasempapel.camarasjc.sp.gov.br/parlamentar.aspx?id=' + id_value
-
-print(url)
-
-response = requests.get(url)
-# Verificando se a requisição foi bem-sucedida
-if response.status_code == 200:
-    
-    # Criando um objeto BeautifulSoup
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    # Encontrando a imagem pelo class name
-    form = soup.find('form', id="formulario")
-    if form:
-        # Extraindo o ID da URL
-        ver_id = form['action'].split('id=')[-1]
+        # Step 2: Parse the response as JSON
+        data = response.json()
+        parlamentares = data['parlamentares']
         
-        ver_foto = soup.find('img', class_='w-auto mw-100 m-auto')['src']
-        ver_nome = soup.find('div', id="nome_parlamentar").text.strip()
-        ver_partido = soup.find('span', id="partido").text.split("(")[-1][0:-1]
-        
-        ver_tel1 = ""
-        ver_tel2 = ""
-        ver_celular = ""
-        ver_email = ""
+        print(len(parlamentares))
+        i = 0
+        while i < len(parlamentares):
+            parlamentarID = parlamentares[i]['parlamentarID']
+            nome = parlamentares[i]['parlamentarNome']
+            partido = parlamentares[i]['partidoSigla']
+            foto = parlamentares[i]['parlamentarFoto']
+            situacao = parlamentares[i]['parlamentarSituacao']
+            telefone = parlamentares[i]['parlamentarTelefone']
+            email = parlamentares[i]['parlamentarEmail']
+            comissoes = parlamentares[i]['comissoesAtuantes'] # Retorna uma lista
 
-        dados_parlamentar_div = soup.find('div', id="dados_parlamentar")
-        if dados_parlamentar_div:
-            divs = dados_parlamentar_div.find_all('div')
-            if len(divs) > 1:
-                for div in divs:
-                    if 'Telefone' in div.text.strip():
-                        telefones = div.text.split(':')[-1].strip().split("/")
-                        ver_tel1 = telefones[0].strip()
-                        if len(telefones) > 1:
-                            ver_tel2 = telefones[1].strip()
-                    if 'Celular' in div.text.strip():
-                        ver_celular = div.text.split(":")[-1].strip()
-                        if "A Câmara não disponibiliza celular para os vereadores" in ver_celular:
-                            ver_celular = "-"
-                    if 'E-mail' in div.text.strip():
-                        ver_email = div.text.split(":")[-1].strip()
-        
-        vereador = {
-            "ver_id": ver_id,
-            "ver_nome": ver_nome,
-            "ver_partido": ver_partido,
-            "ver_tel1": ver_tel1, 
-            "ver_tel2": ver_tel2, 
-            "ver_celular": ver_celular, 
-            "ver_email": ver_email, 
-            "ver_foto": ver_foto
-        }
+            if len(comissoes) > 0:
+                print("Parcipou de comissões")
+                getComissoes(comissoes)
 
-        # Adicionando ao banco de dados
-        try:
-            db_connection = connect_to_db()
-            cursor = db_connection.cursor()
-
-            # Verificando duplicatas
-            check_query = "SELECT COUNT(*) FROM vereadores WHERE ver_id = %s"
-            cursor.execute(check_query, (ver_id,))
-            result = cursor.fetchone()
-
-            if result[0] == 0:  # Se não existe duplicata
-                insert_query = """
-                INSERT INTO vereadores (ver_id, ver_nome, ver_partido, ver_tel1, ver_tel2, ver_celular, ver_email, ver_foto) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(insert_query, (
-                    ver_id,
-                    ver_nome,
-                    ver_partido,
-                    ver_tel1,
-                    ver_tel2,
-                    ver_celular,
-                    ver_email,
-                    ver_foto
-                ))
-                db_connection.commit()
-                print("Vereador adicionado ao banco de dados.")
             else:
-                print("Vereador já existe no banco de dados.")
+                print("Não participou de comissões")
 
-        except mysql.connector.Error as err:
-            print(f"Erro ao interagir com o banco de dados: {err}")
-        finally:
-            cursor.close()
-            db_connection.close()
-else:
-    print(f"Erro ao acessar a URL: {response.status_code}")
+            # print(f"Id: {parlamentarID}")
+            # print(f"Nome: {nome}")
+            # print(f"Partido: {partido}")
+            # print(f"Foto: {foto}")
+            # print(f"situacao: {situacao}")
+            # print(f"telefone: {telefone}")
+            # print(f"email: {email}")
+            print()
+            i+=1
+
+def getComissoes(comissoes):
+    i = 0
+    while i < len(comissoes):
+        comissaoId = comissoes[i]['comissaID']
+        comissaoNome = comissoes[i]['comissaoNome']
+        comissaoCargo = comissoes[i]['comissaoCargo']
+
+        # chamada pro banco de dados
+        # verifica se o id da comissao já existe no banco
+        # se sim, atualiza
+        # se não, cria uma nova comissão
+
+def main():
+    get_vereadores(url)
+
+main()

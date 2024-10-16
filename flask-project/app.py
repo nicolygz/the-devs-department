@@ -5,7 +5,11 @@ import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
+from dotenv import load_dotenv  # Adicione esta linha
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
+
+# Carregar variáveis do .env
+load_dotenv()  # Adicione esta linha para carregar o .env
 
 app = Flask(__name__)
 
@@ -14,11 +18,11 @@ id_vereadores = [35,238,38,247,40,43,246,44,45,47,244,242,243,245,50,240,234,249
 # Create a MySQL connection
 def get_db_connection():
     connection = mysql.connector.connect(
-        host=app.config['MYSQL_HOST'],
-        user=app.config['MYSQL_USER'],
-        password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DATABASE'],
-        port=app.config.get('MYSQL_PORT')  # Fetch the port from config
+        host=os.getenv('MYSQL_HOST'),  # Fetch directly from environment variables
+        user=os.getenv('MYSQL_USER'),
+        password=os.getenv('MYSQL_PASSWORD'),
+        database=os.getenv('MYSQL_DATABASE'),
+        port=os.getenv('MYSQL_PORT', 3306)  # Provide a default port if not defined
     )
     return connection
 
