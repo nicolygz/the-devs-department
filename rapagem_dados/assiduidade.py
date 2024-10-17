@@ -1,26 +1,22 @@
 import requests
-import mysql.connector
+import json
+import time
 
-def get_api_assiduidade(ID):
+def get_api_assiduidade(ids):
     url = "https://camarasempapel.camarasjc.sp.gov.br/api/publico/parlamentar"
-    params = {
-        "qtd": 1,
-        "parlamentarID": ID,
-    }
 
-    response = requests.get(url, params=params)
+    all_results = [] 
 
-    if response.status_code == 200:
-        data = response.json()
+    for ID in ids:
+        params = {
+            "qtd": 1,
+            "parlamentarID": ID,
+        }
 
-        try:    
-            db_connection = mysql.connector.connect(
-                host="[SEGREDO]",           
-                user="[SEGREDO]",       
-                password="[SEGREDO]",   
-                database="[SEGREDO]"
-            )
-            cursor = db_connection.cursor()
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
 
             for parlamentar in data.get("parlamentares", []):
                 parlamentar_id = parlamentar.get("parlamentarID")
@@ -44,38 +40,22 @@ def get_api_assiduidade(ID):
                             elif situacao["frequenciaSituacaoNome"] == "Falta Justificada":
                                 justificada = quantidade
 
-                    # Verificar se os dados já existem
-                    check_query = """
-                    SELECT COUNT(*) FROM assiduidade 
-                    WHERE ver_id = %s AND ano = %s
-                    """
-                    cursor.execute(check_query, (parlamentar_id, ano))
-                    exists = cursor.fetchone()[0]
+                    # Adiciona os dados ao resultado
+                    all_results.append({
+                        "ver_id": parlamentar_id,
+                        "ano": ano,
+                        "presenca": presenca,
+                        "faltas": faltas,
+                        "justificada": justificada
+                    })
 
-                    if exists == 0:  # Se não existir, insere os dados
-                        insert_query = """
-                        INSERT INTO assiduidade (ver_id, ano, presenca, faltas, justif)
-                        VALUES (%s, %s, %s, %s, %s)
-                        """
-                        cursor.execute(insert_query, (
-                            parlamentar_id,
-                            ano,
-                            presenca,
-                            faltas,
-                            justificada
-                        ))
+            print(f"Dados processados para o ID {ID}.")
+        else:
+            print(f"Erro ao fazer a solicitação para o ID {ID}: {response.status_code}")
 
-            db_connection.commit()
+        time.sleep(0.1)
+    
+    with open('rapagem_dados/assiduidades/assiduidade_total.json', 'w') as json_file:
+        json.dump(all_results, json_file, indent=4)
 
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
-        finally:
-            if db_connection.is_connected():
-                cursor.close()
-                db_connection.close()
-
-        return f"Dados processados para o parlamentar ID {ID}."
-    else:
-        return f"Erro ao fazer a solicitação: {response.status_code}"
-
-print(get_api_assiduidade(35))
+    print("Todos os dados salvos em assiduidade_total.json.")

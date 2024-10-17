@@ -1,0 +1,590 @@
+[
+    {
+        "ver_id": 35,
+        "ano": 2021,
+        "presenca": 86,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 35,
+        "ano": 2022,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 35,
+        "ano": 2023,
+        "presenca": 77,
+        "faltas": 0,
+        "justificada": 3
+    },
+    {
+        "ver_id": 35,
+        "ano": 2024,
+        "presenca": 58,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 238,
+        "ano": 2021,
+        "presenca": 82,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 238,
+        "ano": 2022,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 238,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 238,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 38,
+        "ano": 2021,
+        "presenca": 77,
+        "faltas": 0,
+        "justificada": 9
+    },
+    {
+        "ver_id": 38,
+        "ano": 2022,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 38,
+        "ano": 2023,
+        "presenca": 74,
+        "faltas": 0,
+        "justificada": 6
+    },
+    {
+        "ver_id": 38,
+        "ano": 2024,
+        "presenca": 53,
+        "faltas": 0,
+        "justificada": 6
+    },
+    {
+        "ver_id": 247,
+        "ano": 2021,
+        "presenca": 86,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 247,
+        "ano": 2022,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 247,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 247,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 40,
+        "ano": 2021,
+        "presenca": 81,
+        "faltas": 0,
+        "justificada": 5
+    },
+    {
+        "ver_id": 40,
+        "ano": 2022,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 40,
+        "ano": 2023,
+        "presenca": 73,
+        "faltas": 0,
+        "justificada": 7
+    },
+    {
+        "ver_id": 40,
+        "ano": 2024,
+        "presenca": 58,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 43,
+        "ano": 2021,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 43,
+        "ano": 2022,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 43,
+        "ano": 2023,
+        "presenca": 76,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 43,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 246,
+        "ano": 2021,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 3
+    },
+    {
+        "ver_id": 246,
+        "ano": 2022,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 246,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 246,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 44,
+        "ano": 2021,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 6
+    },
+    {
+        "ver_id": 44,
+        "ano": 2022,
+        "presenca": 79,
+        "faltas": 3,
+        "justificada": 2
+    },
+    {
+        "ver_id": 44,
+        "ano": 2023,
+        "presenca": 78,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 44,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 45,
+        "ano": 2021,
+        "presenca": 82,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 45,
+        "ano": 2022,
+        "presenca": 76,
+        "faltas": 0,
+        "justificada": 8
+    },
+    {
+        "ver_id": 45,
+        "ano": 2023,
+        "presenca": 76,
+        "faltas": 2,
+        "justificada": 2
+    },
+    {
+        "ver_id": 45,
+        "ano": 2024,
+        "presenca": 57,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 47,
+        "ano": 2021,
+        "presenca": 82,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 47,
+        "ano": 2022,
+        "presenca": 79,
+        "faltas": 3,
+        "justificada": 2
+    },
+    {
+        "ver_id": 47,
+        "ano": 2023,
+        "presenca": 78,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 47,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 244,
+        "ano": 2021,
+        "presenca": 86,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 244,
+        "ano": 2022,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 244,
+        "ano": 2023,
+        "presenca": 79,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 244,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 242,
+        "ano": 2021,
+        "presenca": 78,
+        "faltas": 1,
+        "justificada": 7
+    },
+    {
+        "ver_id": 242,
+        "ano": 2022,
+        "presenca": 81,
+        "faltas": 1,
+        "justificada": 2
+    },
+    {
+        "ver_id": 242,
+        "ano": 2023,
+        "presenca": 75,
+        "faltas": 1,
+        "justificada": 4
+    },
+    {
+        "ver_id": 242,
+        "ano": 2024,
+        "presenca": 53,
+        "faltas": 0,
+        "justificada": 6
+    },
+    {
+        "ver_id": 243,
+        "ano": 2021,
+        "presenca": 76,
+        "faltas": 0,
+        "justificada": 10
+    },
+    {
+        "ver_id": 243,
+        "ano": 2022,
+        "presenca": 82,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 243,
+        "ano": 2023,
+        "presenca": 78,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 243,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 245,
+        "ano": 2021,
+        "presenca": 82,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 245,
+        "ano": 2022,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 245,
+        "ano": 2023,
+        "presenca": 78,
+        "faltas": 0,
+        "justificada": 2
+    },
+    {
+        "ver_id": 245,
+        "ano": 2024,
+        "presenca": 56,
+        "faltas": 0,
+        "justificada": 3
+    },
+    {
+        "ver_id": 50,
+        "ano": 2021,
+        "presenca": 83,
+        "faltas": 1,
+        "justificada": 2
+    },
+    {
+        "ver_id": 50,
+        "ano": 2022,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 50,
+        "ano": 2023,
+        "presenca": 79,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 50,
+        "ano": 2024,
+        "presenca": 56,
+        "faltas": 0,
+        "justificada": 3
+    },
+    {
+        "ver_id": 240,
+        "ano": 2021,
+        "presenca": 82,
+        "faltas": 0,
+        "justificada": 4
+    },
+    {
+        "ver_id": 240,
+        "ano": 2022,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 240,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 240,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 234,
+        "ano": 2021,
+        "presenca": 86,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 234,
+        "ano": 2022,
+        "presenca": 83,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 234,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 234,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 249,
+        "ano": 2021,
+        "presenca": 0,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 249,
+        "ano": 2022,
+        "presenca": 24,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 249,
+        "ano": 2023,
+        "presenca": 71,
+        "faltas": 0,
+        "justificada": 9
+    },
+    {
+        "ver_id": 249,
+        "ano": 2024,
+        "presenca": 57,
+        "faltas": 1,
+        "justificada": 1
+    },
+    {
+        "ver_id": 239,
+        "ano": 2021,
+        "presenca": 85,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 239,
+        "ano": 2022,
+        "presenca": 81,
+        "faltas": 0,
+        "justificada": 3
+    },
+    {
+        "ver_id": 239,
+        "ano": 2023,
+        "presenca": 79,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 239,
+        "ano": 2024,
+        "presenca": 55,
+        "faltas": 1,
+        "justificada": 3
+    },
+    {
+        "ver_id": 55,
+        "ano": 2021,
+        "presenca": 86,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 55,
+        "ano": 2022,
+        "presenca": 77,
+        "faltas": 1,
+        "justificada": 6
+    },
+    {
+        "ver_id": 55,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 55,
+        "ano": 2024,
+        "presenca": 58,
+        "faltas": 0,
+        "justificada": 1
+    },
+    {
+        "ver_id": 237,
+        "ano": 2021,
+        "presenca": 86,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 237,
+        "ano": 2022,
+        "presenca": 84,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 237,
+        "ano": 2023,
+        "presenca": 80,
+        "faltas": 0,
+        "justificada": 0
+    },
+    {
+        "ver_id": 237,
+        "ano": 2024,
+        "presenca": 59,
+        "faltas": 0,
+        "justificada": 0
+    }
+]
