@@ -1,11 +1,11 @@
 import sys
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
-from dotenv import load_dotenv  # Adicione esta linha
+from dotenv import load_dotenv 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
 
 # Carregar variáveis do .env
@@ -66,7 +66,64 @@ def lista_vereadores():
 
 @app.route('/vereador')
 def pagina_vereador():
-    return render_template('vereador.html')
+        
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('SELECT * FROM assiduidade')  
+    vereador = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return render_template('vereador.html', vereador = vereador)
+
+@app.route('/atualiza_vereador')
+def atualiza_vereador():
+    # Ler o arquivo JSON
+    with open('rapagem_dados/assiduidades/assiduidade_total.json', 'r') as file:
+        assiduidade = json.load(file)
+
+    # Get a database connection
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    try:
+        for vereador in assiduidade:
+            ver_id = vereador['ver_id']
+            ano = vereador['ano']
+            presenca = vereador['presenca']
+            faltas = vereador['faltas']
+            justificada = vereador['justificada']
+
+            # Checar se o vereador já existe
+            cursor.execute("SELECT ver_id FROM assiduidade WHERE ver_id = %s", (ver_id,))
+            resposta = cursor.fetchone()
+            print(resposta)
+
+            # Se o vereador não existir, faz o INSERT
+            if not resposta:
+                cursor.execute(""" 
+                    INSERT INTO assiduidade 
+                    (ver_id, ano, presenca, faltas, justificada)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, 
+                (ver_id, ano, presenca, faltas, justificada)) 
+
+        # Confirmar as mudanças no banco de dados
+        connection.commit()
+
+    except Exception as e:
+        print(f"Erro: {e}")
+        connection.rollback()  # Reverter em caso de erro
+
+    finally:
+        # Fechar conexão
+        cursor.close()
+        connection.close()
+
+    return redirect('/vereador')
+
 
 @app.route('/pagina-proposicao')
 def pagVer():
