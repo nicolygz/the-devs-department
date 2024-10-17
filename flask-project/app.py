@@ -64,21 +64,22 @@ def lista_vereadores():
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
     
-def get_faltas_totais(vereador_id):
+def get_assiduidade_totais(vereador_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     
     query = """
     SELECT 
-        ver_id, 
-        ano, 
-        SUM(faltas) AS faltas_totais
+        ver_id,
+        SUM(faltas) AS faltas_totais,
+        SUM(presenca) AS presencas_totais,
+        SUM(justif) AS justificadas_totais
     FROM 
         assiduidade
     WHERE 
         ver_id = %s
     GROUP BY 
-        ano
+        ver_id;
     """
     
     cursor.execute(query, (vereador_id,))
@@ -91,7 +92,7 @@ def get_faltas_totais(vereador_id):
 
 @app.route('/vereador/<int:vereador_id>')
 def pagina_vereador(vereador_id):
-    faltas = get_faltas_totais(vereador_id)    
+    assiduidades = get_assiduidade_totais(vereador_id) 
     connection = get_db_connection()
     cursor = connection.cursor()
 
@@ -101,7 +102,7 @@ def pagina_vereador(vereador_id):
     cursor.close()
     connection.close()
 
-    return render_template('vereador.html', vereador_id=vereador_id, faltas=faltas)
+    return render_template('vereador.html', assiduidades=assiduidades)
 
 @app.route('/atualiza_vereador')
 def atualiza_vereador():
