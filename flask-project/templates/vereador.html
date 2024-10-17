@@ -70,33 +70,38 @@
 
     <div class="container" id="box_frequencia">
         <div class="cabeçalho">
-            <div class="title">Frequência em Plenário</div>
+            <div class="title">Frequência em Plenário (2021-2024)</div>
         </div>
+        {% for registro in assiduidades %}
         <div class="bar-container">
             <div class="label">Presenças:</div>
             <div class="bar">
-                <div class="progress" style="width: 98%;"></div>
+                <div class="progress"
+                    style="width: {{ (registro.presencas_totais / (registro.presencas_totais + registro.faltas_totais + registro.justificadas_totais)) * 100 }}%">
+                </div>
             </div>
-            <div class="percentage">98%</div>
+            <div class="percentage">{{ registro.presencas_totais }}</div>
         </div>
-        {% for registro in faltas %}
         <div class="bar-container">
-            <div class="label">Ausências em {{ registro.ano }}:</div>
+            <div class="label">Ausências:</div>
             <div class="bar">
                 <div class="progress"
-                    style="width: {{ (registro.faltas_totais / 100) * 100 }}%; background-color: gray;"></div>
+                    style="width: {{ (registro.faltas_totais / (registro.presencas_totais + registro.faltas_totais + registro.justificadas_totais)) * 100 }}%">
+                </div>
             </div>
             <div class="percentage">{{ registro.faltas_totais }}</div>
         </div>
+        <div class="bar-container">
+            <div class="label">Ausências Justificadas:</div>
+            <div class="bar">
+                <div class="progress"
+                    style="width: {{ (registro.justificadas_totais / (registro.presencas_totais + registro.faltas_totais + registro.justificadas_totais)) * 100 }}%">
+                </div>
+            </div>
+            <div class="percentage">{{ registro.justificadas_totais }}</div>
+        </div>
         {% endfor %}
 
-        <div class="bar-container">
-            <div class="label">Ausências justificadas:</div>
-            <div class="bar">
-                <div class="progress" style="width: 100%;"></div>
-            </div>
-            <div class="percentage">2/2</div>
-        </div>
         <div class="note">⭐ Este vereador está entre os 2% que menos faltam</div>
 
     </div>
@@ -164,12 +169,12 @@
             <button type="submit" id="botao_estrela">Publicar</button>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </div>
 
 <br><br>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </div>
-
-
-
 
 {% endblock %}
