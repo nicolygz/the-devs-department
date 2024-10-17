@@ -104,7 +104,6 @@ def pagina_vereador(vereador_id):
     return render_template('vereador.html', vereador_id=vereador_id, faltas=faltas)
 
 @app.route('/atualiza_vereador')
-
 def atualiza_vereador():
     # Ler o arquivo JSON
     with open('rapagem_dados/assiduidades/assiduidade_total.json', 'r') as file:
@@ -123,11 +122,11 @@ def atualiza_vereador():
             faltas = vereador['faltas']
             justif = vereador['justif']
 
-            # Checar se o vereador já existe
-            cursor.execute("SELECT ver_id FROM assiduidade WHERE ver_id = %s", (ver_id,))
+            # Checar se o vereador e o ano já existem
+            cursor.execute("SELECT ver_id FROM assiduidade WHERE ver_id = %s AND ano = %s", (ver_id, ano))
             resposta = cursor.fetchone()
 
-            # Se o vereador não existir, faz o INSERT
+            # Se o vereador e o ano não existirem, faz o INSERT
             if not resposta:
                 cursor.execute(""" 
                     INSERT INTO assiduidade 
