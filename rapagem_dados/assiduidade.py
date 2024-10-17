@@ -26,7 +26,7 @@ def get_api_assiduidade(ids):
                 for ano in anos_filtrados:
                     presenca = 0
                     faltas = 0
-                    justificada = 0
+                    justif = 0
 
                     # Coletar dados de presença, faltas e justificativas
                     for situacao in frequencia:
@@ -38,7 +38,7 @@ def get_api_assiduidade(ids):
                             elif situacao["frequenciaSituacaoNome"] == "Falta":
                                 faltas = quantidade
                             elif situacao["frequenciaSituacaoNome"] == "Falta Justificada":
-                                justificada = quantidade
+                                justif = quantidade
 
                     # Adiciona os dados ao resultado
                     all_results.append({
@@ -46,7 +46,7 @@ def get_api_assiduidade(ids):
                         "ano": ano,
                         "presenca": presenca,
                         "faltas": faltas,
-                        "justificada": justificada
+                        "justif": justif
                     })
 
             print(f"Dados processados para o ID {ID}.")

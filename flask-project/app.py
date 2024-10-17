@@ -63,10 +63,35 @@ def lista_vereadores():
 
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
+    
+def get_faltas_totais(vereador_id):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    
+    query = """
+    SELECT 
+        ver_id, 
+        ano, 
+        SUM(faltas) AS faltas_totais
+    FROM 
+        assiduidade
+    WHERE 
+        ver_id = %s
+    GROUP BY 
+        ano
+    """
+    
+    cursor.execute(query, (vereador_id,))
+    resultados = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    return resultados
 
-@app.route('/vereador')
-def pagina_vereador():
-        
+@app.route('/vereador/<int:vereador_id>')
+def pagina_vereador(vereador_id):
+    faltas = get_faltas_totais(vereador_id)    
     connection = get_db_connection()
     cursor = connection.cursor()
 
@@ -76,9 +101,10 @@ def pagina_vereador():
     cursor.close()
     connection.close()
 
-    return render_template('vereador.html', vereador = vereador)
+    return render_template('vereador.html', vereador_id=vereador_id, faltas=faltas)
 
 @app.route('/atualiza_vereador')
+
 def atualiza_vereador():
     # Ler o arquivo JSON
     with open('rapagem_dados/assiduidades/assiduidade_total.json', 'r') as file:
@@ -88,27 +114,28 @@ def atualiza_vereador():
     connection = get_db_connection()
     cursor = connection.cursor()
     
+    inserted_count = 0  # Contador de inserções
     try:
         for vereador in assiduidade:
             ver_id = vereador['ver_id']
             ano = vereador['ano']
             presenca = vereador['presenca']
             faltas = vereador['faltas']
-            justificada = vereador['justificada']
+            justif = vereador['justif']
 
             # Checar se o vereador já existe
             cursor.execute("SELECT ver_id FROM assiduidade WHERE ver_id = %s", (ver_id,))
             resposta = cursor.fetchone()
-            print(resposta)
 
             # Se o vereador não existir, faz o INSERT
             if not resposta:
                 cursor.execute(""" 
                     INSERT INTO assiduidade 
-                    (ver_id, ano, presenca, faltas, justificada)
+                    (ver_id, ano, presenca, faltas, justif)
                     VALUES (%s, %s, %s, %s, %s)
                 """, 
-                (ver_id, ano, presenca, faltas, justificada)) 
+                (ver_id, ano, presenca, faltas, justif)) 
+                inserted_count += 1  # Incrementar o contador
 
         # Confirmar as mudanças no banco de dados
         connection.commit()
@@ -116,14 +143,14 @@ def atualiza_vereador():
     except Exception as e:
         print(f"Erro: {e}")
         connection.rollback()  # Reverter em caso de erro
+        return {'status': 'error', 'message': str(e)}
 
     finally:
         # Fechar conexão
         cursor.close()
         connection.close()
 
-    return redirect('/vereador')
-
+    return {'status': 'success', 'inserted_count': inserted_count}
 
 @app.route('/pagina-proposicao')
 def pagVer():

@@ -24,7 +24,7 @@
                         <label for="star5" title="5 estrelas">★</label>
                         <label for="star4" title="4 estrelas">★</label>
                         <label for="star3" title="3 estrelas">☆</label>
-                        <label for="star2" title="2 estrelas">☆</label>                          
+                        <label for="star2" title="2 estrelas">☆</label>
                         <label for="star1" title="1 estrela">☆</label>
                         <a id="notas_estrela">2.0</a>
                     </div>
@@ -47,7 +47,8 @@
                         <br>
                         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, praesentium consequatur
                             tempora fuga exercitationem voluptates omnis nobis aliquid. Quasi distinctio velit molestiae
-                            non provident fugit numquam rem iusto, libero labore?orem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, praesentium consequatur
+                            non provident fugit numquam rem iusto, libero labore?orem ipsum dolor, sit amet consectetur
+                            adipisicing elit. Quisquam, praesentium consequatur
                             tempora fuga exercitatio </p>
                     </section>
                 </div>
@@ -78,13 +79,17 @@
             </div>
             <div class="percentage">98%</div>
         </div>
+        {% for registro in faltas %}
         <div class="bar-container">
-            <div class="label">Ausências:</div>
+            <div class="label">Ausências em {{ registro.ano }}:</div>
             <div class="bar">
-                <div class="progress" style="width: 10%; background-color: gray;"></div>
+                <div class="progress"
+                    style="width: {{ (registro.faltas_totais / 100) * 100 }}%; background-color: gray;"></div>
             </div>
-            <div class="percentage">2</div>
+            <div class="percentage">{{ registro.faltas_totais }}</div>
         </div>
+        {% endfor %}
+
         <div class="bar-container">
             <div class="label">Ausências justificadas:</div>
             <div class="bar">
@@ -116,10 +121,10 @@
 
     <div class="container" id="box_votaçao">
         <div id="container">
-        <h2 id="QUESTÕES-CHAVE">VOTAÇÃO EM QUESTÕES-CHAVE</h2>
-        <div class="graphic-placeholder">
-            <p>Gráfico Placeholder</p>
-        </div>
+            <h2 id="QUESTÕES-CHAVE">VOTAÇÃO EM QUESTÕES-CHAVE</h2>
+            <div class="graphic-placeholder">
+                <p>Gráfico Placeholder</p>
+            </div>
         </div>
         <br>
         <br>
@@ -127,44 +132,41 @@
     </div>
     <br><br>
 
-        <div class="comment-section">
-            <h2>Comentários</h2>
-            <div class="comment">
-                <p><strong>José Carlos</strong> comentou em <span>20/08/2022</span></p>
-                <p>Esses caras são uns sem vergonha! Usam o dinheiro público para fazer bagunça.</p>
-            </div>
-    
-            <div class="comment-form">
-                <h3>Dê sua opinião:</h3>
-                <div class="rating">
-                    <span>Nota:</span>
-                    <div class="stars">
-                        <input type="radio" id="star5" name="rating" value="5" />
-                        <label for="star5" title="5 estrelas">★</label>
-    
-                        <input type="radio" id="star4" name="rating" value="4" />
-                        <label for="star4" title="4 estrelas">★</label>
-    
-                        <input type="radio" id="star3" name="rating" value="3" />
-                        <label for="star3" title="3 estrelas">★</label>
-    
-                        <input type="radio" id="star2" name="rating" value="2" />
-                        <label for="star2" title="2 estrelas">★</label>
-    
-                        <input type="radio" id="star1" name="rating" value="1" />
-                        <label for="star1" title="1 estrela">★</label>
-                    </div>
+    <div class="comment-section">
+        <h2>Comentários</h2>
+        <div class="comment">
+            <p><strong>José Carlos</strong> comentou em <span>20/08/2022</span></p>
+            <p>Esses caras são uns sem vergonha! Usam o dinheiro público para fazer bagunça.</p>
+        </div>
+
+        <div class="comment-form">
+            <h3>Dê sua opinião:</h3>
+            <div class="rating">
+                <span>Nota:</span>
+                <div class="stars">
+                    <input type="radio" id="star5" name="rating" value="5" />
+                    <label for="star5" title="5 estrelas">★</label>
+
+                    <input type="radio" id="star4" name="rating" value="4" />
+                    <label for="star4" title="4 estrelas">★</label>
+
+                    <input type="radio" id="star3" name="rating" value="3" />
+                    <label for="star3" title="3 estrelas">★</label>
+
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label for="star2" title="2 estrelas">★</label>
+
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label for="star1" title="1 estrela">★</label>
                 </div>
-                <textarea placeholder="Digite aqui seu comentário..."></textarea>
-                <button type="submit" id="botao_estrela">Publicar</button>
             </div>
+            <textarea placeholder="Digite aqui seu comentário..."></textarea>
+            <button type="submit" id="botao_estrela">Publicar</button>
         </div>
-    
-        <script src="script.js"></script>
     </div>
+</div>
 
-    <br><br>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<br><br>
 </div>
 
 
