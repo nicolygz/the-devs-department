@@ -59,3 +59,5 @@ def get_api_assiduidade(ids):
         json.dump(all_results, json_file, indent=4)
 
     print("Todos os dados salvos em assiduidade_total.json.")
+    return all_results
+

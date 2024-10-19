@@ -6,12 +6,16 @@
 <link rel="stylesheet" href="../static/lista-vereadores.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='vereador.css') }}">
 
-
-
 {% endblock %}
 
 {% block content %}
 <div class="bg">
+    <div class="btncontainer">
+        <div class="btn" id="btnContainer">
+            <a href="/atualiza_vereador" id="updateButton" onclick="updateData(event)">Atualizar a assiduidade dos
+                vereadores</a>
+        </div>
+    </div>
     <div style="padding-top: 80px;">
         <div class="container" id="box">
             <h1 class="item1">Ver. Milton Vieira Filho </h1>
@@ -38,28 +42,38 @@
                 </div>
                 <div id="resumo" class="content1">
                     <section>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At, incidunt facere neque debitis
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At, incidunt facere neque
+                            debitis
                             eum
                             sunt nobis molestiae natus placeat doloremque, tempore animi, repellendus vel excepturi
                             molestias? Quam, nisi eum! Aliquid?</p>
                         <br>
                         <h3>Título para alguma coisa</h3>
                         <br>
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, praesentium consequatur
-                            tempora fuga exercitationem voluptates omnis nobis aliquid. Quasi distinctio velit molestiae
-                            non provident fugit numquam rem iusto, libero labore?orem ipsum dolor, sit amet consectetur
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, praesentium
+                            consequatur
+                            tempora fuga exercitationem voluptates omnis nobis aliquid. Quasi distinctio velit
+                            molestiae
+                            non provident fugit numquam rem iusto, libero labore?orem ipsum dolor, sit amet
+                            consectetur
                             adipisicing elit. Quisquam, praesentium consequatur
                             tempora fuga exercitatio </p>
                     </section>
                 </div>
                 <div id="proposicoes" class="content1" style="display: none;">
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto reprehenderit ipsam ipsa,
-                        tenetur ex illum commodi, temporibus, laboriosam sint modi maiores. Praesentium quidem veniam
-                        velit alias sint vel ducimus maxime?Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                        Consectetur dolorem ipsum molestiae laboriosam eius quibusdam officia modi sit, voluptate omnis
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto reprehenderit ipsam
+                        ipsa,
+                        tenetur ex illum commodi, temporibus, laboriosam sint modi maiores. Praesentium quidem
+                        veniam
+                        velit alias sint vel ducimus maxime?Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit.
+                        Consectetur dolorem ipsum molestiae laboriosam eius quibusdam officia modi sit, voluptate
+                        omnis
                         hic perspiciatis impedit accusantium qui quos quas delectus cum! Fugiat!maxime? Lorem ipsum
-                        dolor sit, amet consectetur adipisicing elit. Sit deleniti tempore quae repellat quaerat placeat
-                        rerum nobis incidunt cumque facilis perferendis veniam accusamus blanditiis, accusantium autem
+                        dolor sit, amet consectetur adipisicing elit. Sit deleniti tempore quae repellat quaerat
+                        placeat
+                        rerum nobis incidunt cumque facilis perferendis veniam accusamus blanditiis, accusantium
+                        autem
                         neque dolor ex fuga?</p>
                 </div>
             </div>
@@ -175,6 +189,45 @@
 
 <br><br>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<div class="btncontainer">
+    <div class="btn">
+        <a href='/atualiza_vereador' class="txtbtn" id="updateButton" onclick="changeButtonColor(event)">Atualizar dados
+            de vereadores</a>
+    </div>
+</div>
+
+<script>
+    function updateData(event) {
+        event.preventDefault(); // Previne o comportamento padrão do link
+
+        const btnContainer = document.getElementById("btnContainer");
+
+        // Muda a cor de fundo do contêiner do botão
+        btnContainer.style.backgroundColor = "#ffa100";
+
+        // Faz a requisição para o servidor
+        fetch(document.getElementById("updateButton").href)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Erro na requisição');
+                }
+            })
+            .then(data => {
+
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            })
+            .finally(() => {
+                // Restaura a cor original após a requisição
+                btnContainer.style.backgroundColor = "";
+            });
+    }
+</script>
+
 </div>
 
 {% endblock %}

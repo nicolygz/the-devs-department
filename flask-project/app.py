@@ -1,12 +1,13 @@
 import sys
 import os
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
 from dotenv import load_dotenv 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
+from rapagem_dados import assiduidade
 
 # Carregar variáveis do .env
 load_dotenv()  # Adicione esta linha para carregar o .env
@@ -106,36 +107,51 @@ def pagina_vereador(vereador_id):
 
 @app.route('/atualiza_vereador')
 def atualiza_vereador():
-    # Ler o arquivo JSON
-    with open('rapagem_dados/assiduidades/assiduidade_total.json', 'r') as file:
-        assiduidade = json.load(file)
-
-    # Get a database connection
+    # Chamar a API e pegar os dados de assiduidade
+    dados_atuais = assiduidade.get_api_assiduidade(id_vereadores)
+    
+    # Guardar o JSON da API para inspeção
+    with open('rapagem_dados/assiduidades/assiduidade_total.json', 'w') as json_file:
+        json.dump(dados_atuais, json_file, indent=4)
+    
+    # Obter conexão com o banco de dados
     connection = get_db_connection()
     cursor = connection.cursor()
     
     inserted_count = 0  # Contador de inserções
+    updated_count = 0   # Contador de atualizações
     try:
-        for vereador in assiduidade:
+        for vereador in dados_atuais:
             ver_id = vereador['ver_id']
             ano = vereador['ano']
             presenca = vereador['presenca']
             faltas = vereador['faltas']
             justif = vereador['justif']
 
-            # Checar se o vereador e o ano já existem
-            cursor.execute("SELECT ver_id FROM assiduidade WHERE ver_id = %s AND ano = %s", (ver_id, ano))
+            # Checar se o vereador e o ano já existem no banco de dados
+            cursor.execute("SELECT presenca, faltas, justif FROM assiduidade WHERE ver_id = %s AND ano = %s", (ver_id, ano))
             resposta = cursor.fetchone()
 
-            # Se o vereador e o ano não existirem, faz o INSERT
             if not resposta:
+                # Se o vereador e o ano não existirem, faz o INSERT
                 cursor.execute(""" 
                     INSERT INTO assiduidade 
                     (ver_id, ano, presenca, faltas, justif)
                     VALUES (%s, %s, %s, %s, %s)
                 """, 
                 (ver_id, ano, presenca, faltas, justif)) 
-                inserted_count += 1  # Incrementar o contador
+                inserted_count += 1  # Incrementar o contador de inserção
+            else:
+                # Se já existe, verificar se houve mudanças nos dados
+                presenca_db, faltas_db, justif_db = resposta
+                if (presenca_db != presenca) or (faltas_db != faltas) or (justif_db != justif):
+                    # Se os dados são diferentes, faz o UPDATE
+                    cursor.execute("""
+                        UPDATE assiduidade
+                        SET presenca = %s, faltas = %s, justif = %s
+                        WHERE ver_id = %s AND ano = %s
+                    """, (presenca, faltas, justif, ver_id, ano))
+                    updated_count += 1  # Incrementar o contador de atualização
 
         # Confirmar as mudanças no banco de dados
         connection.commit()
@@ -150,7 +166,7 @@ def atualiza_vereador():
         cursor.close()
         connection.close()
 
-    return {'status': 'success', 'inserted_count': inserted_count}
+    return redirect(request.referrer)
 
 @app.route('/pagina-proposicao')
 def pagVer():
