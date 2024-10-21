@@ -3,9 +3,14 @@ import os
 from flask import Flask, render_template
 import mysql.connector
 import requests
+from datetime import datetime
 from bs4 import BeautifulSoup
 import json
+from dotenv import load_dotenv  # Adicione esta linha
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
+
+# Carregar variáveis do .env
+load_dotenv()  # Adicione esta linha para carregar o .env
 
 app = Flask(__name__)
 
@@ -14,11 +19,11 @@ id_vereadores = [35,238,38,247,40,43,246,44,45,47,244,242,243,245,50,240,234,249
 # Create a MySQL connection
 def get_db_connection():
     connection = mysql.connector.connect(
-        host=app.config['MYSQL_HOST'],
-        user=app.config['MYSQL_USER'],
-        password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DATABASE'],
-        port=app.config.get('MYSQL_PORT')  # Fetch the port from config
+        host=os.getenv('MYSQL_HOST'),  # Fetch directly from environment variables
+        user=os.getenv('MYSQL_USER'),
+        password=os.getenv('MYSQL_PASSWORD'),
+        database=os.getenv('MYSQL_DATABASE'),
+        port=os.getenv('MYSQL_PORT', 3306)  # Provide a default port if not defined
     )
     return connection
 
@@ -70,7 +75,104 @@ def pagVer():
 
 @app.route('/proposicoes')
 def listProp():
-    return render_template('filtro.html')
+    try:
+        connection = get_db_connection()  # Conecte-se ao banco de dados
+        cursor = connection.cursor(dictionary=True)
+
+        # Execute a consulta para buscar todas as proposições
+        cursor.execute('SELECT * FROM proposicoes')
+        todas_proposicoes = cursor.fetchall()
+
+        # Filtre apenas as moções
+        mocoes = [prop for prop in todas_proposicoes if prop['tipo'] == 'Moção']
+
+        cursor.close()
+        connection.close()
+
+        # Imprimir os dados para verificação
+        print("Todas as proposições:", todas_proposicoes)  # Para verificação no console
+        print("Moções filtradas:", mocoes)  # Para verificação no console
+        
+        return render_template('filtro.html', proposicoes=mocoes)  # Passa as moções para o template
+
+    except Exception as e:
+        print("Erro ao conectar ao banco de dados ou executar a consulta:", e)
+        return "Erro ao acessar os dados"
+
+
+
+@app.route('/proposicao/<int:id_prop>')
+def pagina_proposicao(id_prop):
+    # Aqui você poderia buscar e exibir detalhes da proposição específica
+    return f"Página da proposição com ID: {id_prop}"
+
+
+@app.route('/insere_mocoes')
+def insere_mocoes():
+    caminho_mocoes = 'rapagem_dados/ArquivosJson/dadosMocoes_2021_a_2024.json'
+
+    try:
+        with open(caminho_mocoes, 'r', encoding='utf-8') as file:
+            mocoes = json.load(file)
+
+    except FileNotFoundError:
+        return {'status': 'error', 'message': 'Arquivo não encontrado. Verifique o caminho.'}
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    inserted_count = 0
+
+    # Itera sobre as moções e insere no banco de dados
+    for mocao in mocoes:
+        assunto = mocao.get('Assunto', 'Sem assunto')
+        
+        # Converter a data para o formato correto
+        data_str = mocao.get('Data', '0000-00-00 00:00:00')
+        try:
+            data_hora = datetime.strptime(data_str, '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            print(f"Data inválida: {data_str}. Usando data padrão.")
+            data_hora = '0000-00-00 00:00:00'
+            
+        situacao = mocao.get('Situacao', 'Indefinido')
+        tipo = mocao.get('Tipo', 'Moção')
+        autor_nome = mocao.get('Autor')  # Usando o nome do autor
+        tema = mocao.get('Tema', 'Sem tema')
+        requerimento_num = mocao.get('Numero Proposicao', 'N/A')
+        num_processo = mocao.get('Numero Processo', 'N/A')
+        num_protocolo = mocao.get('Numero Protocolo', 0)
+        id_prop = mocao.get('Numero Proposicao', 0)
+
+        # Consultar o ver_id usando o nome do vereador
+        cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor_nome,))
+        resultado = cursor.fetchone()
+
+        if resultado is None:
+            print(f"Vereador '{autor_nome}' não encontrado. A inserção da moção será ignorada.")
+            continue  # Ignora se o vereador não for encontrado
+        else:
+            id_vereador = resultado[0]  # Obtém o ID do vereador
+
+        # Comando SQL para inserir os dados na tabela proposicoes
+        sql = """INSERT INTO proposicoes 
+                (requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, ver_id, tema)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        
+        valores = (requerimento_num, assunto, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, id_vereador, tema)
+        
+        try:
+            cursor.execute(sql, valores)
+            print(f"Moção inserida com sucesso: {id_prop}")
+            inserted_count += 1
+        except Exception as e:
+            print(f"Erro ao inserir moção: {e}. ver_id: {id_vereador}")
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return {'status': 'success', 'inserted_count': inserted_count}
+
 
 
 @app.route('/atualiza_vereadores')

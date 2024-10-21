@@ -1,67 +1,56 @@
-{% extends 'base.html' %} {% block extra_css%}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='listProp.css') }}"
-/>
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='listProp.css') }}" />
 <link rel="stylesheet" href="../static/listProp.css" />
-{% endblock %} {% block title %}Lista de Proposições{% endblock %} {% block
-content %}
+{% endblock %}
+
+{% block title %}
+Lista de Proposições
+{% endblock %}
+
+{% block content %}
 <main class="list-prop">
   <h1 class="list-title">PROPOSIÇÕES APRESENTADAS</h1>
   <p class="pag-descricao">
     Tenha uma visão geral do desempenho dos vereadores, faltas no período e
     proposições apresentadas
   </p>
-  <section class="navBar">{% block filtro %} {% endblock %}</section>
-  <section class="prop-infos">
-    <section class="proposicao">
-      <section class="detalhes-prop title">
-        <h4>TÍTULO DA PROPOSIÇÃO</h4>
-        <p>n° xxx/2024</p>
-      </section>
-      <section class="detalhes-prop situation-negada">
-        <h4>SITUAÇÃO ATUAL:</h4>
-        <p>Aprovada</p>
-      </section>
-      <section class="detalhes-prop date">
-        <h4>DATA:</h4>
-        <p>dd/mm/aaaa</p>
-      </section>
-    </section>
-    <section class="descricao">
-      <a href="/pagina-proposicao" class="link-pagProp">
-        <p class="descricao-prop">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-          incidunt assumenda debitis nulla aliquid consequuntur?
-        </p>
-      </a>
-    </section>
+  
+  <section class="navBar">
+    {% block filtro %}
+    {% endblock %}
   </section>
 
-  <section class="prop-infos">
-    <section class="proposicao">
-      <section class="detalhes-prop title">
-        <h4>TÍTULO DA PROPOSIÇÃO</h4>
-        <p>n° xxx/2024</p>
+  {% if proposicoes %}
+    {% for proposicao in proposicoes %}
+      <section class="prop-infos">
+        <section class="proposicao">
+          <section class="detalhes-prop title">
+            <h4>TÍTULO DA PROPOSIÇÃO</h4>
+            <p>n° {{ proposicao.requerimento_num }}/2024</p> <!-- Exibe o número do requerimento -->
+          </section>
+          <section class="detalhes-prop situation-negada">
+            <h4>SITUAÇÃO ATUAL:</h4>
+            <p>Aprovada</p> <!-- Aqui você pode adicionar a situação correta se tiver -->
+          </section>
+          <section class="detalhes-prop date">
+            <h4>DATA:</h4>
+            <p>{{ proposicao.data_hora.strftime('%d/%m/%Y') }}</p> <!-- Formato de data -->
+          </section>
+        </section>
+        <section class="descricao">
+          <a href="/pagina-proposicao" class="link-pagProp">
+            <p class="descricao-prop">
+              {{ proposicao.ementa }} <!-- Adiciona a ementa da proposição -->
+            </p>
+          </a>
+        </section>
       </section>
-      <section class="detalhes-prop situation-negada">
-        <h4>SITUAÇÃO ATUAL:</h4>
-        <p>Aprovada</p>
-      </section>
-      <section class="detalhes-prop date">
-        <h4>DATA:</h4>
-        <p>dd/mm/aaaa</p>
-      </section>
-    </section>
-    <section class="descricao">
-      <a href="/pagina-proposicao" class="link-pagProp">
-        <p class="descricao-prop">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-          incidunt assumenda debitis nulla aliquid consequuntur?
-        </p>
-      </a>
-    </section>
-  </section>
+    {% endfor %}
+  {% else %}
+    <p>Nenhuma moção encontrada.</p>
+  {% endif %}
   
   <nav class="btn-pags">
     <p class="arrow">&LeftTriangle;</p>
