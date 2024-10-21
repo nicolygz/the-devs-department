@@ -17,11 +17,11 @@
     </div>
     <div style="padding-top: 80px;">
         <div class="container" id="box">
-            <h1 class="item1">Ver. Milton Vieira Filho </h1>
+            <h1 class="item1">{{ vereador[1] }}</h1>
             <div class="flex-container-vereador">
                 <div class="card">
                     <div class="card-img">
-                        <a href="#"><img src="../static/imagens/foto-vereador.png" alt=""></a>
+                        <a href="#"><img src="{{ vereador[9]}}" alt=""></a>
                     </div>
                     <div class="stars_card">
                         <label for="star5" title="5 estrelas">★</label>
@@ -31,7 +31,13 @@
                         <label for="star1" title="1 estrela">☆</label>
                         <a id="notas_estrela">2.0</a>
                     </div>
-                    <div class="card-footer">MDB</div>
+                    <div class="card-text-container">
+                        <div class="card-text">Telefone: {{ " " }}{{ vereador[3] }}</div>
+                        <div class="card-text">Telefone 2: {{ " " }}{{ vereador[4] }}</div>
+                        <div class="card-text">Celular: {{ " " }}{{ vereador[5] }}</div>
+                        <div class="card-text">Email: {{ " " }}{{ vereador[6] }}</div>
+                    </div>
+                    <div class="card-footer">{{ vereador[2] }}</div>
                 </div>
             </div>
             <div class="container">
@@ -188,11 +194,7 @@
 
 <br><br>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-<div class="btncontainer">
-    <div class="btn">
-        <a href='/atualiza_vereador' class="txtbtn" id="updateButton" onclick="changeButtonColor(event)">Atualizar dados
-            de vereadores</a>
-    </div>
+</div>
 </div>
 
 <script>

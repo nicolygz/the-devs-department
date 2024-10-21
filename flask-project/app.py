@@ -97,13 +97,13 @@ def pagina_vereador(vereador_id):
     connection = get_db_connection()
     cursor = connection.cursor()
 
-    cursor.execute('SELECT * FROM assiduidade')  
-    vereador = cursor.fetchall()
+    cursor.execute('SELECT * FROM vereadores WHERE ver_id = %s', (vereador_id,))
+    vereador = cursor.fetchone()
 
     cursor.close()
     connection.close()
 
-    return render_template('vereador.html', assiduidades=assiduidades)
+    return render_template('vereador.html', assiduidades=assiduidades, vereador=vereador)
 
 @app.route('/atualiza_vereador')
 def atualiza_vereador():
