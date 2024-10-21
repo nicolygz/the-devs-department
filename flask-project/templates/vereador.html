@@ -198,9 +198,14 @@
 </div>
 
 <script>
+    let isUpdating = false; // Variável para controlar o estado de atualização
+
     function updateData(event) {
         event.preventDefault(); // Previne o comportamento padrão do link
 
+        if (isUpdating) return; // Se já estiver atualizando, não faz nada
+
+        isUpdating = true; // Indica que a atualização está em andamento
         const btnContainer = document.getElementById("btnContainer");
 
         // Muda a cor de fundo do contêiner do botão
@@ -216,7 +221,6 @@
                 }
             })
             .then(data => {
-
                 console.log(data);
             })
             .catch(error => {
@@ -225,10 +229,14 @@
             .finally(() => {
                 // Restaura a cor original após a requisição
                 btnContainer.style.backgroundColor = "";
+
+                // Espera 30 segundos antes de permitir outra atualização
+                setTimeout(() => {
+                    isUpdating = false; // Permite nova atualização
+                }, 30000);
             });
     }
 </script>
-
 </div>
 
 {% endblock %}
