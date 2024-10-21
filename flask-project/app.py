@@ -104,9 +104,18 @@ def pagina_vereador(vereador_id):
     connection.close()
 
     return render_template('vereador.html', assiduidades=assiduidades, vereador=vereador)
+ 
+@app.route('/pagina-proposicao')
+def pagVer():
+    return render_template('pagina-proposicao.html')
 
-@app.route('/atualiza_vereador')
-def atualiza_vereador():
+@app.route('/proposicoes')
+def listProp():
+    return render_template('filtro.html')
+
+
+@app.route('/atualiza_vereadores')
+def atualiza_vereadores():
     # Chamar a API e pegar os dados de assiduidade
     dados_atuais = assiduidade.get_api_assiduidade(id_vereadores)
     
@@ -166,19 +175,6 @@ def atualiza_vereador():
         cursor.close()
         connection.close()
 
-    return redirect(request.referrer)
-
-@app.route('/pagina-proposicao')
-def pagVer():
-    return render_template('pagina-proposicao.html')
-
-@app.route('/proposicoes')
-def listProp():
-    return render_template('filtro.html')
-
-
-@app.route('/atualiza_vereadores')
-def atualiza_vereadores():
     vereadores = []
     for i in id_vereadores:
         vereador = get_vereadores(str(i))
@@ -221,7 +217,7 @@ def atualiza_vereadores():
     cursor.close()
     connection.close()
 
-    return "deu certo"
+    return redirect(request.referrer)
 
 def get_vereadores(id):
 
