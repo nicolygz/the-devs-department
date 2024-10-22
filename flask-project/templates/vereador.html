@@ -35,7 +35,7 @@
                         <li>Telefone: {{ " " }}{{ vereador[3] }}</li>
                         <li>Telefone 2: {{ " " }}{{ vereador[4] }}</li>
                         <li>Celular: {{ " " }}{{ vereador[5] }}</li>
-                        <li>Email: {{ " " }}{{ vereador[6] }}</li>
+                        <li>Email: <span id="email">{{ " " }}{{ vereador[6] }}</span></li>
                     </ul>
                     <span class="card-footer">{{ vereador[2] }}</span>
                 </div>
@@ -195,48 +195,6 @@
 <br><br>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </div>
-</div>
-
-<script>
-    let isUpdating = false; // Variável para controlar o estado de atualização
-
-    function updateData(event) {
-        event.preventDefault(); // Previne o comportamento padrão do link
-
-        if (isUpdating) return; // Se já estiver atualizando, não faz nada
-
-        isUpdating = true; // Indica que a atualização está em andamento
-        const btnContainer = document.getElementById("btnContainer");
-
-        // Muda a cor de fundo do contêiner do botão
-        btnContainer.style.backgroundColor = "#ffa100";
-
-        // Faz a requisição para o servidor
-        fetch(document.getElementById("updateButton").href)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Erro na requisição');
-                }
-            })
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-            })
-            .finally(() => {
-                // Restaura a cor original após a requisição
-                btnContainer.style.backgroundColor = "";
-
-                // Espera 30 segundos antes de permitir outra atualização
-                setTimeout(() => {
-                    isUpdating = false; // Permite nova atualização
-                }, 30000);
-            });
-    }
-</script>
 </div>
 
 {% endblock %}
