@@ -9144,6 +9144,54 @@
         "Situacao": "N/A"
     },
     {
+        "ID": "402904",
+        "Numero Processo": "17232",
+        "Numero Protocolo": "20518",
+        "Numero Proposicao": "269",
+        "Tipo": "Moção",
+        "Assunto": "Parabeniza a aluna Milena Rafaelli Santos Rosa, da E.E. Prof. Estevam Ferri, por premiação em concurso de desenho organizado pela Fundação Japão.",
+        "Data": "21/10/2024 16:42:09",
+        "Autor": " Ver. Amélia Naomi ",
+        "Id Autor": "1137",
+        "Situacao": "Tramitando"
+    },
+    {
+        "ID": "402852",
+        "Numero Processo": "17233",
+        "Numero Protocolo": "20520",
+        "Numero Proposicao": "270",
+        "Tipo": "Moção",
+        "Assunto": "Manifesta repúdio à assinatura de resolução do Foro de São Paulo assinada pelo Partido dos Trabalhadores que reconhece a vitória de Nicolás Maduro.",
+        "Data": "21/10/2024 16:53:00",
+        "Autor": "Ver. Thomaz Henrique",
+        "Id Autor": "3710",
+        "Situacao": "Tramitando"
+    },
+    {
+        "ID": "402839",
+        "Numero Processo": "17229",
+        "Numero Protocolo": "20511",
+        "Numero Proposicao": "268",
+        "Tipo": "Moção",
+        "Assunto": "Manifesta repúdio à palestra realizada na Universidade Federal do Maranhão que promoveu erotismo durante o evento denominado \"Encontro de Gênero\" do Grupo de Pesquisa Epistemologia da Antropologia, Etnologia e Política (Gaep).",
+        "Data": "21/10/2024 16:26:30",
+        "Autor": "Ver. Thomaz Henrique",
+        "Id Autor": "3710",
+        "Situacao": "Tramitando"
+    },
+    {
+        "ID": "402813",
+        "Numero Processo": "17128",
+        "Numero Protocolo": "20399",
+        "Numero Proposicao": "267",
+        "Tipo": "Moção",
+        "Assunto": "Parabeniza o Espaço Civile e o Núcleo Hespérides – Música das Américas pela realização do Sarau Beneficente em prol do Grupo de Estímulo e Solidariedade ao tratamento Oncológico (GESTO).",
+        "Data": "21/10/2024 10:35:30",
+        "Autor": "Ver. Fernando Petiti",
+        "Id Autor": "1141",
+        "Situacao": "Tramitando"
+    },
+    {
         "ID": "402402",
         "Numero Processo": "16873",
         "Numero Protocolo": "20056",

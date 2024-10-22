@@ -1,6 +1,7 @@
 import json
 import requests
 import mysql.connector
+import time  # Importa o módulo para adicionar delay
 from datetime import datetime
 
 # Função principal para capturar moções de um intervalo de anos e salvar tudo em um único arquivo JSON
@@ -14,9 +15,12 @@ def get_mocoes_anos(inicio_ano, fim_ano):
         
         # Adiciona as moções do ano atual à lista geral
         all_mocoes.extend(listJson)
+        
+        # um intervalo de 2 segundos entre os anos para não sobrecarregar o servidor
+        time.sleep(10)
     
     # Salva todas as moções de todos os anos em um único arquivo JSON
-    with open(f'rapagem_dados/ArquivosJson/dadosMocoes_2021_a_2024.json', encoding='utf-8', mode='w') as f:
+    with open(f'rapagem_dados/ArquivosJson/dadosMocoes.json', encoding='utf-8', mode='w') as f:
         json.dump(all_mocoes, f, indent=4, ensure_ascii=False)
     
     print("Dados de 2021 até 2024 salvos com sucesso em um único arquivo.")
@@ -85,6 +89,9 @@ def get_mocoes(url):
         
             # Próxima página
             i += 1
+            
+            # Adiciona um intervalo de 1 segundo entre as requisições de páginas para evitar sobrecarga
+            time.sleep(6)
 
         except Exception as e:
             print(f"Erro na requisição da página {i}: {e}")

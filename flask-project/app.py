@@ -1,8 +1,9 @@
 import sys
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import mysql.connector
 import requests
+from tqdm import tqdm # type: ignore
 from datetime import datetime
 from bs4 import BeautifulSoup
 import json
@@ -73,27 +74,28 @@ def pagina_vereador():
 def pagVer():
     return render_template('pagina-proposicao.html')
 
-@app.route('/proposicoes')
+@app.route('/proposicoes', methods=['GET'])
 def listProp():
     try:
+        page = int(request.args.get('page', 1))  # Obtém a página atual da URL
+        per_page = 10  # Número de proposições por página
+        offset = (page - 1) * per_page  # Calcula o deslocamento
+
         connection = get_db_connection()  # Conecte-se ao banco de dados
         cursor = connection.cursor(dictionary=True)
 
-        # Execute a consulta para buscar todas as proposições
-        cursor.execute('SELECT * FROM proposicoes')
-        todas_proposicoes = cursor.fetchall()
-
-        # Filtre apenas as moções
-        mocoes = [prop for prop in todas_proposicoes if prop['tipo'] == 'Moção']
+        # Execute a consulta para buscar as proposições com LIMIT e OFFSET
+        cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))
+        proposicoes = cursor.fetchall()
 
         cursor.close()
         connection.close()
 
         # Imprimir os dados para verificação
-        print("Todas as proposições:", todas_proposicoes)  # Para verificação no console
-        print("Moções filtradas:", mocoes)  # Para verificação no console
-        
-        return render_template('filtro.html', proposicoes=mocoes)  # Passa as moções para o template
+        print("Proposições na página", page, ":", proposicoes)  # Para verificação no console
+
+        # Passa as proposições para o template
+        return render_template('filtro.html', proposicoes=proposicoes, page=page)  # Passa as proposições e a página atual para o template
 
     except Exception as e:
         print("Erro ao conectar ao banco de dados ou executar a consulta:", e)
@@ -101,77 +103,87 @@ def listProp():
 
 
 
-@app.route('/proposicao/<int:id_prop>')
-def pagina_proposicao(id_prop):
-    # Aqui você poderia buscar e exibir detalhes da proposição específica
-    return f"Página da proposição com ID: {id_prop}"
-
-
-@app.route('/insere_mocoes')
-def insere_mocoes():
-    caminho_mocoes = 'rapagem_dados/ArquivosJson/dadosMocoes_2021_a_2024.json'
-
-    try:
-        with open(caminho_mocoes, 'r', encoding='utf-8') as file:
-            mocoes = json.load(file)
-
-    except FileNotFoundError:
-        return {'status': 'error', 'message': 'Arquivo não encontrado. Verifique o caminho.'}
-
+@app.route('/insere_proposicoes')  # Mantendo a rota original
+def readJson_SendData():
+    diretorio = "./rapagem_dados/ArquivosJson/dadosMocoes.json"  # Caminho para o arquivo JSON das moções
     connection = get_db_connection()
     cursor = connection.cursor()
-    inserted_count = 0
-
-    # Itera sobre as moções e insere no banco de dados
-    for mocao in mocoes:
-        assunto = mocao.get('Assunto', 'Sem assunto')
-        
-        # Converter a data para o formato correto
-        data_str = mocao.get('Data', '0000-00-00 00:00:00')
+    years = ['2021', '2022', '2023', '2024']
+    
+    # Abrir arquivos JSON com as informações das moções
+    with open(diretorio, encoding='utf-8', mode='r') as file:
+        pagData = json.load(file)
+    cont = 0
+    
+    # Fazer loop para cada item presente no dicionário JSON 
+    for i in tqdm(pagData, desc="Inserindo moções no banco"):
         try:
-            data_hora = datetime.strptime(data_str, '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+            # Transforma a data para o padrão do banco MySQL
+            date = datetime.strptime(i['Data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
         except ValueError:
-            print(f"Data inválida: {data_str}. Usando data padrão.")
-            data_hora = '0000-00-00 00:00:00'
+            date = '0000-00-00 00:00:00'
+        
+        # Filtra o ano para o mandato atual (2021-2024)
+        if date[:4] in years:
+            # Usando 'get()' para evitar KeyError
+            requerimento_num = i.get('Numero Proposicao')  # A chave que representa o número da proposição
+            ementa = i.get('Assunto')  # A chave que representa o assunto
+            num_processo = i.get('Numero Processo')  # O número do processo
+            num_protocolo = i.get('Numero Protocolo')  # O número do protocolo
+            id_prop = i.get('ID')  # O ID da proposição
+            data_hora = date
+            situacao = i.get('Situacao')  # A situação da moção
+            tipo = i.get('Tipo')  # O tipo da moção
+            autor = str(i.get('Autor', '').strip())  # O autor da moção
+            tema = ''  # Tema pode ser adicionado ou deixado vazio
             
-        situacao = mocao.get('Situacao', 'Indefinido')
-        tipo = mocao.get('Tipo', 'Moção')
-        autor_nome = mocao.get('Autor')  # Usando o nome do autor
-        tema = mocao.get('Tema', 'Sem tema')
-        requerimento_num = mocao.get('Numero Proposicao', 'N/A')
-        num_processo = mocao.get('Numero Processo', 'N/A')
-        num_protocolo = mocao.get('Numero Protocolo', 0)
-        id_prop = mocao.get('Numero Proposicao', 0)
+            # Consultar ver_id usando o nome do vereador
+            cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor,))
+            resultado = cursor.fetchone()
 
-        # Consultar o ver_id usando o nome do vereador
-        cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor_nome,))
-        resultado = cursor.fetchone()
+            if resultado is None:
+                print(f"Vereador '{autor}' não encontrado. A inserção da moção será ignorada.")
+                continue  # Ignora se o vereador não for encontrado
+            else:
+                id_vereador = resultado[0]  # Obtém o ID do vereador
+            
+            # Pesquisa se a proposição já existe no banco
+            cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (id_prop,))
+            resp = cursor.fetchone()
+            
+            # Caso não exista, insere a moção no banco de dados
+            if not resp:
+                query = """ 
+                            INSERT INTO proposicoes
+                            (ver_id, requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            """
+                try:
+                    # Sua consulta de inserção
+                    cursor.execute(query, 
+                            (id_vereador, requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                except mysql.connector.MySQLInterfaceError as e:
+                    if "Lock wait timeout exceeded" in str(e):
+                        print("Erro de bloqueio: Reiniciando transação...")
+                        # Reinicie a consulta de inserção
+                        cursor.execute(query, 
+                            (id_vereador, requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                    else:
+                        print("Erro inesperado:", e)
 
-        if resultado is None:
-            print(f"Vereador '{autor_nome}' não encontrado. A inserção da moção será ignorada.")
-            continue  # Ignora se o vereador não for encontrado
-        else:
-            id_vereador = resultado[0]  # Obtém o ID do vereador
+        if cont % 50 == 0:
+            connection.commit()
+            print('Alterações salvas no banco')
+        cont += 1
 
-        # Comando SQL para inserir os dados na tabela proposicoes
-        sql = """INSERT INTO proposicoes 
-                (requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, ver_id, tema)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        
-        valores = (requerimento_num, assunto, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, id_vereador, tema)
-        
-        try:
-            cursor.execute(sql, valores)
-            print(f"Moção inserida com sucesso: {id_prop}")
-            inserted_count += 1
-        except Exception as e:
-            print(f"Erro ao inserir moção: {e}. ver_id: {id_vereador}")
-
+    # Confirmar as mudanças no banco de dados
     connection.commit()
+    
+    # Fechar conexão
     cursor.close()
     connection.close()
-
-    return {'status': 'success', 'inserted_count': inserted_count}
+    
+    return "Dados inseridos com sucesso!"
 
 
 

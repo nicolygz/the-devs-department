@@ -28,12 +28,13 @@ Lista de Proposições
         <section class="proposicao">
           <section class="detalhes-prop title">
             <h4>TÍTULO DA PROPOSIÇÃO</h4>
-            <p>n° {{ proposicao.requerimento_num }}/2024</p> <!-- Exibe o número do requerimento -->
+            <p>n° {{ proposicao.requerimento_num }}/{{ proposicao.data_hora.strftime('%Y') }}</p> <!-- Exibe o número do requerimento -->
           </section>
           <section class="detalhes-prop situation-negada">
-            <h4>SITUAÇÃO ATUAL:</h4>
-            <p>Aprovada</p> <!-- Aqui você pode adicionar a situação correta se tiver -->
+              <h4>SITUAÇÃO ATUAL:</h4>
+              <p>{{ proposicao['situacao'] }}</p> <!-- Aqui, 'situacao' deve ser o nome do campo no seu banco de dados -->
           </section>
+          
           <section class="detalhes-prop date">
             <h4>DATA:</h4>
             <p>{{ proposicao.data_hora.strftime('%d/%m/%Y') }}</p> <!-- Formato de data -->
