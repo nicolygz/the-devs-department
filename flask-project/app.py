@@ -104,6 +104,7 @@ def listProp():
 
     print(offset)
 
+
     # Fetch the data for the current page
     cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))
     proposicoes = cursor.fetchall()
