@@ -3,32 +3,32 @@
 {% block title %}Lista de Vereadores{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="../static/lista-vereadores.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='lista-vereadores.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="../static/lista-vereadores.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='lista-vereadores.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-    <div styles="padding-top: 80px;" class="content-flex">
-        <form class="filtro-container">
-             <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Busque o vereador por nome, partido ou temas...">
-                <i class="fas fa-filter filter-icon"></i> <!-- Ícone de filtro -->
-             </div>
-            <button type="button" class="custom-button">Pesquisar</button>
-        </form>
-    </div>
-    <div class="resultados-encontrados">{{ vereadores|length }} resultados encontrados</div>
-    <div class="card-container">
-        {% for vereador in vereadores %}
-        <div class="card">
-            <div class="card-img">
-                <a href="/vereador"><img src="{{ vereador[9] }}" alt=""></a>
-            </div>
-            <div class="card-content">{{ vereador[1] }}</div>
-            <div class="card-footer">{{ vereador[2] }}</div>
+<div styles="padding-top: 80px;" class="content-flex">
+    <form class="filtro-container">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Busque o vereador por nome, partido ou temas...">
+            <i class="fas fa-filter filter-icon"></i> <!-- Ícone de filtro -->
         </div>
-        {% endfor %}
+        <button type="button" class="custom-button">Pesquisar</button>
+    </form>
+</div>
+<div class="resultados-encontrados">{{ vereadores|length }} resultados encontrados</div>
+<div class="card-container">
+    {% for vereador in vereadores %}
+    <div class="card">
+        <div class="card-img">
+            <a href="/vereador/{{ vereador[0] }}"><img src="{{ vereador[9] }}" alt=""></a>
+        </div>
+        <div class="card-content">{{ vereador[1] }}</div>
+        <div class="card-footer">{{ vereador[2] }}</div>
     </div>
+    {% endfor %}
+</div>
 {% endblock %}

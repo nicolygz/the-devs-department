@@ -18,7 +18,7 @@
     border: 0.5px solid #D2D4D4;
     border-radius: 18px;
     display: grid;
-    grid-template-rows: 75% 15% 10%;
+    grid-template-rows: auto 6% auto auto auto auto 1%;
     overflow: hidden;
     transition: transform 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -47,6 +47,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.card-text-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 6px;
+}
+
+.card-text-container li
+{   
+    list-style-type: none;
+    font-size: 14px;
+    line-height: 1.5rem;
+
+}
+
+#email {
+    font-size: 12px;
 }
 
 .card-footer {
@@ -89,7 +107,8 @@
 }
 
 .search-input {
-    flex: 1; /* Faz o input ocupar o máximo de espaço disponível */
+    flex: 1;
+    /* Faz o input ocupar o máximo de espaço disponível */
     padding: 0px 8px;
     border: none;
     outline: none;
@@ -141,4 +160,5 @@
     .filtro-container {
         flex-wrap: wrap;
     }
+
 }
