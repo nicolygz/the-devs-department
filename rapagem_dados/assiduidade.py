@@ -3,7 +3,19 @@ import requests
 import json
 import time
 import mysql.connector
+from dotenv import load_dotenv
 
+load_dotenv()
+
+def get_db_connection():
+    connection = mysql.connector.connect(
+        host=os.getenv('MYSQL_HOST'),
+        user=os.getenv('MYSQL_USER'),
+        password=os.getenv('MYSQL_PASSWORD'),
+        database=os.getenv('MYSQL_DATABASE'),
+         port=os.getenv('MYSQL_PORT', 3306)
+    )
+    return connection
 
 def get_api_assiduidade(ids):
     url = "https://camarasempapel.camarasjc.sp.gov.br/api/publico/parlamentar"
@@ -64,15 +76,7 @@ def get_api_assiduidade(ids):
     print("Todos os dados salvos em assiduidade_total.json.")
     return all_results
 
-def get_db_connection():
-    connection = mysql.connector.connect(
-        host=os.getenv('MYSQL_HOST'),
-        user=os.getenv('MYSQL_USER'),
-        password=os.getenv('MYSQL_PASSWORD'),
-        database=os.getenv('MYSQL_DATABASE'),
-        port=os.getenv('MYSQL_PORT')
-    )
-    return connection
+
 def get_assiduidade_totais(vereador_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
