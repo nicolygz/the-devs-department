@@ -5,6 +5,8 @@ import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
+from tqdm import tqdm
+from datetime import datetime
 from dotenv import load_dotenv  # Adicione esta linha
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
 
@@ -71,6 +73,69 @@ def pagina_vereador():
 @app.route('/pagina-proposicao')
 def pagVer():
     return render_template('pagina-proposicao.html')
+
+@app.route('/projetos-lei')
+def plsenddata():
+    cont = 0
+    diretorio = '../rapagem_dados/ArquivosJson/DadosPL.json'
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    years = ['2021', '2022', '2023', '2024']
+    with open (diretorio, encoding='utf-8',mode='r+') as file:
+        dadojson = json.load(file)
+    for i in tqdm(dadojson,desc= 'Inserindo proposições no banco'):
+        try:
+            date = datetime.strptime(i['Data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            date = '0000-00-00 00:00:00'
+        if date[:4] in years:
+            requerimento_num = i['Numero Proposicao']
+            ementa = i['Assunto']
+            num_processo = i['Numero Processo']
+            num_protocolo = i['Numero Protocolo']
+            id_prop = i['ID']
+            data_hora = date
+            situacao = i['Situacao']
+            tipo = i['Tipo']
+            ver_id = int(i['Id Autor'])
+            autor = str(i['Autor'].strip())
+            tema = ''
+
+            cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor,))
+            resultado = cursor.fetchone()
+
+            if resultado is None:
+                print(f"Vereador '{autor}' não encontrado. A inserção do Projeto de lei será ignorada.")
+                continue  # Ignora se o vereador não for encontrado
+            else:
+                id_vereador = resultado[0]  # Obtém o ID do vereador
+            cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (id_prop,))
+            resp = cursor.fetchone()
+            if not resp:
+                query = """ 
+                            INSERT INTO proposicoes
+                            (ver_id,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema)
+                            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            """
+                try:
+                    # Sua consulta de inserção
+                    cursor.execute(query, 
+                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                except mysql.connector.MySQLInterfaceError as e:
+                    if "Lock wait timeout exceeded" in str(e):
+                        print("Erro de bloqueio: Reiniciando transação...")
+                        # Reinicie a consulta de inserção
+                        cursor.execute(query, 
+                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                    else:
+                        print("Erro inesperado:", e)
+        if cont %50 == 0:
+            connection.commit()
+            print('Alterações salvas no banco de dados')
+        cont +=1
+    connection.commit()
+    cursor.close()
+    connection.close()
 
 @app.route('/proposicoes')
 def listProp():
