@@ -13,55 +13,35 @@ content %}
     proposições apresentadas
   </p>
   <section class="navBar">{% block filtro %} {% endblock %}</section>
-  <section class="prop-infos">
-    <section class="proposicao">
-      <section class="detalhes-prop title">
-        <h4>TÍTULO DA PROPOSIÇÃO</h4>
-        <p>n° xxx/2024</p>
+    {% for prop in proposicoes[:15] %}
+    <section class="prop-infos">
+      <section class="proposicao">
+        <section class="detalhes-prop title">
+          <h4>TÍTULO DA PROPOSIÇÃO</h4>
+          <p>n° {{prop[0]}}/{{prop[5]}}</p>
+        </section>
+        <section class="detalhes-prop situation-aprovada">
+          <h4>SITUAÇÃO ATUAL:</h4>
+          <p>{{prop[6]}}</p>
+        </section>
+        <section class="detalhes-prop title">
+          <h4>TIPO:</h4>
+          <p>{{prop[7]}}</p>
+        </section>
+        <section class="detalhes-prop date">
+          <h4>DATA:</h4>
+          <p>{{prop[5]}}</p>
+        </section>
       </section>
-      <section class="detalhes-prop situation-negada">
-        <h4>SITUAÇÃO ATUAL:</h4>
-        <p>Aprovada</p>
-      </section>
-      <section class="detalhes-prop date">
-        <h4>DATA:</h4>
-        <p>dd/mm/aaaa</p>
-      </section>
-    </section>
-    <section class="descricao">
-      <a href="/pagina-proposicao" class="link-pagProp">
-        <p class="descricao-prop">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-          incidunt assumenda debitis nulla aliquid consequuntur?
-        </p>
-      </a>
-    </section>
-  </section>
-
-  <section class="prop-infos">
-    <section class="proposicao">
-      <section class="detalhes-prop title">
-        <h4>TÍTULO DA PROPOSIÇÃO</h4>
-        <p>n° xxx/2024</p>
-      </section>
-      <section class="detalhes-prop situation-negada">
-        <h4>SITUAÇÃO ATUAL:</h4>
-        <p>Aprovada</p>
-      </section>
-      <section class="detalhes-prop date">
-        <h4>DATA:</h4>
-        <p>dd/mm/aaaa</p>
+      <section class="descricao">
+        <a href="/pagina-proposicao" class="link-pagProp">
+          <p class="descricao-prop">
+            {{prop[1]}}
+          </p>
+        </a>
       </section>
     </section>
-    <section class="descricao">
-      <a href="/pagina-proposicao" class="link-pagProp">
-        <p class="descricao-prop">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-          incidunt assumenda debitis nulla aliquid consequuntur?
-        </p>
-      </a>
-    </section>
-  </section>
+    {% endfor %}
   
   <nav class="btn-pags">
     <p class="arrow">&LeftTriangle;</p>
