@@ -77,7 +77,7 @@ def get_api_assiduidade(ids):
     return all_results
 
 
-def get_assiduidade_totais(vereador_id):
+def get_assiduidade_vereador(vereador_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     
@@ -101,29 +101,55 @@ def get_assiduidade_totais(vereador_id):
     cursor.close()
     connection.close()
     
-    # Calcular a porcentagem de faltas
-    for resultado in resultados:
-        total_part = resultado['faltas_totais'] + resultado['presencas_totais'] + resultado['justificadas_totais']
-        if total_part > 0:
-            resultado['porcentagem_faltas'] = (resultado['faltas_totais'] / total_part) * 100
-        else:
-            resultado['porcentagem_faltas'] = 0
-
     return resultados
 
-def get_menos_faltas(vereadores_ids):
-    if isinstance(vereadores_ids, int):  # Verifica se é um único ID
-        vereadores_ids = [vereadores_ids]  # Converte para lista
+def get_assiduidade_totais():
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
     
-    todos_resultados = []
-    for vereador_id in vereadores_ids:
-        resultados = get_assiduidade_totais(vereador_id)
-        todos_resultados.extend(resultados)
+    query = """
+    SELECT 
+        ver_id,
+        SUM(faltas) AS faltas_totais,
+        SUM(presenca) AS presencas_totais,
+        SUM(justif) AS justificadas_totais
+    FROM 
+        assiduidade
+    GROUP BY 
+        ver_id;
+    """
+    
+    cursor.execute(query)
+    resultados = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    return resultados
 
-    # Ordenar por porcentagem de faltas e pegar o vereador com menos faltas
-    menos_faltas = min(todos_resultados, key=lambda x: x['porcentagem_faltas'], default=None)
 
-    return "%s" % menos_faltas['porcentagem_faltas'] if menos_faltas else None
+def calcular_porcentagem_presenca(vereador_id):
+    resultados = get_assiduidade_totais()
+    
+    # Filtra o resultado para o vereador_id específico
+    dados = next((dado for dado in resultados if dado['ver_id'] == vereador_id), None)
 
+    if dados is None:
+        return None  # Retorna None se não houver dados para o vereador
 
+    faltas_totais = dados['faltas_totais']
+    presencas_totais = dados['presencas_totais']  # Corrigido para acessar presenças
+    justificadas_totais = dados['justificadas_totais']  # Acesso corrigido
 
+    total_faltas = faltas_totais + justificadas_totais  # Total de faltas
+    total = total_faltas + presencas_totais  # Total geral
+
+    if total == 0:  # Evitar divisão por zero
+        return 0.0  # Retorna 0% se não houve faltas nem presenças
+
+    porcentagem_falta = (presencas_totais / total) * 100
+    porcentagem_falta = round(porcentagem_falta, 2)
+    return porcentagem_falta
+
+# Exemplo de uso
+print(calcular_porcentagem_presenca(35))

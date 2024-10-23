@@ -67,16 +67,9 @@ def lista_vereadores():
     
 @app.route('/vereador/<int:vereador_id>')
 def pagina_vereador(vereador_id):
-    assiduidades = assiduidade.get_assiduidade_totais(vereador_id)
-    
-    # Obter a porcentagem de faltas do vereador atual
-    porcentagem_faltas = None
-    if assiduidades:
-        # Supondo que assiduidades é uma lista e queremos a porcentagem do vereador atual
-        porcentagem_faltas = assiduidades[0]['porcentagem_faltas']  # Ajuste conforme necessário
+    assiduidades = assiduidade.get_assiduidade_vereador(vereador_id)
 
-    menos_faltas = assiduidade.get_menos_faltas(vereador_id)
-    
+    # Obter dados do vereador
     connection = get_db_connection()
     cursor = connection.cursor()
 
@@ -86,7 +79,16 @@ def pagina_vereador(vereador_id):
     cursor.close()
     connection.close()
 
-    return render_template('vereador.html', assiduidades=assiduidades, vereador=vereador, menos_faltas=menos_faltas, porcentagem_faltas=porcentagem_faltas)
+    # Obter totais de assiduidade e calcular porcentagem de presença
+    assiduidade_totais = assiduidade.get_assiduidade_totais()
+    porcentagem_presenca = assiduidade.calcular_porcentagem_presenca(vereador_id)
+
+    return render_template('vereador.html', 
+                           assiduidades=assiduidades, 
+                           vereador=vereador,
+                           assiduidade_totais=assiduidade_totais,
+                           porcentagem_presenca=porcentagem_presenca)
+
 
  
 @app.route('/pagina-proposicao')
