@@ -65,9 +65,6 @@ Confira a seguir uma demonstração das funcionalidades:
 
 *encontra-se também na pasta [misc](/misc) desse repositório.*
 
-# Burndown das sprints
-![Burndown Sprint1](misc/imagens/burndown-sprint1.png)
-
 # Apresentação da equipe e funções
 ![Foto do Grupo](misc/imagens/foto-grupo.jpeg)
 
@@ -88,3 +85,4 @@ Confira a seguir uma demonstração das funcionalidades:
 
 - [Jira do Projeto](https://guedesdeabreunicoly.atlassian.net/jira/software/projects/SCRUM/boards/1)
 - [Vídeo Apresentação - Sprint 1](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)
+- [Vídeo Apresentação - Sprint 2]()
