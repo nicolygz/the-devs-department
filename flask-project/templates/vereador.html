@@ -42,27 +42,16 @@
             </div>
             <div class="container">
                 <div class="menu">
-                    <button onclick="showContent('resumo')">Resumo Político</button>
+                    <button onclick="showContent('resumo')">Biografia</button>
                     <button onclick="showContent('proposicoes')">Proposições (92)</button>
                 </div>
                 <div id="resumo" class="content1">
                     <section>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At, incidunt facere neque
-                            debitis
-                            eum
-                            sunt nobis molestiae natus placeat doloremque, tempore animi, repellendus vel excepturi
-                            molestias? Quam, nisi eum! Aliquid?</p>
+                        <p>{{vereador [10]}}</p>
                         <br>
-                        <h3>Título para alguma coisa</h3>
+                        <h3>Patrimônio:</h3>
                         <br>
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, praesentium
-                            consequatur
-                            tempora fuga exercitationem voluptates omnis nobis aliquid. Quasi distinctio velit
-                            molestiae
-                            non provident fugit numquam rem iusto, libero labore?orem ipsum dolor, sit amet
-                            consectetur
-                            adipisicing elit. Quisquam, praesentium consequatur
-                            tempora fuga exercitatio </p>
+                        <p>O valor de seu patrimonio publico é R${{ " " }}{{ '%.2f'|format(vereador[11])|replace('.', ',') }}</p>
                     </section>
                 </div>
                 <div id="proposicoes" class="content1" style="display: none;">
