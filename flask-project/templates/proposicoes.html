@@ -51,19 +51,31 @@ content %}
     <ul class="inline-flex items-center space-x-2">
 
       <!-- Previous Button -->
-      {% if page >1 %}
-        <!-- Active "Previous" Button -->
-        <a href="?page={{ page - 1 }}" class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
-          « 
-        </a>
-        <li>
-          <a href="?page={{ 1 }}" class="px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-200">
-            1
+      {% if page > 1 %}
+        {% if page == 2 %}
+          <!-- Active "Previous" Button -->
+          <a href="?page={{ page - 1 }}" class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
+            « 
           </a>
-        </li>
-        <li>
-          <span class="px-4 py-2 border border-gray-300 text-gray-700 bg-white">...</span>
-        </li>
+          <li>
+            <a href="?page={{ 1 }}" class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
+              1
+            </a>
+          </li>
+        {% else %}
+          <!-- Active "Previous" Button -->
+          <a href="?page={{ page - 1 }}" class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
+            « 
+          </a>
+          <li>
+            <a href="?page={{ 1 }}" class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
+              1
+            </a>
+          </li>
+          <li>
+            <span class="px-4 py-2 text-black bg-white">...</span>
+          </li>
+        {% endif %}
       {% else %}
         <!-- Inactive "Previous" Button -->
         <span class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-400 bg-gray-100 cursor-not-allowed">
@@ -74,26 +86,37 @@ content %}
       <!-- Page Numbers -->
       {% for p in range(1, total_pages + 1) %}
         {% if p == page and p != total_pages %}
+          {% if page == total_pages - 1%}
+            <li>
+              <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
+            </li>
+            <li>
+              <a href="?page={{ page + 1 }}" class="px-4 py-2 border bg-gray-300 text-black bg-white hover:bg-gray-200">
+                {{ page + 1 }}
+              </a>
+            </li>
+          {% else %}
           <li>
-            <span class="px-4 py-2 border border-gray-300 bg-gray-500 text-white">{{ p }}</span>
+            <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
           </li>
           <li>
-            <a href="?page={{ page + 1 }}" class="px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-200">
+            <a href="?page={{ page + 1 }}" class="px-4 py-2 border bg-gray-300 text-black bg-white hover:bg-gray-200">
               {{ page + 1 }}
             </a>
           </li>
           <li>
-            <span class="px-4 py-2 border border-gray-300 text-gray-700 bg-white">...</span>
+            <span class="px-4 py-2 text-black bg-white">...</span>
           </li>
           <li>
-            <a href="?page={{total_pages}}" class="px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-200">
+            <a href="?page={{total_pages}}" class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
               {{total_pages}}
             </a>
           </li>
+        {% endif %}
         {% else %}
           {% if p == total_pages and p == page %}
           <li>
-            <a href="?page={{ p }}" class="px-4 py-2 border border-gray-300 bg-gray-500 text-white">
+            <a href="?page={{ p }}" class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">
               {{p}}
             </a>
           </li>
@@ -108,7 +131,7 @@ content %}
       <!-- Next Button -->
       {% if page < total_pages %}
         <li>
-          <a href="?page={{ page + 1 }}" class="px-4 py-2.5 border border-gray-300 rounded-r-md text-gray-700 bg-white hover:bg-gray-200">
+          <a href="?page={{ page + 1 }}" class="px-4 py-2.5 border border-gray-300 rounded-r-md text-black bg-white hover:bg-gray-200">
             »
           </a>
         </li>
