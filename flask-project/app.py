@@ -65,35 +65,18 @@ def lista_vereadores():
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
     
-def get_assiduidade_totais(vereador_id):
-    connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
-    
-    query = """
-    SELECT 
-        ver_id,
-        SUM(faltas) AS faltas_totais,
-        SUM(presenca) AS presencas_totais,
-        SUM(justif) AS justificadas_totais
-    FROM 
-        assiduidade
-    WHERE 
-        ver_id = %s
-    GROUP BY 
-        ver_id;
-    """
-    
-    cursor.execute(query, (vereador_id,))
-    resultados = cursor.fetchall()
-    
-    cursor.close()
-    connection.close()
-    
-    return resultados
-
 @app.route('/vereador/<int:vereador_id>')
 def pagina_vereador(vereador_id):
-    assiduidades = get_assiduidade_totais(vereador_id) 
+    assiduidades = assiduidade.get_assiduidade_totais(vereador_id)
+    
+    # Obter a porcentagem de faltas do vereador atual
+    porcentagem_faltas = None
+    if assiduidades:
+        # Supondo que assiduidades é uma lista e queremos a porcentagem do vereador atual
+        porcentagem_faltas = assiduidades[0]['porcentagem_faltas']  # Ajuste conforme necessário
+
+    menos_faltas = assiduidade.get_menos_faltas(vereador_id)
+    
     connection = get_db_connection()
     cursor = connection.cursor()
 
@@ -103,7 +86,8 @@ def pagina_vereador(vereador_id):
     cursor.close()
     connection.close()
 
-    return render_template('vereador.html', assiduidades=assiduidades, vereador=vereador)
+    return render_template('vereador.html', assiduidades=assiduidades, vereador=vereador, menos_faltas=menos_faltas, porcentagem_faltas=porcentagem_faltas)
+
  
 @app.route('/pagina-proposicao')
 def pagVer():
