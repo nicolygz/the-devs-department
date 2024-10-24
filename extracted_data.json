@@ -22,7 +22,7 @@
     },
     {
         "num_pl": 3552024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 4
@@ -43,7 +43,7 @@
     },
     {
         "num_pl": 2822024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 7
@@ -78,7 +78,7 @@
     },
     {
         "num_pl": 3522024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 12
@@ -99,21 +99,21 @@
     },
     {
         "num_pl": 282023,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 15
     },
     {
         "num_pl": 3482024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 16
     },
     {
         "num_pl": 3932023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 17
@@ -134,21 +134,21 @@
     },
     {
         "num_pl": 2352024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 20
     },
     {
         "num_pl": 3102024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 21
     },
     {
         "num_pl": 3502024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 22
@@ -162,7 +162,7 @@
     },
     {
         "num_pl": 392023,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 24
@@ -176,49 +176,49 @@
     },
     {
         "num_pl": 2122024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 26
     },
     {
         "num_pl": 1062021,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 27
     },
     {
         "num_pl": 3862023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 28
     },
     {
         "num_pl": 1182024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 29
     },
     {
         "num_pl": 2742024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 30
     },
     {
         "num_pl": 2962024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 31
     },
     {
         "num_pl": 3082024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 32
@@ -267,14 +267,14 @@
     },
     {
         "num_pl": 62024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 39
     },
     {
         "num_pl": 2482024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 40
@@ -295,7 +295,7 @@
     },
     {
         "num_pl": 3362023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 43
@@ -309,14 +309,14 @@
     },
     {
         "num_pl": 4952023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 45
     },
     {
         "num_pl": 852024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 46
@@ -330,7 +330,7 @@
     },
     {
         "num_pl": 2362024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 48
@@ -358,21 +358,21 @@
     },
     {
         "num_pl": 1892024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 52
     },
     {
         "num_pl": 1912024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 53
     },
     {
         "num_pl": 1092023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 54
@@ -386,7 +386,7 @@
     },
     {
         "num_pl": 2902024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 56
@@ -400,7 +400,7 @@
     },
     {
         "num_pl": 42024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 58
@@ -414,35 +414,35 @@
     },
     {
         "num_pl": 1712024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 60
     },
     {
         "num_pl": 2022024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 61
     },
     {
         "num_pl": 2082024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 62
     },
     {
         "num_pl": 2132024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 63
     },
     {
         "num_pl": 2372024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 64
@@ -484,14 +484,14 @@
     },
     {
         "num_pl": 3482023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 70
     },
     {
         "num_pl": 1872024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 71
@@ -505,7 +505,7 @@
     },
     {
         "num_pl": 2202024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 73
@@ -533,35 +533,35 @@
     },
     {
         "num_pl": 1742022,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 77
     },
     {
         "num_pl": 2032024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 78
     },
     {
         "num_pl": 2402024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 79
     },
     {
         "num_pl": 2522024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 80
     },
     {
         "num_pl": 3012024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 81
@@ -575,49 +575,49 @@
     },
     {
         "num_pl": 1662024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 83
     },
     {
         "num_pl": 1832024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 84
     },
     {
         "num_pl": 1862024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 85
     },
     {
         "num_pl": 1972024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 86
     },
     {
         "num_pl": 2012024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 87
     },
     {
         "num_pl": 2392024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 88
     },
     {
         "num_pl": 2232024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 89
@@ -645,91 +645,91 @@
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 93
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "",
         "presidente": null,
         "autoria_pl": null,
         "id": 94
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 95
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 96
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 97
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 98
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "",
         "presidente": null,
         "autoria_pl": null,
         "id": 99
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 100
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "",
         "presidente": null,
         "autoria_pl": null,
         "id": 101
     },
     {
         "num_pl": 2182024,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitada",
         "presidente": null,
         "autoria_pl": null,
         "id": 102
     },
     {
         "num_pl": 1592024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 103
     },
     {
         "num_pl": 3832023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 104
     },
     {
         "num_pl": 1152024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 105
@@ -750,105 +750,105 @@
     },
     {
         "num_pl": 1252024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 108
     },
     {
         "num_pl": 3412021,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 109
     },
     {
         "num_pl": 5212021,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitado",
         "presidente": null,
         "autoria_pl": null,
         "id": 110
     },
     {
         "num_pl": 332022,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitado",
         "presidente": null,
         "autoria_pl": null,
         "id": 111
     },
     {
         "num_pl": 112023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 112
     },
     {
         "num_pl": 1062023,
-        "resultado": "Aprovada",
+        "resultado": "Rejeitado",
         "presidente": null,
         "autoria_pl": null,
         "id": 113
     },
     {
         "num_pl": 1422023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 114
     },
     {
         "num_pl": 1772023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 115
     },
     {
         "num_pl": 2002023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 116
     },
     {
         "num_pl": 3312023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 117
     },
     {
         "num_pl": 1572024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 118
     },
     {
         "num_pl": 1702024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 119
     },
     {
         "num_pl": 1942024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 120
     },
     {
         "num_pl": 2002024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 121
     },
     {
         "num_pl": 2052024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 122
@@ -862,42 +862,42 @@
     },
     {
         "num_pl": 1012024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 124
     },
     {
         "num_pl": 1512024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 125
     },
     {
         "num_pl": 3282023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 126
     },
     {
         "num_pl": 4992023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 127
     },
     {
         "num_pl": 232024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 128
     },
     {
         "num_pl": 2332024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 129
@@ -932,56 +932,56 @@
     },
     {
         "num_pl": 5812021,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 134
     },
     {
         "num_pl": 3322023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 135
     },
     {
         "num_pl": 3992023,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 136
     },
     {
         "num_pl": 892024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 137
     },
     {
         "num_pl": 1612024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 138
     },
     {
         "num_pl": 1612024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 139
     },
     {
         "num_pl": 1962024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 140
     },
     {
         "num_pl": 1982024,
-        "resultado": "Aprovada",
+        "resultado": "Aprovado",
         "presidente": null,
         "autoria_pl": null,
         "id": 141

@@ -63,20 +63,23 @@ def download_and_extract_pdf(url, filename):
     return ""  # Retorna string vazia se falhar
 
 # Função para extrair campos específicos do texto
+import re
+
 def extract_fields_from_text(text):
     # Extrai todos os números de PL entre "Processo" e "Autoria"
-    pl_matches = re.findall(r"Processo.*?Projeto de Lei nº (\d+)/(\d+).*?Autoria", text, re.DOTALL)
+    pl_matches = re.findall(r"(Processo.*?Projeto de Lei nº (\d+)/(\d+).*?Autoria.*?)(?=Processo|$)", text, re.DOTALL)
 
     # Cria uma lista para armazenar todos os projetos de lei encontrados
     pl_list = []
 
     for match in pl_matches:
-        num_pl = f"{match[0]}{match[1]}"  # Concatena número e ano (ex: 4682021)
+        pl_text = match[0]  # Parte do texto específica do PL atual
+        num_pl = f"{match[1]}{match[2]}"  # Concatena número e ano (ex: 4682021)
 
-        # Extrai outras informações para cada PL
-        resultado = re.search(r"Resultado:\s*(\w+)", text)
-        presidente = re.search(r"Presidente:\s*(\d+)", text)
-        autoria_pl = re.search(r"Autoria:\s*(\d+)", text)
+        # Extrai outras informações para cada PL dentro do trecho correspondente
+        resultado = re.search(r"Resultado:\s*(\w+)", pl_text)
+        presidente = re.search(r"Presidente:\s*(\d+)", pl_text)
+        autoria_pl = re.search(r"Autoria:\s*(\d+)", pl_text)
 
         # Cria um dicionário com as informações do PL atual
         pl_data = {
