@@ -1,11 +1,17 @@
 import sys
 import os
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, request
+from flask_paginate import Pagination, get_page_parameter, redirect, request
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
+from datetime import datetime
+from tqdm import tqdm
 from dotenv import load_dotenv 
+from math import ceil
+
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
 from rapagem_dados import assiduidade
 
@@ -97,9 +103,43 @@ def pagVer():
 
 @app.route('/proposicoes')
 def listProp():
-    return render_template('filtro.html')
+    # Conecte-se ao banco de dados
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    # Get current page from the query string, default is page 1
+    page = request.args.get('page', 1, type=int)
+    
+    # Define how many items per page
+    per_page = 10
+
+    # Get the total number of records
+    cursor.execute('SELECT COUNT(*) FROM proposicoes')
+    total = cursor.fetchone()[0]
+    
+    # Calculate total number of pages
+    total_pages = ceil(total / per_page)
+
+    print(total_pages)
+
+    # Calculate the offset for the SQL query
+    offset = (page - 1) * per_page
+
+    print(offset)
 
 
+    # Fetch the data for the current page
+    cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))
+    proposicoes = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    # Renderiza o template e passa a paginação junto com os dados
+    return render_template('filtro.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
+
+
+# ATUALIZA O BANCO DE DADOS COM AS INFORMAÇÕES DO VEREADOR
 @app.route('/atualiza_vereadores')
 def atualiza_vereadores():
     # Chamar a API e pegar os dados de assiduidade
@@ -205,6 +245,7 @@ def atualiza_vereadores():
 
     return redirect(request.referrer)
 
+# BUSCA AS INFORMAÇÕES DE UM VEREADOR NO SITE DA CAMARA
 def get_vereadores(id):
 
     # URL da página
@@ -267,6 +308,236 @@ def get_vereadores(id):
 
     else:
         print(f'Erro ao acessar a página: {response.status_code}')
+
+
+# INSERIR PROPOSIÇÕES NO BANCO DE DADOS ATRAVÉS DO ARQUIVO JSON
+@app.route('/insere_proposicoes')
+def readJson_SendData():
+    diretorio =  "../rapagem_dados/ArquivosJson/DadosRequerimento.json"
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    years = ['2021', '2022', '2023', '2024']
+    
+    # Abrir arquivos json com as informações das proposições
+    with open(diretorio, encoding='utf-8', mode='+r') as file:
+        pagData = json.load(file)
+    cont = 0
+    
+    # Fazer loop para cada item presente no dicionário json 
+    for i in tqdm(pagData, desc="Inserindo proposições no banco"):
+        try:
+            
+            # Transforma a data para o padrão do banco mysql
+            date = datetime.strptime(i['Data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            date = '0000-00-00 00:00:00'
+            
+            # Filtra o ano para o mandato atual (2021-2024)
+        if date[:4] in years:
+            requerimento_num = i['Numero Proposicao']
+            ementa = i['Assunto']
+            num_processo = i['Numero Processo']
+            num_protocolo = i['Numero Protocolo']
+            id_prop = i['ID']
+            data_hora = date
+            situacao = i['Situacao']
+            tipo = i['Tipo']
+            ver_id = int(i['Id Autor'])
+            autor = str(i['Autor'].strip())
+            tema = ''
+            
+            # Consultar o ver_id usando o nome do vereador
+            cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor,))
+            resultado = cursor.fetchone()
+
+            if resultado is None:
+                print(f"Vereador '{autor}' não encontrado. A inserção do requerimento será ignorada.")
+                continue  # Ignora se o vereador não for encontrado
+            else:
+                id_vereador = resultado[0]  # Obtém o ID do vereador
+
+            
+            # Pesquisa se a proposição já existe no banco
+            cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (id_prop,))
+            resp = cursor.fetchone()
+            
+            # Caso não exista, insere a proposição no banco de dados
+            if not resp:
+                query = """ 
+                            INSERT INTO proposicoes
+                            (ver_id,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema)
+                            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            """
+                try:
+                    # Sua consulta de inserção
+                    cursor.execute(query, 
+                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                except mysql.connector.MySQLInterfaceError as e:
+                    if "Lock wait timeout exceeded" in str(e):
+                        print("Erro de bloqueio: Reiniciando transação...")
+                        # Reinicie a consulta de inserção
+                        cursor.execute(query, 
+                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                    else:
+                        print("Erro inesperado:", e)
+        if cont%50 == 0:
+            connection.commit()
+            print('Alterações salvas no banco')
+        cont += 1
+    # Confirmar as mudanças no banco de dados
+    connection.commit()
+    
+    # Fechar conexão
+    cursor.close()
+    connection.close()
+    
+    return "Dados inseridos com sucesso!" 
+
+@app.route('/projetos-lei')
+def plsenddata():
+    cont = 0
+    diretorio = '../rapagem_dados/ArquivosJson/DadosPL.json'
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    years = ['2021', '2022', '2023', '2024']
+    with open (diretorio, encoding='utf-8',mode='r+') as file:
+        dadojson = json.load(file)
+    for i in tqdm(dadojson,desc= 'Inserindo proposições no banco'):
+        try:
+            date = datetime.strptime(i['Data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            date = '0000-00-00 00:00:00'
+        if date[:4] in years:
+            requerimento_num = i['Numero Proposicao']
+            ementa = i['Assunto']
+            num_processo = i['Numero Processo']
+            num_protocolo = i['Numero Protocolo']
+            id_prop = i['ID']
+            data_hora = date
+            situacao = i['Situacao']
+            tipo = i['Tipo']
+            ver_id = int(i['Id Autor'])
+            autor = str(i['Autor'].strip())
+            tema = ''
+
+            cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor,))
+            resultado = cursor.fetchone()
+
+            if resultado is None:
+                print(f"Vereador '{autor}' não encontrado. A inserção do Projeto de lei será ignorada.")
+                continue  # Ignora se o vereador não for encontrado
+            else:
+                id_vereador = resultado[0]  # Obtém o ID do vereador
+            cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (id_prop,))
+            resp = cursor.fetchone()
+            if not resp:
+                query = """ 
+                            INSERT INTO proposicoes
+                            (ver_id,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema)
+                            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            """
+                try:
+                    # Sua consulta de inserção
+                    cursor.execute(query, 
+                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                except mysql.connector.InterfaceError as e:
+                    if "Lock wait timeout exceeded" in str(e):
+                        print("Erro de bloqueio: Reiniciando transação...")
+                        # Reinicie a consulta de inserção
+                        cursor.execute(query, 
+                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
+                    else:
+                        print("Erro inesperado:", e)
+        if cont %50 == 0:
+            connection.commit()
+            print('Alterações salvas no banco de dados')
+        cont +=1
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+@app.route("/comissoes")
+def comissoesbd():
+    diretorio="../rapagem_dados/ArquivosJson/comissoes.json"
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    with open (diretorio,encoding="utf-8",mode="+r") as file:
+        dadosjson=json.load(file)
+    cont = 0
+    for x in tqdm(dadosjson, desc="Inserindo proposições no banco"):
+        comissaoNome=x["Nome comissao"]
+        comissaoId= x["ID comissao"]
+        comissaoTema=" "
+        comissaoLink=x["Link"]
+        try:
+            # Transforma a data para o padrão do banco mysql
+            date = datetime.strptime(x['Data inicio'], '%d/%m/%Y').strftime('%Y-%m-%d')
+            dateEnd = datetime.strptime(x['Data final'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            date = '0000-00-00 00:00:00'
+
+        cursor.execute("SELECT id FROM comissoes WHERE id= %s",(comissaoId,))
+        resp = cursor.fetchone()
+        if not resp:
+            query=""" 
+            INSERT INTO comissoes 
+            (id,nome,tema,data_inicio,data_fim,link)
+            VALUES(%s,%s,%s,%s,%s,%s)
+                """
+            try:
+                cursor.execute(query,
+                    (comissaoId,comissaoNome,comissaoTema,date,dateEnd,comissaoLink))
+                connection.commit()
+            except mysql.connector.InterfaceError as e:
+                if "lock wait timeout exceeded" in str(e):
+                    print("erro de bloqueio, reinicie a transação...")
+                    cursor.execute(query,
+                    (comissaoId,comissaoNome,comissaoTema,date,dateEnd,comissaoLink))
+                else:
+                    print("erro inesperado:",e)
+                    
+            for i in x["Outras infos"]:
+                pID = None
+                pNOME = i["ParlamentarNome"]
+                pCARGO = i["Cargo"]
+                cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome=%s",(pNOME,))
+                resultado = cursor.fetchone()
+                
+                if resultado:
+                    verID = resultado[0]
+                    cursor.execute("SELECT * FROM vereadores_comissoes WHERE ver_id = %s AND comissao_id = %s AND cargo = %s",
+                    (verID, comissaoId, pCARGO))
+                    resp = cursor.fetchone()
+                    print(resp)
+                    
+                    if not resp: 
+                        query= """
+                        INSERT INTO vereadores_comissoes(ver_id,comissao_id,cargo)
+                        VALUES (%s,%s,%s)
+                        """
+                        print(i)
+                        
+                        try: 
+                            cursor.execute(query,(verID,comissaoId,pCARGO),)
+                            
+                        except mysql.connector.InterfaceError as e:
+                            if "lock wait timeout exceeded" in str(e):
+                                print("erro de bloqueio, reinicie a transação...")
+                                cursor.execute(query,
+                                (verID,comissaoId,pCARGO))
+                            else:
+                                print("erro inesperado:",e)
+                    else:
+                        return "Dados já existem no Banco de Dados"
+                    
+        cont += 1   
+        connection.commit() 
+           
+    cursor.close()
+    connection.close()
+    
+    return "Dados inseridos com sucesso!"
+
 
 if __name__ == "__main__":
     app.run(debug=True)

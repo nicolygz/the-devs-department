@@ -1,0 +1,334 @@
+[
+  {
+            "Nome comissao": "Comissão de Cultura e Esportes",
+            "ID comissao": "37",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=37",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "245",
+                                "ParlamentarNome": "Ver. Renato Santiago",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "43",
+                                "ParlamentarNome": "Ver. Juliana Fraga",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "249",
+                                "ParlamentarNome": "Ver. Rogério da ACASEM",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "44",
+                                "ParlamentarNome": "Ver. Juvenil Silvério",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "35",
+                                "ParlamentarNome": "Ver. Amélia Naomi",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "240",
+                                "ParlamentarNome": "Ver. Roberto Chagas",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Economia, Finanças e Orçamento",
+            "ID comissao": "43",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=43",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "240",
+                                "ParlamentarNome": "Ver. Roberto Chagas",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "40",
+                                "ParlamentarNome": "Ver. Fernando Petiti",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "44",
+                                "ParlamentarNome": "Ver. Juvenil Silvério",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "244",
+                                "ParlamentarNome": "Ver. Marcelo Garcia",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "243",
+                                "ParlamentarNome": "Ver. Rafael Pascucci",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "239",
+                                "ParlamentarNome": "Ver. Thomaz Henrique",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Educação e Promoção Social",
+            "ID comissao": "26",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=26",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "247",
+                                "ParlamentarNome": "Ver. Fabião Zagueiro",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "237",
+                                "ParlamentarNome": "Ver. Zé Luis",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "43",
+                                "ParlamentarNome": "Ver. Juliana Fraga",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "242",
+                                "ParlamentarNome": "Ver. Milton Vieira Filho",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "239",
+                                "ParlamentarNome": "Ver. Thomaz Henrique",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "35",
+                                "ParlamentarNome": "Ver. Amélia Naomi",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Ética",
+            "ID comissao": "40",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=40",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "50",
+                                "ParlamentarNome": "Ver. Robertinho da Padaria",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "44",
+                                "ParlamentarNome": "Ver. Juvenil Silvério",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "240",
+                                "ParlamentarNome": "Ver. Roberto Chagas",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "245",
+                                "ParlamentarNome": "Ver. Renato Santiago",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "43",
+                                "ParlamentarNome": "Ver. Juliana Fraga",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "40",
+                                "ParlamentarNome": "Ver. Fernando Petiti",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "238",
+                                "ParlamentarNome": "Ver. Dr. José Claudio",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "239",
+                                "ParlamentarNome": "Ver. Thomaz Henrique",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "243",
+                                "ParlamentarNome": "Ver. Rafael Pascucci",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "45",
+                                "ParlamentarNome": "Ver. Lino Bispo",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Justiça, Redação e Direitos Humanos",
+            "ID comissao": "39",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=39",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "50",
+                                "ParlamentarNome": "Ver. Robertinho da Padaria",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "246",
+                                "ParlamentarNome": "Ver. Júnior da Farmácia",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "237",
+                                "ParlamentarNome": "Ver. Zé Luis",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "247",
+                                "ParlamentarNome": "Ver. Fabião Zagueiro",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "55",
+                                "ParlamentarNome": "Ver. Walter Hayashi",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "38",
+                                "ParlamentarNome": "Ver. Dulce Rita",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Meio Ambiente",
+            "ID comissao": "42",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=42",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "244",
+                                "ParlamentarNome": "Ver. Marcelo Garcia",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "47",
+                                "ParlamentarNome": "Ver. Marcão da Academia",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "238",
+                                "ParlamentarNome": "Ver. Dr. José Claudio",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "45",
+                                "ParlamentarNome": "Ver. Lino Bispo",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "246",
+                                "ParlamentarNome": "Ver. Júnior da Farmácia",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "245",
+                                "ParlamentarNome": "Ver. Renato Santiago",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Planejamento Urbano, Obras e Transportes",
+            "ID comissao": "41",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=41",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "45",
+                                "ParlamentarNome": "Ver. Lino Bispo",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "249",
+                                "ParlamentarNome": "Ver. Rogério da ACASEM",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "47",
+                                "ParlamentarNome": "Ver. Marcão da Academia",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "243",
+                                "ParlamentarNome": "Ver. Rafael Pascucci",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "40",
+                                "ParlamentarNome": "Ver. Fernando Petiti",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "239",
+                                "ParlamentarNome": "Ver. Thomaz Henrique",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  },
+  {
+            "Nome comissao": "Comissão de Saúde",
+            "ID comissao": "38",
+            "Data inicio": "01/01/2023",
+            "Data final": "31/12/2024",
+            "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=38",
+            "Outras infos": [
+                      {
+                                "ParlamentarID": "242",
+                                "ParlamentarNome": "Ver. Milton Vieira Filho",
+                                "Cargo": "Presidente"
+                      },
+                      {
+                                "ParlamentarID": "238",
+                                "ParlamentarNome": "Ver. Dr. José Claudio",
+                                "Cargo": "Suplente de Presidente"
+                      },
+                      {
+                                "ParlamentarID": "237",
+                                "ParlamentarNome": "Ver. Zé Luis",
+                                "Cargo": "Relator"
+                      },
+                      {
+                                "ParlamentarID": "50",
+                                "ParlamentarNome": "Ver. Robertinho da Padaria",
+                                "Cargo": "Suplente de Relator"
+                      },
+                      {
+                                "ParlamentarID": "38",
+                                "ParlamentarNome": "Ver. Dulce Rita",
+                                "Cargo": "Membro"
+                      },
+                      {
+                                "ParlamentarID": "55",
+                                "ParlamentarNome": "Ver. Walter Hayashi",
+                                "Cargo": "Suplente de Membro"
+                      }
+            ]
+  }
+]
