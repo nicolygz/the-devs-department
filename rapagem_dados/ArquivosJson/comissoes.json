@@ -1,0 +1,334 @@
+[
+     {
+          "Nome comissao": "Comissão de Cultura e Esportes",
+          "ID comissao": "37",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "245",
+                    "parlamentarNome": "Ver. Renato Santiago",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "43",
+                    "parlamentarNome": "Ver. Juliana Fraga",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "249",
+                    "parlamentarNome": "Ver. Rogério da ACASEM",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "44",
+                    "parlamentarNome": "Ver. Juvenil Silvério",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "35",
+                    "parlamentarNome": "Ver. Amélia Naomi",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "240",
+                    "parlamentarNome": "Ver. Roberto Chagas",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Economia, Finanças e Orçamento",
+          "ID comissao": "43",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "240",
+                    "parlamentarNome": "Ver. Roberto Chagas",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "40",
+                    "parlamentarNome": "Ver. Fernando Petiti",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "44",
+                    "parlamentarNome": "Ver. Juvenil Silvério",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "244",
+                    "parlamentarNome": "Ver. Marcelo Garcia",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "243",
+                    "parlamentarNome": "Ver. Rafael Pascucci",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "239",
+                    "parlamentarNome": "Ver. Thomaz Henrique",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Educação e Promoção Social",
+          "ID comissao": "26",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "247",
+                    "parlamentarNome": "Ver. Fabião Zagueiro",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "237",
+                    "parlamentarNome": "Ver. Zé Luis",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "43",
+                    "parlamentarNome": "Ver. Juliana Fraga",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "242",
+                    "parlamentarNome": "Ver. Milton Vieira Filho",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "239",
+                    "parlamentarNome": "Ver. Thomaz Henrique",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "35",
+                    "parlamentarNome": "Ver. Amélia Naomi",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Ética",
+          "ID comissao": "40",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "50",
+                    "parlamentarNome": "Ver. Robertinho da Padaria",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "44",
+                    "parlamentarNome": "Ver. Juvenil Silvério",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "240",
+                    "parlamentarNome": "Ver. Roberto Chagas",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "245",
+                    "parlamentarNome": "Ver. Renato Santiago",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "43",
+                    "parlamentarNome": "Ver. Juliana Fraga",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "40",
+                    "parlamentarNome": "Ver. Fernando Petiti",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "238",
+                    "parlamentarNome": "Ver. Dr. José Claudio",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "239",
+                    "parlamentarNome": "Ver. Thomaz Henrique",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "243",
+                    "parlamentarNome": "Ver. Rafael Pascucci",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "45",
+                    "parlamentarNome": "Ver. Lino Bispo",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Justiça, Redação e Direitos Humanos",
+          "ID comissao": "39",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "50",
+                    "parlamentarNome": "Ver. Robertinho da Padaria",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "246",
+                    "parlamentarNome": "Ver. Júnior da Farmácia",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "237",
+                    "parlamentarNome": "Ver. Zé Luis",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "247",
+                    "parlamentarNome": "Ver. Fabião Zagueiro",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "55",
+                    "parlamentarNome": "Ver. Walter Hayashi",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "38",
+                    "parlamentarNome": "Ver. Dulce Rita",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Meio Ambiente",
+          "ID comissao": "42",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "244",
+                    "parlamentarNome": "Ver. Marcelo Garcia",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "47",
+                    "parlamentarNome": "Ver. Marcão da Academia",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "238",
+                    "parlamentarNome": "Ver. Dr. José Claudio",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "45",
+                    "parlamentarNome": "Ver. Lino Bispo",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "246",
+                    "parlamentarNome": "Ver. Júnior da Farmácia",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "245",
+                    "parlamentarNome": "Ver. Renato Santiago",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Planejamento Urbano, Obras e Transportes",
+          "ID comissao": "41",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "45",
+                    "parlamentarNome": "Ver. Lino Bispo",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "249",
+                    "parlamentarNome": "Ver. Rogério da ACASEM",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "47",
+                    "parlamentarNome": "Ver. Marcão da Academia",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "243",
+                    "parlamentarNome": "Ver. Rafael Pascucci",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "40",
+                    "parlamentarNome": "Ver. Fernando Petiti",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "239",
+                    "parlamentarNome": "Ver. Thomaz Henrique",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     },
+     {
+          "Nome comissao": "Comissão de Saúde",
+          "ID comissao": "38",
+          "Data inicio": "",
+          "Data final": "",
+          "Link": "https://camarasempapel.camarasjc.sp.gov.br/spl/comissao.aspx?id=(comissao_id)",
+          "Outras infos": [
+               {
+                    "parlamentarID": "242",
+                    "parlamentarNome": "Ver. Milton Vieira Filho",
+                    "cargo": "Presidente"
+               },
+               {
+                    "parlamentarID": "238",
+                    "parlamentarNome": "Ver. Dr. José Claudio",
+                    "cargo": "Suplente de Presidente"
+               },
+               {
+                    "parlamentarID": "237",
+                    "parlamentarNome": "Ver. Zé Luis",
+                    "cargo": "Relator"
+               },
+               {
+                    "parlamentarID": "50",
+                    "parlamentarNome": "Ver. Robertinho da Padaria",
+                    "cargo": "Suplente de Relator"
+               },
+               {
+                    "parlamentarID": "38",
+                    "parlamentarNome": "Ver. Dulce Rita",
+                    "cargo": "Membro"
+               },
+               {
+                    "parlamentarID": "55",
+                    "parlamentarNome": "Ver. Walter Hayashi",
+                    "cargo": "Suplente de Membro"
+               }
+          ]
+     }
+]

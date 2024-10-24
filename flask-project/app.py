@@ -5,6 +5,7 @@ import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 import json
+from datetime import datetime
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from rapagem_dados import *
 
@@ -183,6 +184,71 @@ def get_vereadores(id):
 
     else:
         print(f'Erro ao acessar a página: {response.status_code}')
+
+@app.route("/comissoes")
+def comissoesbd():
+    diretorio="../rapagem_dados/ArquivosJson/comissoes.json"
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    with open (diretorio,encoding="utf-8",mode="+r") as file:
+        dadosjson=json.load(file)
+    print(dadosjson)
+    for x in dadosjson:
+        comissaoNome=x["Nome comissao"]
+        comissaoId=x["ID comissao"]
+        comissaoInicio=x["Data inicio"]
+        comissaoInicio=datetime.strptime(comissaoInicio,"%d/%m/%Y").strftime("%Y-%m-%d")
+        comissaoFinal=x["Data final"]
+        comissaoFinal=datetime.strptime(comissaoFinal,"%d/%m/%Y").strftime("%Y-%m-%d")
+        comissaoTema=" "
+        comissaoLink=x["Link"]
+
+        cursor.execute("SELECT id FROM comissoes WHERE id=%s,"(comissaoId,))
+        resp=cursor.fetchone()
+        if not resp:
+            query=""" INSERT INTO comissoes 
+              (id,nome,tema,data_inicio,data_fim,link)
+              VALUES(%s,%s,%s,%s,%s,%s)
+                  """
+            try:
+                cursor.execute(query,
+                    (comissaoId,comissaoNome,comissaoTema,comissaoInicio,comissaoFinal,comissaoLink))
+            except mysql.connector.MySQLInterfacError as e:
+                if "lock wait timeout exceeded" in str(e):
+                    print("erro de bloqueio, reinicie a transação...")
+                    cursor.execute(query,
+                    (comissaoId,comissaoNome,comissaoTema,comissaoInicio,comissaoFinal,comissaoLink))
+                else:
+                    print("erro inesperado:",e)
+            for i in x["Outras infos"]:
+                pID=i["parlamentarID"]
+                pNOME=i["parlamentarNome"]
+                pCARGO=i["cargo"]
+                cursor.execute("SELECT ver_id FROM veradores WHERE ver_nome=%s",(pNOME,))
+                resultado = cursor.fetchone()
+                if resultado is None:
+                    print(f"Vereador {pNOME} não encontrado.A inserção do requerimento será ignorada")
+                    continue
+                else:
+                    verID=resultado [0]
+            query= """   INSERT INTO vereadores_comissoes(id,ver_id,comissao_id,cargo)
+        VALUES (%s,%s,%s,%s)
+            """
+            try: 
+                cursor.execute(query,(pID,verID,comissaoId,pCARGO))
+            except mysql.connector.MySQLInterfacError as e:
+                if "lock wait timeout exceeded" in str(e):
+                    print("erro de bloqueio, reinicie a transação...")
+                    cursor.execute(query,
+                    (pID,verID,comissaoId,pCARGO))
+                else:
+                    print("erro inesperado:",e)
+            connection.commit()
+        connection.commit()
+        
+            
+    cursor.close()
+    connection.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
