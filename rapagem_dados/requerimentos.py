@@ -20,20 +20,20 @@ for i in range(1, int(paginacao)):
     pagina = criarRequisicao(url + f'&pag={i}').json()
     fim = datetime.now()
     duracao = fim - inicio
-    quantPag = int(len(pagina['Data']))
+    quant_per_pag = int(len(pagina['Data']))
     print(f'Loop {i}, duração: {duracao}')
     if i != 0:
-      for x in range(quantPag):
-        idProposicao = pagina['Data'][x]['id']
-        processoNum = pagina['Data'][x]['processo']
-        protocoloNum = pagina['Data'][x]['protocolo']
-        numeroProp = pagina['Data'][x]['numero']
-        tipoProposicao = pagina['Data'][x]['tipo']
-        assuntoProposicao = pagina['Data'][x]['assunto']
-        dataProposicao = pagina['Data'][x]['data']
-        situacaoProposicao = pagina['Data'][x]['situacao']
-        autorProposicao = pagina['Data'][x]['AutorRequerenteDados']['nomeRazao']
-        idAutorProp = pagina['Data'][x]['AutorRequerenteDados']['autorId']
+      for proposicao in range(quant_per_pag):
+        idProposicao = pagina['Data'][proposicao]['id']
+        processoNum = pagina['Data'][proposicao]['processo']
+        protocoloNum = pagina['Data'][proposicao]['protocolo']
+        numeroProp = pagina['Data'][proposicao]['numero']
+        tipoProposicao = pagina['Data'][proposicao]['tipo']
+        assuntoProposicao = pagina['Data'][proposicao]['assunto']
+        dataProposicao = pagina['Data'][proposicao]['data']
+        situacaoProposicao = pagina['Data'][proposicao]['situacao']
+        autorProposicao = pagina['Data'][proposicao]['AutorRequerenteDados']['nomeRazao']
+        idAutorProp = pagina['Data'][proposicao]['AutorRequerenteDados']['autorId']
         dicionario = {
           'ID': str(idProposicao),
           'Numero Processo': str(processoNum),
