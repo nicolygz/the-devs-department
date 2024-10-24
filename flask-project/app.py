@@ -309,8 +309,89 @@ def readJson_SendData():
     cursor.close()
     connection.close()
     
-    return "Dados inseridos com sucesso!"  
+    return "Dados inseridos com sucesso!" 
 
+@app.route("/comissoes")
+def comissoesbd():
+    diretorio="../rapagem_dados/ArquivosJson/comissoes.json"
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    with open (diretorio,encoding="utf-8",mode="+r") as file:
+        dadosjson=json.load(file)
+    cont = 0
+    for x in tqdm(dadosjson, desc="Inserindo proposições no banco"):
+        comissaoNome=x["Nome comissao"]
+        comissaoId= x["ID comissao"]
+        comissaoTema=" "
+        comissaoLink=x["Link"]
+        try:
+            # Transforma a data para o padrão do banco mysql
+            date = datetime.strptime(x['Data inicio'], '%d/%m/%Y').strftime('%Y-%m-%d')
+            dateEnd = datetime.strptime(x['Data final'], '%d/%m/%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            date = '0000-00-00 00:00:00'
+
+        cursor.execute("SELECT id FROM comissoes WHERE id= %s",(comissaoId,))
+        resp = cursor.fetchone()
+        if not resp:
+            query=""" 
+            INSERT INTO comissoes 
+            (id,nome,tema,data_inicio,data_fim,link)
+            VALUES(%s,%s,%s,%s,%s,%s)
+                """
+            try:
+                cursor.execute(query,
+                    (comissaoId,comissaoNome,comissaoTema,date,dateEnd,comissaoLink))
+                connection.commit()
+            except mysql.connector.InterfaceError as e:
+                if "lock wait timeout exceeded" in str(e):
+                    print("erro de bloqueio, reinicie a transação...")
+                    cursor.execute(query,
+                    (comissaoId,comissaoNome,comissaoTema,date,dateEnd,comissaoLink))
+                else:
+                    print("erro inesperado:",e)
+                    
+            for i in x["Outras infos"]:
+                pID = None
+                pNOME = i["ParlamentarNome"]
+                pCARGO = i["Cargo"]
+                cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome=%s",(pNOME,))
+                resultado = cursor.fetchone()
+                
+                if resultado:
+                    verID = resultado[0]
+                    cursor.execute("SELECT * FROM vereadores_comissoes WHERE ver_id = %s AND comissao_id = %s AND cargo = %s",
+                    (verID, comissaoId, pCARGO))
+                    resp = cursor.fetchone()
+                    print(resp)
+                    
+                    if not resp: 
+                        query= """
+                        INSERT INTO vereadores_comissoes(ver_id,comissao_id,cargo)
+                        VALUES (%s,%s,%s)
+                        """
+                        print(i)
+                        
+                        try: 
+                            cursor.execute(query,(verID,comissaoId,pCARGO),)
+                            
+                        except mysql.connector.InterfaceError as e:
+                            if "lock wait timeout exceeded" in str(e):
+                                print("erro de bloqueio, reinicie a transação...")
+                                cursor.execute(query,
+                                (verID,comissaoId,pCARGO))
+                            else:
+                                print("erro inesperado:",e)
+                    else:
+                        return "Dados já existem no Banco de Dados"
+                    
+        cont += 1   
+        connection.commit() 
+           
+    cursor.close()
+    connection.close()
+    
+    return "Dados inseridos com sucesso!"
 
 
 if __name__ == "__main__":
