@@ -1,3 +1,18 @@
 {
-  "liveServer.settings.port": 5501
+  "liveServer.settings.port": 5501,
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "autorack.proxy.rlwy.net",
+      "port": 27556,
+      "driver": "MySQL",
+      "database": "railway",
+      "username": "root",
+      "name": "opa"
+    }
+  ]
 }
