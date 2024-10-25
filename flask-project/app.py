@@ -74,13 +74,32 @@ def lista_vereadores():
 def pagina_vereador(vereador_id):
     assiduidades = assiduidade.get_assiduidade_vereador(vereador_id)
 
-    # Obter dados do vereador
     connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute('SELECT * FROM vereadores WHERE ver_id = %s', (vereador_id,))
     vereador = cursor.fetchone()
-
+    cursor.execute('SELECT * FROM vereadores WHERE ver_id = %s', (vereador_id,))
+    vereador = cursor.fetchone()
+    
+    
+    cursor.execute('SELECT * FROM vereadores_comissoes WHERE ver_id = %s', (vereador_id,))
+    com_participating = cursor.fetchall()
+    
+    comissaoLista = []
+    
+    for com in com_participating:
+        id_comissao = com[2]
+        cargo_comissao = com[3]
+        cursor.execute('SELECT * FROM comissoes WHERE id = %s', (id_comissao,))
+        comissao = cursor.fetchone()
+        nome_comissao = comissao[1].upper()
+        
+        comissaoDic = {
+            "nomeComissao": nome_comissao,
+            "cargo": cargo_comissao
+        }
+        comissaoLista.append(comissaoDic)
     cursor.close()
     connection.close()
 
@@ -92,7 +111,8 @@ def pagina_vereador(vereador_id):
                            assiduidades=assiduidades, 
                            vereador=vereador,
                            assiduidade_totais=assiduidade_totais,
-                           porcentagem_presenca=porcentagem_presenca)
+                           porcentagem_presenca=porcentagem_presenca,
+                           comissaoLista=comissaoLista)
 
 @app.route('/pagina-proposicao/<int:id_prop>')
 def pagVer(id_prop):
