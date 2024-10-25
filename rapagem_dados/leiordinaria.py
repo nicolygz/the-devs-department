@@ -1,116 +1,87 @@
-import requests
+import aiohttp
+import asyncio
 from bs4 import BeautifulSoup
-import os
 import json
+import os
 
-# Muda o diretório de trabalho para 'rapagem_dados'
-#os.chdir("/Users/pedrovaz/Library/Mobile Documents/com~apple~CloudDocs/iCloud/4. Estudos/Fatec - DSM/1-SEM/API/the-devs-department/rapagem_dados/output")
-
-# Agora salve o arquivo
+# Caminho do arquivo de saída
 file_path = "/Users/pedrovaz/Library/Mobile Documents/com~apple~CloudDocs/iCloud/4. Estudos/Fatec - DSM/1-SEM/API/the-devs-department/rapagem_dados/output/links_para_leis.txt"
 
-def buscar_tema(soup):
-    # Encontrar o elemento <p> com o id "ContentPlaceHolder1_p_temas"
-    p_element = soup.find('p', id='ContentPlaceHolder1_p_temas')
+listaJson = []
 
+async def buscar_tema(soup):
+    p_element = soup.find('p', id='ContentPlaceHolder1_p_temas')
     if p_element:
-        # Extrair o texto do link dentro do <p>
         a_element = p_element.find('a')
         if a_element:
-            tema = a_element.text.strip()  # "Educação"
-            return tema
-        else:
-            print('Elemento <a> não encontrado.')
-    else:
-        print('Elemento <p> não encontrado.')
+            return a_element.text.strip()
+    return None
 
-
-def buscar_num_ano(soup):
-    # Encontrar o elemento <span> com o id "ContentPlaceHolder1_span_proposicao"
+async def buscar_num_ano(soup):
     span_element = soup.find('span', id='ContentPlaceHolder1_span_proposicao')
     if span_element:
-        # Extrair o texto do link dentro do <span>
         a_element = span_element.find('a')
         if a_element:
-            texto = a_element.text.strip()  # "Projeto de Lei 236/2022"
-            
-            # Extrair os números da proposta e do ano
-            pl, ano = texto.split()[-1].split('/')  # Pega "236/2022" e divide
-            pl = pl.strip()  # "236"
-            ano = ano.strip()  # "2022"
-            
-            return {"num":pl,"ano":ano}
-        else:
-            None
-    else:
-        return None
+            texto = a_element.text.strip()
+            pl, ano = texto.split()[-1].split('/')
+            return {"num": pl.strip(), "ano": ano.strip()}
+    return None
 
-def buscar_num_processo(soup):
-    # Encontrar o elemento <span> com o id "ContentPlaceHolder1_span_proposicao"
+async def buscar_num_processo(soup):
     span_element = soup.find('span', id='ContentPlaceHolder1_span_processo_numero')
-    if span_element:
-        return span_element.text.strip()
-    else:
-        # Se o elemento não for encontrado, retornar None
-        return ""
+    return span_element.text.strip() if span_element else ""
 
+# Função para extrair informações de uma página assíncronamente
+async def extrair_informacoes(session, url):
+    async with session.get(url) as response:
+        if response.status == 200:
+            html = await response.text()
+            soup = BeautifulSoup(html, 'html.parser')
 
-# Função para extrair informações de uma página
-def extrair_informacoes(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        # Parsear o conteúdo HTML
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Trazer o tema
-        tema = buscar_tema(soup)
+            tema = await buscar_tema(soup)
+            dict_num_ano = await buscar_num_ano(soup)
+            num_processo = await buscar_num_processo(soup)
 
-        # Trazer o numero da proposta e ano do PL
-        dict_num_ano = buscar_num_ano(soup)
+            num_pl, ano_pl = "", ""
+            if dict_num_ano:
+                num_pl = dict_num_ano["num"]
+                ano_pl = dict_num_ano["ano"]
 
-        num_pl = ""
-        ano_pl = ""
+            return {
+                "num_processo": num_processo,
+                "tema": tema,
+                "num_pl": num_pl,
+                "ano_pl": ano_pl
+            }
+        else:
+            return None
 
-        if dict_num_ano:
-            num_pl = dict_num_ano["num"]
-            ano_pl = dict_num_ano["ano"]
+# Função para salvar o JSON em um arquivo
+def salvar_json(listaJson):
+    output_path = "/Users/pedrovaz/Library/Mobile Documents/com~apple~CloudDocs/iCloud/4. Estudos/Fatec - DSM/1-SEM/API/the-devs-department/rapagem_dados/output/pl_com_temas.json"
+    with open(output_path, 'a', encoding='utf-8') as f:
+        json.dump(listaJson, f, indent=10, ensure_ascii=False)
 
+# Função assíncrona principal
+async def main():
+    async with aiohttp.ClientSession() as session:
+        tasks = []
 
-        # Buscar número do processo
-        num_processo = buscar_num_processo(soup)
+        # Ler links do arquivo e criar tarefas
+        with open(file_path, 'r', encoding='utf-8') as file:
+            for c, linha in enumerate(file, 1):
+                print(f">> Processando linha: {c}")
+                url = linha.strip()
+                if url:
+                    tasks.append(extrair_informacoes(session, url))
 
-        json = {
-            "num_processo":num_processo,
-            "tema":tema,
-            "num_pl":num_pl,
-            "ano_pl":ano_pl
-        }
+        # Executar as tarefas em paralelo
+        resultados = await asyncio.gather(*tasks)
 
-        salvar_json(json)
+        # Filtrar resultados válidos e salvar
+        listaJson = [resultado for resultado in resultados if resultado]
+        salvar_json(listaJson)
 
-        print(json)
-        print()
-       
-        # print(f"\nPL nº {num_pl}/{ano_pl}, \ntema: {tema}\nnº processo: {num_processo}\n")
-
-        
-    else:
-        print(f'Erro ao acessar {url}: Status {response.status_code}')
-
-
-def salvar_json(json):
-    
-    file_path = "/Users/pedrovaz/Library/Mobile Documents/com~apple~CloudDocs/iCloud/4. Estudos/Fatec - DSM/1-SEM/API/the-devs-department/rapagem_dados/output/pl_com_temas.json"
-
-    with open(file_path, 'a', encoding='utf-8') as file:
-        file.write(json)  # Salvar o href no arquivo
-
-# Ler links do arquivo e fazer requisições
-with open(file_path, 'r', encoding='utf-8') as file:
-    c = 1
-    for linha in file:
-        print(f">> linha: {c}")
-        url = linha.strip()  # Remove espaços em branco e quebras de linha
-        if url:  # Verifica se a linha não está vazia
-            extrair_informacoes(url)
-        c+= 1
+# Executar o loop assíncrono
+if __name__ == "__main__":
+    asyncio.run(main())
