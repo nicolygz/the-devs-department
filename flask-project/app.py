@@ -74,9 +74,28 @@ def lista_vereadores():
 def pagina_vereador():
     return render_template('vereador.html')
 
-@app.route('/pagina-proposicao')
-def pagVer():
-    return render_template('pagina-proposicao.html')
+@app.route('/pagina-proposicao/<int:id_prop>')
+def pagVer(id_prop):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    cursor.execute('SELECT * FROM proposicoes WHERE id_prop = %s', (id_prop,))
+    prop = cursor.fetchone()
+    
+    cursor.execute('SELECT ver_id FROM proposicoes WHERE id_prop = %s', (id_prop,))
+    id = cursor.fetchone()
+    id = id[0]
+    print(id)
+    
+    cursor.execute(f'SELECT ver_nome FROM vereadores WHERE ver_id = {id}')
+    vereador = cursor.fetchone()
+
+    
+    
+    cursor.close()
+    connection.close()
+    
+    return render_template('pagina-proposicao.html', prop = prop, vereador = vereador)
 
 @app.route('/proposicoes')
 def listProp():
@@ -103,11 +122,11 @@ def listProp():
     offset = (page - 1) * per_page
 
     print(offset)
-
-
+    
     # Fetch the data for the current page
     cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))
     proposicoes = cursor.fetchall()
+    print(proposicoes)
     
     cursor.close()
     connection.close()
