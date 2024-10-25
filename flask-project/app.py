@@ -117,11 +117,6 @@ def pagVer(id_prop):
     
     return render_template('pagina-proposicao.html', prop = prop, vereador = vereador)
  
-@app.route('/pagina-proposicao')
-def pagVer():
-    return render_template('pagina-proposicao.html')
-
-
 @app.route('/proposicoes')
 def listProp():
     # Conecte-se ao banco de dados
@@ -149,7 +144,7 @@ def listProp():
     print(offset)
     
     # Fetch the data for the current page
-    cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))
+    cursor.execute('SELECT * FROM proposicoes ORDER BY data_hora DESC LIMIT %s OFFSET %s', (per_page, offset))
     proposicoes = cursor.fetchall()
     print(proposicoes)
     
