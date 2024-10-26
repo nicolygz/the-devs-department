@@ -31,7 +31,7 @@ Sprint | Previsão | Status|
 |02|  27/10/2024 | em progresso |
 |03| 24/11/2024 | a fazer|
 |Feira de Soluções| 12/12 |a fazer |
-
+![Foto do Grupo](misc/imagens/evoluçãoo.jpg)
 
 # Objetivo do Projeto
 
