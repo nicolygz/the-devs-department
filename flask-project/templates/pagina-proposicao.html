@@ -9,18 +9,16 @@
 
 {% block content %}
     <main class="propositions">
-        <a href="{{'proposicoes'}}" class="backAnc">voltar</a>
-        <h1 class="PropTitle">PROPOSIÇÃO N° 123/2024</h1>
-        <p class="txtProp">Tenha uma visão geral do desempenho dos vereadores, faltas no período e proposições apresentadas.</p>
+        <a href="/proposicoes" class="backAnc">voltar</a>
+        <h1 class="PropTitle">PROPOSIÇÃO {{ proposicao['id_prop']}}/{{ proposicao['ano'] }}</h1>
         <section class="ProposicaoItem">
-            <h3 class="Author">Autor:</h3>
+            <a href="/vereador/{{ proposicao['autorId'] }}"><h3 class="Author">Autor: {{ nome_vereador }}</h3></a>
             <section class="ProposicaoInfos">
-                <section class="PropDetails"><h3>Título da Proposição: </h3> <p>n° xxx/2024</p></section>
-                <section class="PropDetails"><h3>Situação Atual: </h3> <p>Aprovada</p></section>
-                <section class="PropDetails"><h3>Data: </h3> <p>dd/mm/aaaa</p></section>
+                <section class="PropDetails"><h3>Situação Atual: </h3> <p>{{proposicao['situacao']}}</p></section>
+                <section class="PropDetails"><h3>Data: </h3> <p>{{proposicao['data']}}</p></section>
             </section>
             <section class="ProposicaoDesc">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit vitae accusamus minima ipsa? Animi illum, ex eius!</p>
+                <p>{{ proposicao['assunto'] }}</p>
             </section>
         </section>
     </main>

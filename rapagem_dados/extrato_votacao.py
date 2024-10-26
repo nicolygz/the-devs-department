@@ -3,6 +3,8 @@ import pandas as pd
 import PyPDF2
 import re
 import json
+from tqdm import tqdm
+import time  # para simular requisições
 
 # Lê todas as tabelas do PDF
 tables = camelot.read_pdf("votacao.pdf", pages='all', flavor='stream')
@@ -11,7 +13,7 @@ tables = camelot.read_pdf("votacao.pdf", pages='all', flavor='stream')
 autor = ""
 pl = ""
 
-nomes = [
+lista_vereadores = [
     "Amélia Naomi",
     "Dulce Rita",
     "Fernando Petiti",
@@ -38,6 +40,9 @@ nomes = [
 # LISTA DE INFORMAÇÃO DAS PLS 
 extrato_info_pls = []
 
+def normalize_texto_linha(nome):
+    return nome.replace("\n", "").strip()
+
 # Percorre todas as tabelas e busca pelas linhas com o nome e o voto dos vereadores
 def buscar_extrato_votacao(tables):
 
@@ -47,7 +52,7 @@ def buscar_extrato_votacao(tables):
     votacoes = []
 
     for table_idx, table in enumerate(tables):
-        
+        print(f"Realizando requisição {table_idx + 1}")
         df = table.df
 
         # Verifica se há pelo menos 4 colunas e ignora as tabelas que não têm os dados desejados
@@ -60,19 +65,15 @@ def buscar_extrato_votacao(tables):
         # Itera pelas linhas da tabela atual para capturar vereadores e votos
         for i in range(len(df)):
             coluna = df.iloc[i]
-
-            # print(coluna)
             lista_voto = ["Contrário", "Favorável", "Presidente*"]
-
-            for j in range(0,5):
-
-                if coluna[j].strip() != '' and coluna[j].strip() not in lista_voto and coluna[j].strip() in nomes:
-                    # print(f"vereador: {coluna[j]}")
-                    vereador = coluna[j].strip()
+            
+            for j in range(0,len(coluna)):
+                texto_linha = normalize_texto_linha(coluna[j])
+                if texto_linha != '' and texto_linha not in lista_voto and texto_linha in lista_vereadores:
+                    vereador = texto_linha
                 
-                elif coluna[j].strip() != '' and coluna[j].strip() in lista_voto:
-                    # print(f"voto: {coluna[j]}")
-                    voto = coluna[j].strip()
+                elif texto_linha != '' and texto_linha in lista_voto:
+                    voto = texto_linha
 
                 if vereador != '' and voto != '':
                     extrato = {"vereador":vereador,"voto":voto}
@@ -104,28 +105,35 @@ def buscar_texto_pdf(path_to_pdf):
             # Expressão regular para encontrar os dados
             # O padrão busca o número do projeto, o ano e o auto
             
-            # Padrão para capturar número, ano, autor e resultado
-            padrao = r'(?:(?:Projeto de Lei nº|Emenda nº|Projeto de Decreto Legislativo nº)\s*(\d+)/(\d{4})\s*-\s*Autoria:\s*(.+?)(?:\s+ao)?\s*(?:Projeto de Lei nº \d+/\d+)?(?:\s*Resultado:\s*(.+?))?)'
+           # Padrão flexível para capturar número, ano, autor e resultado com formatação inconsistente
 
-            resultados = re.findall(padrao, texto)
+           # Número e ano, com espaços e quebras
+           # Autor com texto e espaços variados
+           # Resultado com texto e espaços variados
+            padrao_flexivel = (
+                r'(?:Projeto de (?:Lei|Decreto Legislativo|Emenda)(?: nº)?\s*(\d+)[\s\n]*/[\s\n]*(\d{4}))?'
+                r'.*?(?:Autoria:\s*([\w\s]+?))?'
+                r'.*?(?:Resultado:\s*([\w\s]+))?'
+            )
 
-            print(resultados)
+            # Busca todas as ocorrências no texto usando findall
+            resultados = re.findall(padrao_flexivel, texto, re.DOTALL | re.IGNORECASE)
 
-            # Exibir os resultados encontrados
-            for resultado in resultados:
-                numero = resultado[0]
-                ano = resultado[1]
-                autor = resultado[2].strip()
-                resultado_texto = resultado[3].strip() if len(resultado) > 3 and resultado[3] else "Não especificado"
-                print(f"Número do Projeto: {numero}, Ano: {ano}, Autor: {autor}, Resultado: {resultado_texto}")
+            # Exibe cada correspondência encontrada
+            for i, (numero, ano, autor, resultado_status) in enumerate(resultados, 1):
+                print(f"\nProjeto {i}:")
+                print(f"Número: {numero}")
+                print(f"Ano: {ano}")
+                print(f"Autor: {autor}")
+                print(f"Resultado: {resultado_status}")
 
             # Armazene os dados em uma lista de dicionários
-            for numero, ano, autor in resultados:
-                projetos.append({
-                    'numero': numero,
-                    'ano': ano,
-                    'autor': autor.strip()
-                })
+            # for numero, ano, autor in resultados:
+            #     projetos.append({
+            #         'numero': numero,
+            #         'ano': ano,
+            #         'autor': autor.strip()
+            #     })
 
     # Retorna a lista de JSONS com informações de nº PL, ano e autoria
     return projetos
@@ -139,15 +147,15 @@ def main():
     # Ao abrir cada pdf, busca as referências de nº pl e ano e autoria
     projeto_de_lei = buscar_texto_pdf("votacao.pdf")
 
-    print(projeto_de_lei)
+    # print(projeto_de_lei)
     # Faz a chamada para buscar o extrato de votação no pdf.
-    extrato = buscar_extrato_votacao(tables)
+    # extrato = buscar_extrato_votacao(tables)
 
     # AQUI VAI A LOGICA PARA SALVAR O ARQUIVO extrato EM UM JSON
-    # print(extrato)
-    output_path = "output/extrato_votacao_tabela.json"
-    with open(output_path, 'a', encoding='utf-8') as f:
-        json.dump(extrato, f, indent=10, ensure_ascii=False)
+
+    # output_path = "output/extrato_votacao_tabela.json"
+    # with open(output_path, 'a', encoding='utf-8') as f:
+    #    json.dump(extrato, f, indent=4, ensure_ascii=False)
 
 # Chamada para executar a função MAIN
 main()

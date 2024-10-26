@@ -1,7 +1,7 @@
 import sys
 import os
-from flask import Flask, render_template, request
-from flask_paginate import Pagination, get_page_parameter, redirect, request
+from flask import Flask, jsonify, render_template, request, redirect
+from flask_paginate import Pagination, get_page_parameter
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
@@ -10,7 +10,12 @@ from datetime import datetime
 from tqdm import tqdm
 from dotenv import load_dotenv 
 from math import ceil
+import asyncio
+import aiomysql
+import time
 
+# diretório para os arquivos JSON de PROPOSIÇÕES
+DIRETORIO_JSON = "../rapagem_dados/ArquivosJson/"
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',)))
 from rapagem_dados import assiduidade
@@ -32,6 +37,16 @@ def get_db_connection():
         port=os.getenv('MYSQL_PORT', 3306)  # Provide a default port if not defined
     )
     return connection
+
+# Função para criar a conexão com o banco de dados assíncrona
+async def get_async_db_connection():
+    return await aiomysql.connect(
+        host=os.getenv('MYSQL_HOST'),
+        user=os.getenv('MYSQL_USER'),
+        password=os.getenv('MYSQL_PASSWORD'),
+        db=os.getenv('MYSQL_DATABASE'),
+        port=int(os.getenv('MYSQL_PORT', 3306))
+    )
 
 @app.route('/test_connection')
 def test_connection():
@@ -97,12 +112,55 @@ def pagina_vereador(vereador_id):
 
 
  
-@app.route('/pagina-proposicao')
-def pagVer():
-    return render_template('pagina-proposicao.html')
+@app.route('/proposicoes/<int:id_prop>')
+def pagina_proposicao(id_prop):
+    # Conectar no banco
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Realizar busca da proposição
+    cursor.execute('SELECT * FROM proposicoes WHERE id_prop = %s', (id_prop,))
+    proposicao = cursor.fetchone()
+
+    if proposicao is None:
+        # Se não encontrar a proposição, pode redirecionar ou mostrar uma mensagem
+        return "Proposição não encontrada", 404
+
+    # Transforma em objeto
+    proposicaoObj = {
+        "requerimento_num": proposicao[0],
+        "assunto": proposicao[1],
+        "processo": proposicao[2],
+        "protocolo": proposicao[3],
+        "id_prop": proposicao[4],
+        "data": proposicao[5],
+        "situacao": proposicao[6],
+        "tipo": proposicao[7],
+        "autorId": proposicao[8],
+        "tema": proposicao[9],
+        "ano": proposicao[5].year,
+        "numero": proposicao[11],
+    }
+
+    print(proposicaoObj)
+
+    # Buscar nome do vereador
+    cursor.execute('SELECT ver_nome FROM vereadores WHERE ver_id = %s', (proposicaoObj['autorId'],))
+    nome_vereador = cursor.fetchone()  # Isso retorna uma tupla, extraia o nome depois
+
+    # Verifica se o vereador foi encontrado
+    if nome_vereador is not None:
+        nome_vereador = nome_vereador[0]  # Pega o nome da tupla
+    else:
+        nome_vereador = "Vereador não encontrado"
+
+    cursor.close()
+    connection.close()
+    
+    return render_template('pagina-proposicao.html', proposicao=proposicaoObj, nome_vereador=nome_vereador)
 
 @app.route('/proposicoes')
-def listProp():
+def proposicoes():
     # Conecte-se ao banco de dados
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -116,22 +174,12 @@ def listProp():
     # Get the total number of records
     cursor.execute('SELECT COUNT(*) FROM proposicoes')
     total = cursor.fetchone()[0]
-    
-    # Calculate total number of pages
-    total_pages = ceil(total / per_page)
+    total_pages = ceil(total / per_page) # Calculate total number of pages
+    offset = (page - 1) * per_page # Calculate the offset for the SQL query
 
-    print(total_pages)
-
-    # Calculate the offset for the SQL query
-    offset = (page - 1) * per_page
-
-    print(offset)
-
-
-    # Fetch the data for the current page
-    cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))
+    cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))  # Fetch the data for the current page
     proposicoes = cursor.fetchall()
-    
+
     cursor.close()
     connection.close()
     
@@ -309,153 +357,6 @@ def get_vereadores(id):
     else:
         print(f'Erro ao acessar a página: {response.status_code}')
 
-
-# INSERIR PROPOSIÇÕES NO BANCO DE DADOS ATRAVÉS DO ARQUIVO JSON
-@app.route('/insere_proposicoes')
-def readJson_SendData():
-    diretorio =  "../rapagem_dados/ArquivosJson/DadosRequerimento.json"
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    years = ['2021', '2022', '2023', '2024']
-    
-    # Abrir arquivos json com as informações das proposições
-    with open(diretorio, encoding='utf-8', mode='+r') as file:
-        pagData = json.load(file)
-    cont = 0
-    
-    # Fazer loop para cada item presente no dicionário json 
-    for i in tqdm(pagData, desc="Inserindo proposições no banco"):
-        try:
-            
-            # Transforma a data para o padrão do banco mysql
-            date = datetime.strptime(i['Data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            date = '0000-00-00 00:00:00'
-            
-            # Filtra o ano para o mandato atual (2021-2024)
-        if date[:4] in years:
-            requerimento_num = i['Numero Proposicao']
-            ementa = i['Assunto']
-            num_processo = i['Numero Processo']
-            num_protocolo = i['Numero Protocolo']
-            id_prop = i['ID']
-            data_hora = date
-            situacao = i['Situacao']
-            tipo = i['Tipo']
-            ver_id = int(i['Id Autor'])
-            autor = str(i['Autor'].strip())
-            tema = ''
-            
-            # Consultar o ver_id usando o nome do vereador
-            cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor,))
-            resultado = cursor.fetchone()
-
-            if resultado is None:
-                print(f"Vereador '{autor}' não encontrado. A inserção do requerimento será ignorada.")
-                continue  # Ignora se o vereador não for encontrado
-            else:
-                id_vereador = resultado[0]  # Obtém o ID do vereador
-
-            
-            # Pesquisa se a proposição já existe no banco
-            cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (id_prop,))
-            resp = cursor.fetchone()
-            
-            # Caso não exista, insere a proposição no banco de dados
-            if not resp:
-                query = """ 
-                            INSERT INTO proposicoes
-                            (ver_id,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema)
-                            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                            """
-                try:
-                    # Sua consulta de inserção
-                    cursor.execute(query, 
-                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
-                except mysql.connector.MySQLInterfaceError as e:
-                    if "Lock wait timeout exceeded" in str(e):
-                        print("Erro de bloqueio: Reiniciando transação...")
-                        # Reinicie a consulta de inserção
-                        cursor.execute(query, 
-                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
-                    else:
-                        print("Erro inesperado:", e)
-        if cont%50 == 0:
-            connection.commit()
-            print('Alterações salvas no banco')
-        cont += 1
-    # Confirmar as mudanças no banco de dados
-    connection.commit()
-    
-    # Fechar conexão
-    cursor.close()
-    connection.close()
-    
-    return "Dados inseridos com sucesso!" 
-
-@app.route('/projetos-lei')
-def plsenddata():
-    cont = 0
-    diretorio = '../rapagem_dados/ArquivosJson/DadosPL.json'
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    years = ['2021', '2022', '2023', '2024']
-    with open (diretorio, encoding='utf-8',mode='r+') as file:
-        dadojson = json.load(file)
-    for i in tqdm(dadojson,desc= 'Inserindo proposições no banco'):
-        try:
-            date = datetime.strptime(i['Data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            date = '0000-00-00 00:00:00'
-        if date[:4] in years:
-            requerimento_num = i['Numero Proposicao']
-            ementa = i['Assunto']
-            num_processo = i['Numero Processo']
-            num_protocolo = i['Numero Protocolo']
-            id_prop = i['ID']
-            data_hora = date
-            situacao = i['Situacao']
-            tipo = i['Tipo']
-            ver_id = int(i['Id Autor'])
-            autor = str(i['Autor'].strip())
-            tema = ''
-
-            cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (autor,))
-            resultado = cursor.fetchone()
-
-            if resultado is None:
-                print(f"Vereador '{autor}' não encontrado. A inserção do Projeto de lei será ignorada.")
-                continue  # Ignora se o vereador não for encontrado
-            else:
-                id_vereador = resultado[0]  # Obtém o ID do vereador
-            cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (id_prop,))
-            resp = cursor.fetchone()
-            if not resp:
-                query = """ 
-                            INSERT INTO proposicoes
-                            (ver_id,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema)
-                            VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                            """
-                try:
-                    # Sua consulta de inserção
-                    cursor.execute(query, 
-                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
-                except mysql.connector.InterfaceError as e:
-                    if "Lock wait timeout exceeded" in str(e):
-                        print("Erro de bloqueio: Reiniciando transação...")
-                        # Reinicie a consulta de inserção
-                        cursor.execute(query, 
-                            (id_vereador,requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema))
-                    else:
-                        print("Erro inesperado:", e)
-        if cont %50 == 0:
-            connection.commit()
-            print('Alterações salvas no banco de dados')
-        cont +=1
-    connection.commit()
-    cursor.close()
-    connection.close()
-
 @app.route("/comissoes")
 def comissoesbd():
     diretorio="../rapagem_dados/ArquivosJson/comissoes.json"
@@ -500,7 +401,7 @@ def comissoesbd():
                 pID = None
                 pNOME = i["ParlamentarNome"]
                 pCARGO = i["Cargo"]
-                cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome=%s",(pNOME,))
+                cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s",(pNOME,))
                 resultado = cursor.fetchone()
                 
                 if resultado:
@@ -538,6 +439,206 @@ def comissoesbd():
     
     return "Dados inseridos com sucesso!"
 
+# Função para definir o arquivo JSON com base no tipo de proposição
+def obter_diretorio_json(tipo_proposicao):
+    diretorios = {
+        'requerimento': "../rapagem_dados/ArquivosJson/Dados_Requerimento.json",
+        'mocao': "../rapagem_dados/ArquivosJson/Dados_Mocao.json",
+        'projeto_lei': "../rapagem_dados/ArquivosJson/Dados_ProjetoLei.json"
+    }
+    return diretorios.get(tipo_proposicao)
+
+vereador_cache = {}
+
+# Função de busca com cache
+async def buscar_vereador(nome_vereador, cursor):
+    if nome_vereador in vereador_cache:
+        return vereador_cache[nome_vereador]
+    await cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (nome_vereador,))
+    result = await cursor.fetchone()
+    vereador_cache[nome_vereador] = result[0] if result else None
+    return vereador_cache[nome_vereador]
+
+# Função para inserir ou atualizar proposições em lote
+async def inserir_proposicoes_em_lote(cursor, proposicoes, tema):
+    # Listas para valores de inserção e atualização
+    insert_args = []
+    update_args = []
+    
+    for proposicao in proposicoes:
+        data_hora = datetime.strptime(proposicao['data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        autor = proposicao['nomeRazao'].strip()
+
+        # Obter ID do vereador com cache
+        id_vereador = await buscar_vereador(autor, cursor)
+        
+        if not id_vereador:
+            print(f"Vereador '{autor}' não encontrado. A inserção do requerimento será ignorada.")
+            continue
+
+        # Verificar se a proposição já existe
+        await cursor.execute("SELECT id_prop FROM proposicoes WHERE id_prop = %s", (proposicao['id_prop'],))
+        exists = await cursor.fetchone()
+
+        if exists:
+            # Preparar argumentos de atualização
+            update_args.append((
+                id_vereador,
+                proposicao['requerimento_num'],
+                proposicao['assunto'],
+                proposicao['processo'],
+                proposicao['protocolo'],
+                proposicao['ano'],
+                proposicao['numero'],
+                data_hora,
+                proposicao['situacao'],
+                proposicao['tipo'],
+                tema,
+                proposicao['id_prop']
+            ))
+        else:
+            # Preparar argumentos de inserção
+            insert_args.append((
+                id_vereador,
+                proposicao['requerimento_num'],
+                proposicao['assunto'],
+                proposicao['processo'],
+                proposicao['protocolo'],
+                proposicao['id_prop'],
+                data_hora,
+                proposicao['situacao'],
+                proposicao['tipo'],
+                tema,
+                proposicao['ano'],
+                proposicao['numero']
+            ))
+
+    # Inserir em lote
+    if insert_args:
+        insert_query = """
+            INSERT INTO proposicoes
+            (ver_id, requerimento_num, ementa, num_processo, num_protocolo, id_prop, data_hora, situacao, tipo, tema, ano, numero)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        await cursor.executemany(insert_query, insert_args)
+
+    # Atualizar em lote
+    if update_args:
+        update_query = """
+            UPDATE proposicoes
+            SET 
+                ver_id = %s,
+                requerimento_num = %s,
+                ementa = %s,
+                num_processo = %s,
+                num_protocolo = %s,
+                ano = %s,
+                numero = %s,
+                data_hora = %s,
+                situacao = %s,
+                tipo = %s,
+                tema = %s
+            WHERE id_prop = %s
+        """
+        await cursor.executemany(update_query, update_args)
+
+# Função principal para processar proposições
+async def processar_proposicoes(tipo_proposicao, tema):
+    diretorio = obter_diretorio_json(tipo_proposicao)
+    if not diretorio:
+        print(f"Tipo de proposição '{tipo_proposicao}' inválido.")
+        return
+
+    with open(diretorio, encoding='utf-8') as file:
+        proposicoes = json.load(file)
+
+    connection = await get_async_db_connection()
+    async with connection.cursor() as cursor:
+        count = 0
+        total_inserts = 0  # Contador de inserções
+        batch_size = 100
+        total = len(proposicoes)
+        
+        # Processa em lotes
+        for i in tqdm(range(0, total, batch_size), desc=f"Inserindo {tipo_proposicao}s"):
+            batch = proposicoes[i:i + batch_size]
+            await inserir_proposicoes_em_lote(cursor, batch, tema)
+            await connection.commit()
+            print(f"Lote {i // batch_size + 1} confirmado no banco de dados.")
+
+        await connection.commit()  # Commit final para garantir que todos os dados sejam persistidos
+    connection.close()
+    print(f"{tipo_proposicao.capitalize()}s inseridos com sucesso!")
+
+@app.route('/atualiza_requerimentos', methods=['GET'])
+async def atualiza_requerimentos_async():
+    await processar_proposicoes('requerimento')
+    return jsonify({"message": "Processo de inserção de requerimentos iniciado com sucesso!"}), 200
+
+@app.route('/atualiza_mocoes', methods=['GET'])
+async def atualiza_mocoes():
+    await processar_proposicoes('mocao')
+    return jsonify({"message": "Processo de inserção de moções iniciado com sucesso!"}), 200
+
+@app.route('/atualiza_projetos_lei', methods=['GET'])
+async def atualiza_projetos_lei():
+    await processar_proposicoes('projeto_lei')
+    return jsonify({"message": "Processo de inserção de projetos de lei iniciado com sucesso!"}), 200
+
+@app.route('/atualiza_tema_projetos_lei', methods=['GET'])
+async def atualiza_temas_proposicoes():
+    # Buscar a lista de pls com temas
+    diretorio = '../rapagem_dados/output/pl_com_temas.json'
+
+    # Conectar ao banco de dados
+    conn = await get_async_db_connection()
+
+    with open(diretorio, encoding='utf-8') as file:
+        proposicoes = json.load(file)
+
+    # Iterar pelas proposições e atualizar o tema
+    for proposicao in tqdm(proposicoes, unit='it'):
+        await buscar_proposicao(conn, proposicao)
+
+    # Fechar a conexão
+    conn.close()
+
+    return jsonify({"message": "Atualização concluída"})
+
+async def buscar_proposicao(conn, proposicao):
+    
+    # Criar um cursor
+    async with conn.cursor() as cursor:
+        num_processo = proposicao['num_processo']
+        tema = proposicao['tema']
+        numero = proposicao['num_pl']
+        ano = proposicao['ano_pl']
+
+        # Buscar no banco por proposição usando parâmetros
+        query = """
+            SELECT COUNT(*) 
+            FROM proposicoes 
+            WHERE num_processo = %s AND numero = %s AND ano = %s;
+        """
+
+        # Executar a consulta
+        await cursor.execute(query, (num_processo, numero, ano))
+
+        # Obter o resultado da contagem
+        count = await cursor.fetchone()
+
+        if count[0] > 0:
+            print("Proposição encontrada. Atualizando tema...")
+            # Atualizar o tema no banco de dados
+            update_query = """
+                UPDATE proposicoes 
+                SET tema = %s 
+                WHERE num_processo = %s AND numero = %s AND ano = %s;
+            """
+            await cursor.execute(update_query, (tema, num_processo, numero, ano))
+            await conn.commit()  # Commit as mudanças
+        else:
+            print("Proposição não encontrada.")
 
 if __name__ == "__main__":
     app.run(debug=True)
