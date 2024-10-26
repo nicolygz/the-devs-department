@@ -2,19 +2,17 @@ import sys
 import os
 from flask import Flask, jsonify, render_template, request, redirect
 from flask_paginate import Pagination, get_page_parameter
-from flask_paginate import Pagination, get_page_parameter
-from flask import Flask, render_template, redirect, request
 import mysql.connector
 import requests
+from tqdm import tqdm # type: ignore
+from datetime import datetime
 from bs4 import BeautifulSoup
 import json
-from datetime import datetime
-from tqdm import tqdm
 from dotenv import load_dotenv 
 from math import ceil
-import asyncio
 import aiomysql
-import time
+import locale
+import asyncio
 
 # diretório para os arquivos JSON de PROPOSIÇÕES
 DIRETORIO_JSON = "../rapagem_dados/ArquivosJson/"
@@ -39,6 +37,15 @@ def get_db_connection():
         port=os.getenv('MYSQL_PORT', 3306)  # Provide a default port if not defined
     )
     return connection
+
+try:
+    conn = get_db_connection()
+    print("Conexão bem-sucedida!")
+except mysql.connector.Error as err:
+    print(f"Erro de conexão: {err}")
+finally:
+    if conn:
+        conn.close()
 
 # Função para criar a conexão com o banco de dados assíncrona
 async def get_async_db_connection():
@@ -70,8 +77,8 @@ def home():
 def geral():
     return render_template('visao-geral.html')
 
-@app.route('/lista-vereadores')
-def lista_vereadores():
+@app.route('/vereadores')
+def vereadores():
     
    # Get a database connection
     connection = get_db_connection()
@@ -88,49 +95,150 @@ def lista_vereadores():
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
     
-@app.route('/vereador/<int:vereador_id>')
-def pagina_vereador(vereador_id):
-    assiduidades = assiduidade.get_assiduidade_vereador(vereador_id)
+@app.route('/vereadores/<int:vereador_id>')
+async def pagina_vereador(vereador_id):
+    
+    # Configura o locale para português do Brasil
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-    connection = get_db_connection()
-    cursor = connection.cursor()
+    # Cria conexões e cursores independentes
+    connection1 = await get_async_db_connection()
+    connection2 = await get_async_db_connection()
 
-    cursor.execute('SELECT * FROM vereadores WHERE ver_id = %s', (vereador_id,))
-    vereador = cursor.fetchone()
-    cursor.execute('SELECT * FROM vereadores WHERE ver_id = %s', (vereador_id,))
-    vereador = cursor.fetchone()
-    
-    
-    cursor.execute('SELECT * FROM vereadores_comissoes WHERE ver_id = %s', (vereador_id,))
-    com_participating = cursor.fetchall()
-    
-    comissaoLista = []
-    
-    for com in com_participating:
-        id_comissao = com[2]
-        cargo_comissao = com[3]
-        cursor.execute('SELECT * FROM comissoes WHERE id = %s', (id_comissao,))
-        comissao = cursor.fetchone()
-        nome_comissao = comissao[1].upper()
+    async with connection1.cursor() as cursor1, \
+               connection2.cursor() as cursor2:
         
-        comissaoDic = {
-            "nomeComissao": nome_comissao,
-            "cargo": cargo_comissao
-        }
-        comissaoLista.append(comissaoDic)
-    cursor.close()
-    connection.close()
+        assiduidades = assiduidade.get_assiduidade_vereador(vereador_id)
 
-    # Obter totais de assiduidade e calcular porcentagem de presença
-    assiduidade_totais = assiduidade.get_assiduidade_totais()
-    porcentagem_presenca = assiduidade.calcular_porcentagem_presenca(vereador_id)
+        # Garante que cada função retorna uma tarefa única
+        vereador_task = getVereadorById(cursor1, vereador_id)
+        comissoes_task = getComissoesByVereadorId(cursor2, vereador_id)
 
-    return render_template('vereador.html', 
-                           assiduidades=assiduidades, 
-                           vereador=vereador,
-                           assiduidade_totais=assiduidade_totais,
-                           porcentagem_presenca=porcentagem_presenca)
+        # Aguarda as tarefas
+        vereador, comissoesBd = await asyncio.gather(vereador_task, comissoes_task)
 
+        # Criar o objeto vereador e formatar o patrimônio
+        vereadorObj = vereadorListaToObj(vereador)
+        vereadorObj['ver_patrimonio'] = locale.currency(
+            float(vereadorObj['ver_patrimonio']), symbol=True, grouping=True
+        ).replace(" R$", "")
+        
+        # Conectar no banco
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Transformar cada comissão em objeto
+        comissoes = []
+        for comissaoDetalhe in comissoesBd:
+
+            # Realizar busca da proposição
+            cursor.execute('SELECT * FROM comissoes WHERE id = %s', (comissaoDetalhe[2],))
+            comissao = cursor.fetchone()
+            
+            comissaoObj = comissaoListaToObj(comissao)
+
+            comissaoDetalheObj = comissaoDetalheToObj(comissaoDetalhe)
+
+            obj = {
+                "nome_comissao":comissaoObj['nome'],
+                "data_inicio":comissaoObj['data_inicio'],
+                "data_fim":comissaoObj['data_fim'],
+                "link":comissaoObj['link'],
+                "cargo":comissaoDetalheObj['cargo'],
+                "comissao_id":comissaoDetalheObj['id'],
+            }
+            comissoes.append(obj)
+        
+        query = """
+            SELECT 
+            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_requerimento,
+            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_mocao,
+            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_pl
+        FROM 
+            proposicoes
+        WHERE 
+            ver_id = %s;
+        """
+        cursor.execute(query, ('Requerimento','Moção', 'Projeto de Lei', vereador_id))
+
+        response = cursor.fetchone()
+        if response:
+            print(response[0])
+        proposicoes = {"qtd_requerimento":response[0],"qtd_mocao":response[1], "qtd_pl":response[2]}
+
+        # Obter totais de assiduidade e calcular porcentagem de presença
+        assiduidade_totais = assiduidade.get_assiduidade_totais()
+        porcentagem_presenca = assiduidade.calcular_porcentagem_presenca(vereador_id)
+
+    # Fecha a conexão
+    connection1.close()
+    connection2.close()
+
+    # Renderiza o template com os dados
+    return render_template('vereador.html',
+        assiduidades=assiduidades,
+        vereador=vereadorObj,
+        assiduidade_totais=assiduidade_totais,
+        porcentagem_presenca=porcentagem_presenca,
+        comissoes=comissoes,
+        proposicoes= proposicoes
+    )
+
+# Função para buscar os dados do vereador com cursor assíncrono
+async def getVereadorById(cursor, vereador_id):
+    await cursor.execute('SELECT * FROM vereadores WHERE ver_id = %s', (vereador_id,))
+    vereador = await cursor.fetchone()
+    return vereador
+
+# Função para buscar as comissões do vereador com cursor assíncrono
+async def getComissoesByVereadorId(cursor, vereador_id):
+    await cursor.execute('SELECT * FROM vereadores_comissoes WHERE ver_id = %s', (vereador_id,))
+    comissoes = await cursor.fetchall()
+    return comissoes
+
+# Função para buscar uma comissão específica com cursor assíncrono
+async def getComissaoById(cursor, comissao_id):
+    print(f"Buscando comissão com ID: {comissao_id}")  # Verifica o ID
+    await cursor.execute('SELECT * FROM comissoes WHERE id = %s', (comissao_id,))
+    comissao = await cursor.fetchone()
+    return comissao
+
+def comissaoListaToObj(comissao):
+    comissaoObj = {
+        "id":comissao[0],
+        "nome":comissao[1],
+        "tema":comissao[2],
+        "data_inicio":comissao[3],
+        "data_fim":comissao[4],
+        "link":comissao[5],
+    }
+    return comissaoObj
+
+def comissaoDetalheToObj(comissao):
+    comissaoObj = {
+        "id":comissao[0],
+        "ver_id":comissao[1],
+        "comissao_id":comissao[2],
+        "cargo":comissao[3]
+    }
+    return comissaoObj
+
+def vereadorListaToObj(vereador):
+    vereadorObj = {
+        "ver_id":vereador[0],
+        "ver_nome":vereador[1],
+        "ver_partido":vereador[2],
+        "ver_tel1":vereador[3],
+        "ver_tel2":vereador[4],
+        "ver_celular":vereador[5],
+        "ver_email":vereador[6],
+        "ver_gabinete":vereador[7],
+        "ver_posicionamento":vereador[8],
+        "ver_foto":vereador[9],
+        "ver_biografia":vereador[10],
+        "ver_patrimonio":vereador[11],
+    }
+    return vereadorObj
  
 @app.route('/proposicoes/<int:id_prop>')
 def pagina_proposicao(id_prop):
@@ -205,7 +313,6 @@ def proposicoes():
     
     # Renderiza o template e passa a paginação junto com os dados
     return render_template('filtro.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
-
 
 # ATUALIZA O BANCO DE DADOS COM AS INFORMAÇÕES DO VEREADOR
 @app.route('/atualiza_vereadores')
@@ -377,8 +484,8 @@ def get_vereadores(id):
     else:
         print(f'Erro ao acessar a página: {response.status_code}')
 
-@app.route("/comissoes")
-def comissoesbd():
+@app.route("/atualiza_comissoes")
+def atualiza_comissoes():
     diretorio="../rapagem_dados/ArquivosJson/comissoes.json"
     connection = get_db_connection()
     cursor = connection.cursor()

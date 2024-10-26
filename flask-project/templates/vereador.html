@@ -12,13 +12,13 @@
 <div class="bg">
     <div style="padding-top: 80px;">
         <div>
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ vereador[1] }}</h1>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{vereador['ver_nome']}}</h1>
         </div>
         <div class="container" id="box">
             <div class="flex-container-vereador">
                 <div class="card">
                     <div class="card-img">
-                        <img src="{{ vereador[9]}}" alt=""></a>
+                        <img src="{{ vereador['ver_foto']}}" alt=""></a>
                     </div>
                     <div class="stars_card">
                         <label for="star5" title="5 estrelas">★</label>
@@ -29,12 +29,12 @@
                         <a id="notas_estrela">2.0</a>
                     </div>
                     <ul class="card-text-container">
-                        <li>Telefone: {{ " " }}{{ vereador[3] }}</li>
-                        <li>Telefone 2: {{ " " }}{{ vereador[4] }}</li>
-                        <li>Celular: {{ " " }}{{ vereador[5] }}</li>
-                        <li>Email: <span id="email">{{ " " }}{{ vereador[6] }}</span></li>
+                        <li>Telefone: {{ vereador['ver_tel1'] }}</li>
+                        <li>Telefone 2: {{ vereador['ver_tel2'] }}</li>
+                        <li>Celular: {{ vereador['ver_celular'] }}</li>
+                        <li>Email: <span id="email"> {{ vereador['ver_email'] }} </span></li>
                     </ul>
-                    <span class="card-footer">{{ vereador[2] }}</span>
+                    <span class="card-footer">{{ vereador['ver_partido'] }}</span>
                 </div>
             </div>
             <div class="container">
@@ -44,28 +44,17 @@
                 </div>
                 <div id="resumo" class="content1">
                     <section>
-                        <p>{{vereador [10]}}</p>
+                        <p> {{ vereador['ver_biografia'] }} </p>
                         <br>
-                        <h3>Patrimônio:</h3>
+                        <h3 class="font-bold text-xl">Patrimônio:</h3>
                         <br>
-                        <p>O valor de seu patrimonio publico é R${{ " " }}{{ '%.2f'|format(vereador[11])|replace('.', ',') }}</p>
+                        <p>O valor de seu patrimonio declarado é R${{ vereador['ver_patrimonio'] }}</p>
                     </section>
                 </div>
                 <div id="proposicoes" class="content1" style="display: none;">
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto reprehenderit ipsam
-                        ipsa,
-                        tenetur ex illum commodi, temporibus, laboriosam sint modi maiores. Praesentium quidem
-                        veniam
-                        velit alias sint vel ducimus maxime?Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit.
-                        Consectetur dolorem ipsum molestiae laboriosam eius quibusdam officia modi sit, voluptate
-                        omnis
-                        hic perspiciatis impedit accusantium qui quos quas delectus cum! Fugiat!maxime? Lorem ipsum
-                        dolor sit, amet consectetur adipisicing elit. Sit deleniti tempore quae repellat quaerat
-                        placeat
-                        rerum nobis incidunt cumque facilis perferendis veniam accusamus blanditiis, accusantium
-                        autem
-                        neque dolor ex fuga?</p>
+                    <p>Projetos de Lei: {{ proposicoes['qtd_pl'] }}</p>
+                    <p>Requerimentos: {{ proposicoes['qtd_requerimento'] }}</p>
+                    <p>Moções: {{ proposicoes['qtd_mocao'] }}</p>
                 </div>
             </div>
         </div>
@@ -75,7 +64,7 @@
 
     <div class="container" id="box_frequencia">
         <div class="cabeçalho">
-            <div class="title">Frequência em Plenário (2021-2024)</div>
+            <div class="text-4xl p-4 mb-4">Frequência em Plenário (2021-2024)</div>
         </div>
         {% for registro in assiduidades %}
         <div class="bar-container">
@@ -111,25 +100,21 @@
 
     </div>
     <br></br>
-
-    <div class="container" id="box_participaçao">
-        <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
-        
-        <div class="container" id="box_participaçao">
-            <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
-            {% for infos in comissaoLista %}
-            <div class="comissao-item">
-                <strong>CARGO: {{infos['cargo']}}</strong>
-                <a href="#">{{infos['nomeComissao']}}</a>
+    <div>
+        <h2 class="text-4xl p-4 mb-4">PARTICIPAÇÃO EM COMISSÕES</h2>
+        {% for comissao in comissoes %}
+            <div class="bg-white shadow-md flex mx-20 justify-center flex-col text-center rounded-lg p-4 mb-4">
+                <h1 class="text-lg font-semibold text-gray-800">{{ comissao['nome_comissao'] }}</h1>
+                <p class="text-gray-700">CARGO: {{ comissao['cargo'] }}</p>
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
+        
     <br><br>
 
     <div class="container" id="box_votaçao">
         <div id="container">
-            <h2 id="QUESTÕES-CHAVE">VOTAÇÃO EM QUESTÕES-CHAVE</h2>
+            <h2 class="text-4xl p-4 mb-4">VOTAÇÃO EM QUESTÕES-CHAVE</h2>
             <div class="graphic-placeholder">
                 <p>Gráfico Placeholder</p>
             </div>
@@ -141,7 +126,7 @@
     <br><br>
 
     <div class="comment-section">
-        <h2>Comentários</h2>
+        <h2 class="text-4xl p-4 mb-4">Comentários</h2>
         <div class="comment">
             <p><strong>José Carlos</strong> comentou em <span>20/08/2022</span></p>
             <p>Esses caras são uns sem vergonha! Usam o dinheiro público para fazer bagunça.</p>

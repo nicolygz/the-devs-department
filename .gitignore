@@ -1,4 +1,22 @@
+# Arquivos de sistema
 .DS_Store
-__pycache__
-flask-project/__pycache__/app.cpython-312.pyc
+Thumbs.db
+
+# Ambiente Virtual
+.venv/
+venv/
+env/
+
+# Bytecode do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos de configuração sensíveis
 .env
+
+# Configurações do editor
+.vscode/
+
+# Logs
+*.log
