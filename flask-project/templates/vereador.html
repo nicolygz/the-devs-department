@@ -10,14 +10,11 @@
 
 {% block content %}
 <div class="bg">
-    <div class="btncontainer">
-        <div class="btn" id="btnContainer">
-            <a href="/atualiza_vereadores" id="updateButton" onclick="updateData(event)">Atualizar Informações</a>
-        </div>
-    </div>
     <div style="padding-top: 80px;">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ vereador[1] }}</h1>
+        </div>
         <div class="container" id="box">
-            <h1 class="item1">{{ vereador[1] }}</h1>
             <div class="flex-container-vereador">
                 <div class="card">
                     <div class="card-img">
@@ -117,17 +114,15 @@
 
     <div class="container" id="box_participaçao">
         <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
-        <div class="comissao-item">
-            <strong>CARGO: Suplente de Relator</strong>
-            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
-        </div>
-        <div class="comissao-item">
-            <strong>CARGO: Suplente de Relator</strong>
-            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
-        </div>
-        <div class="comissao-item">
-            <strong>CARGO: Suplente de Relator</strong>
-            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
+        
+        <div class="container" id="box_participaçao">
+            <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
+            {% for infos in comissaoLista %}
+            <div class="comissao-item">
+                <strong>CARGO: {{infos['cargo']}}</strong>
+                <a href="#">{{infos['nomeComissao']}}</a>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <br><br>

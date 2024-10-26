@@ -1,0 +1,407 @@
+[
+    {
+        "tabela": 1,
+        "extrato_votacao": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Favorável"
+            }
+        ]
+    },
+    {
+        "tabela": 2,
+        "extrato_votacao": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente*"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Favorável"
+            }
+        ]
+    },
+    {
+        "tabela": 3,
+        "extrato_votacao": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente*"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Favorável"
+            }
+        ]
+    },
+    {
+        "tabela": 4,
+        "extrato_votacao": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente*"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Favorável"
+            }
+        ]
+    },
+    {
+        "tabela": 5,
+        "extrato_votacao": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente*"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Favorável"
+            }
+        ]
+    }
+]

@@ -16,19 +16,27 @@ content %}
   </p>
   <section class="navBar">{% block filtro %} {% endblock %}</section>
     {% for prop in proposicoes %}
-    <section class="prop-infos">
+    <section class="prop-infos hover:bg-gray-200">
       <section class="proposicao">
-        <section class="detalhes-prop title">
-          <h4>PROPOSIÇÃO</h4>
-          <p>n°{{prop[0]}}/</p><p>{{prop[5].strftime('%Y')}}</p>
-        </section>
-        <section class="detalhes-prop situation-aprovada">
-          <h4>SITUAÇÃO ATUAL:</h4>
-          <p>{{prop[6]}}</p>
-        </section>
-        <section class="detalhes-prop title">
-          <h4>TIPO:</h4>
-          <p>{{prop[7]}}</p>
+          <section class="detalhes-prop title">
+            <h4>PROPOSIÇÃO</h4>
+            <p>n°{{prop[4]}}/</p><p>{{prop[5].strftime('%Y')}}</p>
+          </section>
+          <section class="detalhes-prop title">
+            <h4>TEMA:</h4>
+            {% if prop[9] == '' or prop[9] == 'Sem tema'%}
+            <p>-</p>
+            {% else %}
+            <p>{{prop[9]}}</p>
+            {% endif %}
+          </section>
+          <section class="detalhes-prop situation-aprovada">
+            <h4>SITUAÇÃO ATUAL:</h4>
+            <p>{{prop[6]}}</p>
+          </section>
+          <section class="detalhes-prop title">
+            <h4>TIPO:</h4>
+            <p>{{prop[7]}}</p>
         </section>
         <section class="detalhes-prop date">
           <h4>DATA:</h4>
@@ -36,7 +44,7 @@ content %}
         </section>
       </section>
       <section class="descricao">
-        <a href="/pagina-proposicao/{{prop[4]}}" class="link-pagProp">
+        <a href="/proposicoes/{{ prop[4] }}" class="link-pagProp">
           <p class="descricao-prop">
             {{prop[1]}}
           </p>

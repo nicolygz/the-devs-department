@@ -34,14 +34,6 @@ def get_vereadores(url):
 
             else:
                 print("Não participou de comissões")
-
-            # print(f"Id: {parlamentarID}")
-            # print(f"Nome: {nome}")
-            # print(f"Partido: {partido}")
-            # print(f"Foto: {foto}")
-            # print(f"situacao: {situacao}")
-            # print(f"telefone: {telefone}")
-            # print(f"email: {email}")
             print()
             i+=1
 
@@ -51,11 +43,6 @@ def getComissoes(comissoes):
         comissaoId = comissoes[i]['comissaID']
         comissaoNome = comissoes[i]['comissaoNome']
         comissaoCargo = comissoes[i]['comissaoCargo']
-
-        # chamada pro banco de dados
-        # verifica se o id da comissao já existe no banco
-        # se sim, atualiza
-        # se não, cria uma nova comissão
 
 def main():
     get_vereadores(url)
