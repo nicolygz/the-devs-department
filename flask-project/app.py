@@ -192,12 +192,12 @@ def proposicoes():
     per_page = 10
 
     # Get the total number of records
-    cursor.execute('SELECT COUNT(*) FROM proposicoes')
+    cursor.execute('SELECT COUNT(*) FROM proposicoes WHERE situacao = %s', ('Aprovada',))
     total = cursor.fetchone()[0]
     total_pages = ceil(total / per_page) # Calculate total number of pages
     offset = (page - 1) * per_page # Calculate the offset for the SQL query
 
-    cursor.execute('SELECT * FROM proposicoes LIMIT %s OFFSET %s', (per_page, offset))  # Fetch the data for the current page
+    cursor.execute('SELECT * FROM proposicoes WHERE situacao = %s LIMIT %s OFFSET %s', ('Aprovada',per_page, offset))  # Fetch the data for the current page
     proposicoes = cursor.fetchall()
 
     cursor.close()
@@ -480,12 +480,12 @@ async def buscar_vereador(nome_vereador, cursor):
     return vereador_cache[nome_vereador]
 
 # Função para inserir ou atualizar proposições em lote
-async def inserir_proposicoes_em_lote(cursor, proposicoes, tema):
+async def inserir_proposicoes_em_lote(cursor, proposicoes):
     # Listas para valores de inserção e atualização
     insert_args = []
     update_args = []
     
-    for proposicao in proposicoes:
+    for proposicao in tqdm(proposicoes, desc=f"Inserindo {len(proposicoes)} proposições."):
         data_hora = datetime.strptime(proposicao['data'], '%d/%m/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
         autor = proposicao['nomeRazao'].strip()
 
@@ -513,7 +513,7 @@ async def inserir_proposicoes_em_lote(cursor, proposicoes, tema):
                 data_hora,
                 proposicao['situacao'],
                 proposicao['tipo'],
-                tema,
+                '',
                 proposicao['id_prop']
             ))
         else:
@@ -528,7 +528,7 @@ async def inserir_proposicoes_em_lote(cursor, proposicoes, tema):
                 data_hora,
                 proposicao['situacao'],
                 proposicao['tipo'],
-                tema,
+                '',
                 proposicao['ano'],
                 proposicao['numero']
             ))
@@ -563,7 +563,7 @@ async def inserir_proposicoes_em_lote(cursor, proposicoes, tema):
         await cursor.executemany(update_query, update_args)
 
 # Função principal para processar proposições
-async def processar_proposicoes(tipo_proposicao, tema):
+async def processar_proposicoes(tipo_proposicao):
     diretorio = obter_diretorio_json(tipo_proposicao)
     if not diretorio:
         print(f"Tipo de proposição '{tipo_proposicao}' inválido.")
@@ -576,13 +576,13 @@ async def processar_proposicoes(tipo_proposicao, tema):
     async with connection.cursor() as cursor:
         count = 0
         total_inserts = 0  # Contador de inserções
-        batch_size = 100
+        batch_size = 150
         total = len(proposicoes)
         
         # Processa em lotes
         for i in tqdm(range(0, total, batch_size), desc=f"Inserindo {tipo_proposicao}s"):
             batch = proposicoes[i:i + batch_size]
-            await inserir_proposicoes_em_lote(cursor, batch, tema)
+            await inserir_proposicoes_em_lote(cursor, batch)
             await connection.commit()
             print(f"Lote {i // batch_size + 1} confirmado no banco de dados.")
 
@@ -618,14 +618,14 @@ async def atualiza_temas_proposicoes():
 
     # Iterar pelas proposições e atualizar o tema
     for proposicao in tqdm(proposicoes, unit='it'):
-        await buscar_proposicao(conn, proposicao)
+        await atualizar_proposicao(conn, proposicao)
 
     # Fechar a conexão
     conn.close()
 
     return jsonify({"message": "Atualização concluída"})
 
-async def buscar_proposicao(conn, proposicao):
+async def atualizar_proposicao(conn, proposicao):
     
     # Criar um cursor
     async with conn.cursor() as cursor:
@@ -633,6 +633,7 @@ async def buscar_proposicao(conn, proposicao):
         tema = proposicao['tema']
         numero = proposicao['num_pl']
         ano = proposicao['ano_pl']
+        situacao = 'Aprovada'
 
         # Buscar no banco por proposição usando parâmetros
         query = """
@@ -648,17 +649,14 @@ async def buscar_proposicao(conn, proposicao):
         count = await cursor.fetchone()
 
         if count[0] > 0:
-            print("Proposição encontrada. Atualizando tema...")
             # Atualizar o tema no banco de dados
             update_query = """
                 UPDATE proposicoes 
-                SET tema = %s 
+                SET tema = %s, situacao = %s
                 WHERE num_processo = %s AND numero = %s AND ano = %s;
             """
-            await cursor.execute(update_query, (tema, num_processo, numero, ano))
+            await cursor.execute(update_query, (tema, situacao ,num_processo, numero, ano))
             await conn.commit()  # Commit as mudanças
-        else:
-            print("Proposição não encontrada.")
 
 if __name__ == "__main__":
     app.run(debug=True)
