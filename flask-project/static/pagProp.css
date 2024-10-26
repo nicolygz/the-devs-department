@@ -41,6 +41,13 @@
     row-gap: 2.5rem;
     width: 70%;
   }
+
+  .Author{
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3rem;
+    column-gap: 0.7rem;
+  }
   
   .ProposicaoInfos{
     display: flex;

@@ -7,7 +7,6 @@ def criarRequisicao(url):
   response =  requests.get(url)
   if response.status_code == 200:
     return response
-
 url = f'https://camarasempapel.camarasjc.sp.gov.br//api/publico/proposicao/?&qtd=500&dataInicio=2021-01-01&tipoId=340'
 resposta = criarRequisicao(url).json()
 paginacao = resposta['Paginacao']['quantidade']

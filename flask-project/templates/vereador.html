@@ -114,17 +114,15 @@
 
     <div class="container" id="box_participaçao">
         <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
-        <div class="comissao-item">
-            <strong>CARGO: Suplente de Relator</strong>
-            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
-        </div>
-        <div class="comissao-item">
-            <strong>CARGO: Suplente de Relator</strong>
-            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
-        </div>
-        <div class="comissao-item">
-            <strong>CARGO: Suplente de Relator</strong>
-            <a href="#">COMISSÃO DE EDUCAÇÃO E PROMOÇÃO SOCIAL - 2ª Formação</a>
+        
+        <div class="container" id="box_participaçao">
+            <h2>PARTICIPAÇÃO EM COMISSÕES</h2>
+            {% for infos in comissaoLista %}
+            <div class="comissao-item">
+                <strong>CARGO: {{infos['cargo']}}</strong>
+                <a href="#">{{infos['nomeComissao']}}</a>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <br><br>
