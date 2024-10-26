@@ -1,0 +1,52 @@
+[
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "403/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Lino Bispo",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "468/2021",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "476/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Decreto Legislativo",
+        "projeto_de_lei": "53/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "355/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Juvenil Silvério",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    }
+]

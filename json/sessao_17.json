@@ -1,0 +1,192 @@
+[
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "398/2021",
+        "presidente": "Desconhecido",
+        "autoria": "Júnior da Farmácia",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "294/2022",
+        "presidente": "Desconhecido",
+        "autoria": "Roberto do Eleven",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "125/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "341/2021",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "521/2021",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "33/2022",
+        "presidente": "Desconhecido",
+        "autoria": "Rafael Pascucci",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "11/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Rafael Pascucci",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "106/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "142/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "177/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Milton Vieira Filho",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "200/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Júnior da Farmácia",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "331/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Decreto Legislativo",
+        "projeto_de_lei": "26/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Marcão da Academia",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "157/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Júnior da Farmácia",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "170/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Juvenil Silvério",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "194/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Juvenil Silvério",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "200/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Roberto do Eleven",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Decreto Legislativo",
+        "projeto_de_lei": "29/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Fernando Petiti",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "205/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Roberto do Eleven",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    }
+]
