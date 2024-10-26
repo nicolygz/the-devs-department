@@ -85,4 +85,4 @@ Confira a seguir uma demonstração das funcionalidades:
 
 - [Jira do Projeto](https://guedesdeabreunicoly.atlassian.net/jira/software/projects/SCRUM/boards/1)
 - [Vídeo Apresentação - Sprint 1](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)
-- [Vídeo Apresentação - Sprint 2]()
+- [Vídeo Apresentação - Sprint 2](https://www.youtube.com/watch?v=o4FedTRK9qg)
