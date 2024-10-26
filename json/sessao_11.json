@@ -1,0 +1,102 @@
+[
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "150/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Robertinho da Padaria",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "267/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "218/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "174/2022",
+        "presidente": "Desconhecido",
+        "autoria": "Fernando Petiti",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "203/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Fabião Zagueiro",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "240/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Fabião Zagueiro",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "243/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Zé Luis",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "252/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Zé Luis",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Resolução",
+        "projeto_de_lei": "3/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "301/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    }
+]

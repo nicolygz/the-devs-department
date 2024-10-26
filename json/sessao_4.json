@@ -1,0 +1,102 @@
+[
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "48/2022",
+        "presidente": "Desconhecido",
+        "autoria": "Lino Bispo",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "39/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Rejeitada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "338/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Fernando Petiti",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "212/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "106/2021",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "386/2023",
+        "presidente": "Desconhecido",
+        "autoria": "Fernando Petiti",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "118/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Marcão da Academia",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "274/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Amélia Naomi",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "296/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Zé Luis",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    },
+    {
+        "tipo": "Projeto de Lei",
+        "projeto_de_lei": "308/2024",
+        "presidente": "Desconhecido",
+        "autoria": "Zé Luis",
+        "resultado": {
+            "status": "Aprovada",
+            "vereadores": []
+        }
+    }
+]
