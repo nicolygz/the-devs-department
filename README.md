@@ -12,7 +12,7 @@ Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividad
 * [Objetivo do Projeto](#objetivo-do-projeto)
 * [Funcionalidades e registros](#apresentação-das-funcionalidades)
 * [Tecnologias utilizadas](#tecnologias-utilizadas)
-* [Backlog do produto](#backlog-do-produto)
+* [Backlog do produto](#backlog-do-produto-mvp)
 
 * [Apresentação da equipe](#apresentação-da-equipe-e-funções)
 * [Entre em Contato!](#apresentação-da-equipe-e-funções)
@@ -41,7 +41,7 @@ Esse projeto tem como objetivo colocar em prática os conhecimentos aprendidos e
 
 Confira a seguir uma demonstração das funcionalidades:
 
-![Vídeo](https://youtu.be/o4FedTRK9qg?feature=shared)
+[![Evolução Projeto](misc/imagens/demonstracao.jpg)](https://media1.thrillophilia.com/filestore/l9fcy3sj95mwp23zvk13hdefpx0o_49090236931_e27408bbcc_o.jpg](https://youtu.be/o4FedTRK9qg?feature=shared))
 
 # Tecnologias Utilizadas
 
@@ -61,7 +61,7 @@ Confira a seguir uma demonstração das funcionalidades:
 - Visual Studio Code (VSC)
 - Github
 
-# [Backlog Do Produto - MVP](misc/backlog.pdf) 
+# [Backlog Do Produto MVP](misc/backlog.pdf) 
 ![Evolução Projeto](misc/imagens/evoluçãoo.png)
 
 *encontra-se também na pasta [misc](/misc) desse repositório.*
