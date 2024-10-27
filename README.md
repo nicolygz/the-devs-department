@@ -28,10 +28,9 @@ Sprint | Previsão | Status|
 |------|--------|------|
 |Kick Off | 02/09/2024 | concluido|
 |01 | 29/09/2024 | concluido|
-|02|  27/10/2024 | em progresso |
+|02|  27/10/2024 | concluído |
 |03| 24/11/2024 | a fazer|
 |Feira de Soluções| 12/12 |a fazer |
-![Foto do Grupo](misc/imagens/evoluçãoo.jpg)
 
 # Objetivo do Projeto
 
@@ -42,7 +41,7 @@ Esse projeto tem como objetivo colocar em prática os conhecimentos aprendidos e
 
 Confira a seguir uma demonstração das funcionalidades:
 
-[![Nome do Vídeo](https://youtu.be/o4FedTRK9qg?feature=shared)
+![Vídeo](https://youtu.be/o4FedTRK9qg?feature=shared)
 
 # Tecnologias Utilizadas
 
@@ -52,16 +51,18 @@ Confira a seguir uma demonstração das funcionalidades:
 - Flask
 - Python
 - Javascript  
+- Tailwind Framework
+- Railway (BD remoto)
 
 **Softwares de Apoio** 
 - Jira
 - Figma
 - Microsoft Excel
 - Visual Studio Code (VSC)
+- Github
 
-# [Backlog Do Produto](misc/backlog.pdf) 
-- [download](misc/backlog.pdf)
-![](misc/backlog.pdf)
+# [Backlog Do Produto - MVP](misc/backlog.pdf) 
+![Evolução Projeto](misc/imagens/evoluçãoo.png)
 
 *encontra-se também na pasta [misc](/misc) desse repositório.*
 
