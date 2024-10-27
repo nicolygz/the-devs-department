@@ -42,7 +42,7 @@ Esse projeto tem como objetivo colocar em prática os conhecimentos aprendidos e
 
 Confira a seguir uma demonstração das funcionalidades:
 
-[![Nome do Vídeo](https://i9.ytimg.com/vi_webp/Mvr1f5ndZ1o/mq2.webp?sqp=CJTL5bcG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CIAC0AWKAgwIABABGCQgQih_MA8=&rs=AOn4CLCgMXzMF-jHD6QPBvyyDU9fsI3_MA)](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)
+[![Nome do Vídeo](https://www.youtube.com/watch?v=o4FedTRK9qg)
 
 # Tecnologias Utilizadas
 
