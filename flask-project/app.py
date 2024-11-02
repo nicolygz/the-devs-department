@@ -312,7 +312,7 @@ def proposicoes():
     connection.close()
     
     # Renderiza o template e passa a paginação junto com os dados
-    return render_template('filtro.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
+    return render_template('proposicoes.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
 
 # ATUALIZA O BANCO DE DADOS COM AS INFORMAÇÕES DO VEREADOR
 @app.route('/atualiza_vereadores')

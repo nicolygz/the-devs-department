@@ -1,47 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Visao Geral{% endblock %}
-
+{% block title %}Visão Geral{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="../static/geral.css">
-<link rel="stylesheet" href="{{ url_for('static', filename='geral.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='filtro.css') }}">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="/flask-project/static/js/js.js">
+<link rel="stylesheet" href="{{ url_for('static', filename='respofiltro.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='geral.css') }}">
+<link rel="stylesheet" href="../static/geral.css">
 {% endblock %}
 
 {% block content %}
 
 <div class="bg-onda">
     <div class="page" style="padding-top: 80px;">
-
-        <article class="filtro">
-            <div class="filtro-flex">
-                <input class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor">
-                <article class="filtro-bf">
-                    <button class="btn-buscar">Buscar</button>
-                    <button class="btn-filtrar">Filtrar</button>
-                </article>
-            </div>
-            <div class="filtro-flex">
-                <article class="filtro-data">
-                    <label for="data-inicio">No período:</label>
-                    <input type="date" id="data-inicio">
-                    <label for="data-fim">Até:</label>
-                    <input type="date" id="data-fim">
-                </article>
-    
-                <article class="filtro-tipo">
-                    <button class="btn-tipo">Requerimento</button>
-                    <button class="btn-tipo">Moção</button>
-                    <button class="btn-tipo">Projeto de Lei</button>
-                </article>
-            </div>
-            
-        </article>
-        <script src="{{ url_for('static', filename='js/filtro.js') }}"></script>
-
+        <section class="navBar">
+            {% include 'filtro.html' %}
+        </section>
         <section class="flex-container-graph">
 
             <div class="flex-item">
@@ -73,65 +48,11 @@
                     <canvas id="grafico4"></canvas>
                 </div>
             </div>
-    </section>
-
-    <script>
-        const config = {
-            type: 'bar',
-            data: {
-                labels: ['10', '30', '50', '75', '100', '130'],
-                datasets: [{
-                    label: '',
-                    data: [5, 10, 8, 12, 6, 14],
-                    backgroundColor: 'rgba(128, 128, 128, 0.8)',
-                    borderWidth: 1,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            display: true
-                        }
-                    },
-                    y: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            display: false
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        };
-
-        var ctx1 = document.getElementById('grafico1').getContext('2d');
-        var grafico1 = new Chart(ctx1, config);
-
-        var ctx2 = document.getElementById('grafico2').getContext('2d');
-        var grafico2 = new Chart(ctx2, config);
-
-        var ctx3 = document.getElementById('grafico3').getContext('2d');
-        var grafico3 = new Chart(ctx3, config);
-
-        var ctx4 = document.getElementById('grafico4').getContext('2d');
-        var grafico4 = new Chart(ctx4, config);
-    </script>
-
-</div>
+        </section>
+    </div>
 </div>
 <br><br>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/filtro.js') }}"></script>
+<script src="{{ url_for('static', filename='js/js.js') }}"></script>
 {% endblock %}
