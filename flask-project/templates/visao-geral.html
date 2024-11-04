@@ -3,8 +3,8 @@
 {% block title %}Visão Geral{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='filtro.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='respofiltro.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='filtroproposicoes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='respofiltroproposicoes.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='geral.css') }}">
 <link rel="stylesheet" href="../static/geral.css">
@@ -15,7 +15,7 @@
 <div class="bg-onda">
     <div class="page" style="padding-top: 80px;">
         <section class="navBar">
-            {% include 'filtro.html' %}
+            {% include 'filtroproposicoes.html' %}
         </section>
         <section class="flex-container-graph">
 

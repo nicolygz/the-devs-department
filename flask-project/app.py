@@ -85,7 +85,7 @@ def vereadores():
     cursor = connection.cursor()
 
     # Execute a query to fetch vereadores
-    cursor.execute('SELECT * FROM vereadores')  # Replace 'vereadores' with your actual table name
+    cursor.execute('SELECT * FROM vereadores')
     vereadores = cursor.fetchall()
 
     # Clean up
@@ -239,7 +239,7 @@ def vereadorListaToObj(vereador):
         "ver_patrimonio":vereador[11],
     }
     return vereadorObj
- 
+
 @app.route('/proposicoes/<int:id_prop>')
 def pagina_proposicao(id_prop):
     # Conectar no banco
@@ -289,30 +289,73 @@ def pagina_proposicao(id_prop):
 
 @app.route('/proposicoes')
 def proposicoes():
+    # Verifica se os parâmetros estão vazios na URL
+    # Se encontrar exatamente "busca=&data_inicio=&data_fim=" na URL, redireciona
+    if 'busca=&data_inicio=&data_fim=' in request.full_path:
+        return redirect('/proposicoes')
+    
     # Conecte-se ao banco de dados
     connection = get_db_connection()
     cursor = connection.cursor()
     
-    # Get current page from the query string, default is page 1
+    # Obter parâmetros da query
     page = request.args.get('page', 1, type=int)
+    search = request.args.get('busca', '')
+    tipos = request.args.getlist('tipos') # Lista de tipos selecionados
+    date_start = request.args.get('data_inicio')
+    date_end = request.args.get('data_fim')
     
-    # Define how many items per page
+    # Definir itens por página
     per_page = 10
-
-    # Get the total number of records
-    cursor.execute('SELECT COUNT(*) FROM proposicoes WHERE situacao = %s', ('Aprovada',))
+    
+    # Construir a query base
+    query = 'SELECT * FROM proposicoes WHERE situacao = %s'
+    params = ['Aprovada']
+    count_query = 'SELECT COUNT(*) FROM proposicoes WHERE situacao = %s'
+    
+    # Adicionar filtros se existirem
+    if search:
+        query += ' AND (ementa LIKE %s OR tema LIKE %s)'
+        count_query += ' AND (ementa LIKE %s OR tema LIKE %s)'
+        search_param = f'%{search}%'
+        params.extend([search_param, search_param])
+    
+    if tipos:
+        query += ' AND tipo IN ({})'.format(','.join(['%s'] * len(tipos)))
+        count_query += ' AND tipo IN ({})'.format(','.join(['%s'] * len(tipos)))
+        params.extend(tipos)
+    
+    if date_start:
+        query += ' AND DATE(data_hora) >= %s'
+        count_query += ' AND DATE(data_hora) >= %s'
+        params.append(date_start)
+    
+    if date_end:
+        query += ' AND DATE(data_hora) <= %s'
+        count_query += ' AND DATE(data_hora) <= %s'
+        params.append(date_end)
+    
+    # Contar total de registros para paginação
+    cursor.execute(count_query, params)
     total = cursor.fetchone()[0]
-    total_pages = ceil(total / per_page) # Calculate total number of pages
-    offset = (page - 1) * per_page # Calculate the offset for the SQL query
-
-    cursor.execute('SELECT * FROM proposicoes WHERE situacao = %s LIMIT %s OFFSET %s', ('Aprovada',per_page, offset))  # Fetch the data for the current page
+    total_pages = ceil(total / per_page)
+    
+    # Adicionar paginação à query
+    query += ' LIMIT %s OFFSET %s'
+    params.extend([per_page, (page - 1) * per_page])
+    
+    # Executar query final
+    cursor.execute(query, params)
     proposicoes = cursor.fetchall()
-
+    
     cursor.close()
     connection.close()
     
-    # Renderiza o template e passa a paginação junto com os dados
-    return render_template('proposicoes.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
+    return render_template('proposicoes.html', 
+                         proposicoes=proposicoes, 
+                         page=page, 
+                         total_pages=total_pages,
+                         tipos=tipos)
 
 # ATUALIZA O BANCO DE DADOS COM AS INFORMAÇÕES DO VEREADOR
 @app.route('/atualiza_vereadores')

@@ -1,0 +1,21 @@
+<form action="{{ url_for('proposicoes') }}" method="get" class="filtro">
+    <input name="busca" class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor" value="{{ request.args.get('busca', '') }}">
+    <article class="filtro-bf">
+        <button type="submit" class="btn-buscar">Buscar</button>
+        <button type="button" class="btn-filtrar">Filtrar</button>
+    </article>
+    <article class="break"></article>
+    <article class="filtro-data">
+        <label for="data-inicio">No período:</label>
+        <input type="date" id="data-inicio" name="data_inicio" value="{{ request.args.get('data_inicio', '') }}">
+        <label for="data-fim">Até:</label>
+        <input type="date" id="data-fim" name="data_fim" value="{{ request.args.get('data_fim', '') }}">
+    </article>
+
+    <article class="filtro-tipo">
+        <!-- Botões mantêm estado ativo com base nos tipos selecionados -->
+        <button type="button" class="btn-tipo {% if 'Requerimento' in tipos %}ativo{% endif %}" data-type="Requerimento">Requerimento</button>
+        <button type="button" class="btn-tipo {% if 'Moção' in tipos %}ativo{% endif %}" data-type="Moção">Moção</button>
+        <button type="button" class="btn-tipo lei {% if 'Projeto de Lei' in tipos %}ativo{% endif %}" data-type="Projeto de Lei">Projeto de Lei</button>
+    </article>
+</form>
