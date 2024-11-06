@@ -1,35 +1,28 @@
 document.addEventListener("DOMContentLoaded", function() {
-  const form = document.querySelector('form.filtro');
-  
-  // Manipula cliques nos botões de tipo
-  document.addEventListener("click", function(evt) {
-    if (evt.target.classList.contains("btn-tipo")) {
-      evt.target.classList.toggle("ativo");
-      
-      // Atualiza inputs hidden dos tipos selecionados
-      atualizaTiposSelecionados();
+    const form = document.querySelector('form.filtro');
+    const tiposButtons = document.querySelectorAll('.btn-tipo');
+    
+    function atualizaTiposSelecionados() {
+        form.querySelectorAll('input[name="tipos"]').forEach(input => input.remove());
+        
+        document.querySelectorAll('.btn-tipo.ativo').forEach(btn => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'tipos';
+            input.value = btn.getAttribute('data-tipo');
+            form.appendChild(input);
+        });
     }
-  });
 
-  // Função para atualizar os inputs hidden com tipos selecionados
-  function atualizaTiposSelecionados() {
-    const tiposAtivos = Array.from(document.querySelectorAll('.btn-tipo.ativo'))
-      .map(btn => btn.dataset.type);
-    
-    // Remove inputs antigos
-    const oldInputs = form.querySelectorAll('input[name="tipos"]');
-    oldInputs.forEach(input => input.remove());
-    
-    // Adiciona novos inputs para cada tipo selecionado
-    tiposAtivos.forEach(tipo => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'tipos';
-      input.value = tipo;
-      form.appendChild(input);
+    // Adiciona evento de clique aos botões de tipo
+    tiposButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('ativo');
+            atualizaTiposSelecionados();
+            // Remove submissão automática do formulário
+        });
     });
-  }
 
-  // Inicializa os inputs hidden com os tipos já selecionados
-  atualizaTiposSelecionados();
+    // Inicializa os inputs hidden com os tipos já selecionados
+    atualizaTiposSelecionados();
 });

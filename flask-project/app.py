@@ -317,9 +317,24 @@ def proposicoes():
         params.extend([search_param, search_param])
     
     if tipos:
-        query += ' AND tipo IN ({})'.format(','.join(['%s'] * len(tipos)))
-        count_query += ' AND tipo IN ({})'.format(','.join(['%s'] * len(tipos)))
+        placeholders = ', '.join(['%s'] * len(tipos))
+        query += f' AND tipo IN ({placeholders})'
+        count_query += f' AND tipo IN ({placeholders})'
         params.extend(tipos)
+    
+    # Converter Mocao de volta para Moção para a query do banco
+    tipos_convertidos = []
+    if tipos:
+        for tipo in tipos:
+            if tipo == 'Mocao':
+                tipos_convertidos.append('Moção')
+            else:
+                tipos_convertidos.append(tipo)
+        
+        placeholders = ', '.join(['%s'] * len(tipos_convertidos))
+        query += f' AND tipo IN ({placeholders})'
+        count_query += f' AND tipo IN ({placeholders})'
+        params.extend(tipos_convertidos)
     
     if date_start:
         query += ' AND DATE(data_hora) >= %s'
@@ -677,7 +692,7 @@ vereador_cache = {}
 
 # Função de busca com cache
 async def buscar_vereador(nome_vereador, cursor):
-    if nome_vereador in vereador_cache:
+    if (nome_vereador) in vereador_cache:
         return vereador_cache[nome_vereador]
     await cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (nome_vereador,))
     result = await cursor.fetchone()
