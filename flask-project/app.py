@@ -289,10 +289,6 @@ def pagina_proposicao(id_prop):
 
 @app.route('/proposicoes')
 def proposicoes():
-    # Verifica se os parâmetros estão vazios na URL
-    # Se encontrar exatamente "busca=&data_inicio=&data_fim=" na URL, redireciona
-    if 'busca=&data_inicio=&data_fim=' in request.full_path:
-        return redirect('/proposicoes')
     
     # Conecte-se ao banco de dados
     connection = get_db_connection()
