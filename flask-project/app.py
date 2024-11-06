@@ -463,6 +463,65 @@ def atualiza_vereadores():
 
     return redirect(request.referrer)
 
+@app.route('/ranking')  
+def ranking():
+    return render_template('filtroranking.html')
+
+@app.route('/filtrar/<criterio>')
+def filtrar_ranking(criterio):
+    if criterio == 'proposicoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, COUNT(p.ver_id) AS qtd_proposicoes,
+                   COUNT(CASE WHEN p.tipo = 'Requerimento' THEN 1 END) as requerimentos,
+                   COUNT(CASE WHEN p.tipo = 'Moção' THEN 1 END) as mocoes,
+                   COUNT(CASE WHEN p.tipo = 'Projeto de Lei' THEN 1 END) as projetos_lei
+            FROM vereadores v
+            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+            GROUP BY v.ver_id, v.ver_nome
+            ORDER BY qtd_proposicoes DESC;
+        """
+    elif criterio == 'assiduidade':
+        query = """
+            SELECT v.ver_id, v.ver_nome, 
+                   SUM(a.presenca) as total_presencas,
+                   SUM(a.faltas) as total_faltas,
+                   SUM(a.justif) as total_justificadas,
+                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
+            FROM vereadores v
+            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id, v.ver_nome
+            ORDER BY percentual_presenca DESC;
+        """
+    elif criterio == 'comissoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, COUNT(vc.ver_id) AS total_comissoes,
+                   GROUP_CONCAT(DISTINCT c.nome SEPARATOR ', ') as comissoes
+            FROM vereadores v
+            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+            LEFT JOIN comissoes c ON vc.comissao_id = c.id
+            GROUP BY v.ver_id, v.ver_nome
+            ORDER BY total_comissoes DESC;
+        """
+    elif criterio == 'avaliacoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, 
+                   COUNT(a.id) as total_avaliacoes,
+                   ROUND(AVG(a.nota), 2) as media_avaliacoes
+            FROM vereadores v
+            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id, v.ver_nome
+            ORDER BY media_avaliacoes DESC;
+        """
+    
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return jsonify(resultado)
+
 # BUSCA AS INFORMAÇÕES DE UM VEREADOR NO SITE DA CAMARA
 def get_vereadores(id):
 
