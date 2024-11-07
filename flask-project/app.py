@@ -73,9 +73,125 @@ def test_connection():
 def home():
     return render_template('home.html')
 
-@app.route('/visao-geral')
+
+
+
+
+
+
+@app.route('/ranking')
 def geral():
-    return render_template('visao-geral.html')
+    # Conectar ao banco de dados
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)  # Retorna os resultados como dicionários
+
+    # Query para pegar todos os vereadores
+    query_vereadores = """
+    SELECT ver_id, ver_nome, ver_partido, ver_tel1, ver_tel2, ver_celular, ver_email, ver_foto
+    FROM vereadores
+    ORDER BY ver_nome ASC;
+    """
+    cursor.execute(query_vereadores)
+    vereadores = cursor.fetchall()  # Pega todos os vereadores
+
+    # Query para calcular a média da posição política
+    query_media_posicao = """
+    SELECT AVG(posicao_politica) AS media_posicao
+    FROM vereadores;
+    """
+    cursor.execute(query_media_posicao)
+    resultado_media = cursor.fetchone()  # Pega o resultado da média
+
+    # Verificar se a média foi calculada corretamente
+    media_posicao = None
+    if resultado_media and resultado_media['media_posicao'] is not None:
+        media_posicao = resultado_media['media_posicao']
+
+    # Fechar a conexão com o banco após executar as queries
+    cursor.close()
+    connection.close()
+
+    # Renderiza o template 'ranking.html' com os dados
+    return render_template('ranking.html', vereadores=vereadores, media_posicao=media_posicao)
+
+
+@app.route('/filtrar/<criterio>')
+def filtrar_ranking(criterio):
+    # Definir a query com base no critério selecionado
+    if criterio == 'proposicoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, COUNT(p.ver_id) AS qtd_proposicoes
+            FROM vereadores v
+            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+            GROUP BY v.ver_id
+            ORDER BY qtd_proposicoes DESC;
+        """
+    elif criterio == 'assiduidade':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto,
+                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
+            FROM vereadores v
+            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id
+            ORDER BY percentual_presenca DESC;
+        """
+    elif criterio == 'comissoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, COUNT(vc.ver_id) AS total_comissoes
+            FROM vereadores v
+            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+            GROUP BY v.ver_id
+            ORDER BY total_comissoes DESC;
+        """
+    elif criterio == 'avaliacoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, ROUND(AVG(a.nota), 2) as media_avaliacoes
+            FROM vereadores v
+            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id
+            ORDER BY media_avaliacoes DESC;
+        """
+    elif criterio == 'todos':  # Exibir todos os vereadores com todos os critérios
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto,
+                   COALESCE(ROUND(AVG(a.nota), 2), 'N/A') as media_avaliacoes,  -- Valor padrão 'N/A' para a avaliação
+                   COALESCE(COUNT(p.ver_id), 0) AS qtd_proposicoes,
+                   COALESCE(ROUND((SUM(a2.presenca) * 100.0) / (SUM(a2.presenca) + SUM(a2.faltas) + SUM(a2.justif)), 2), 0) as percentual_presenca,
+                   COALESCE(COUNT(vc.ver_id), 0) AS total_comissoes
+            FROM vereadores v
+            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+            LEFT JOIN assiduidade a2 ON v.ver_id = a2.ver_id
+            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+            GROUP BY v.ver_id
+            ORDER BY media_avaliacoes DESC, qtd_proposicoes DESC, percentual_presenca DESC, total_comissoes DESC;
+        """
+    else:
+        return jsonify({"error": "Critério inválido"}), 400
+
+    # Conectar ao banco de dados e executar a query
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+
+    # Substituir valores `None` por valores padrão
+    for item in resultado:
+        item['media_avaliacoes'] = item.get('media_avaliacoes', 'N/A')  # Estático como 'N/A' se não houver avaliação
+        item['ver_partido'] = item.get('ver_partido', '')  # Partido vazio se não houver
+        item['ver_foto'] = item.get('ver_foto', 'caminho/padrao.jpg')  # Caminho padrão para a foto se ausente
+
+    cursor.close()
+    connection.close()
+
+    return jsonify(resultado)
+
+
+
+
+
+
+
 
 @app.route('/vereadores')
 def vereadores():
@@ -85,7 +201,7 @@ def vereadores():
     cursor = connection.cursor()
 
     # Execute a query to fetch vereadores
-    cursor.execute('SELECT * FROM vereadores')
+    cursor.execute('SELECT * FROM vereadores')  # Replace 'vereadores' with your actual table name
     vereadores = cursor.fetchall()
 
     # Clean up
@@ -239,7 +355,7 @@ def vereadorListaToObj(vereador):
         "ver_patrimonio":vereador[11],
     }
     return vereadorObj
-
+ 
 @app.route('/proposicoes/<int:id_prop>')
 def pagina_proposicao(id_prop):
     # Conectar no banco
@@ -289,84 +405,30 @@ def pagina_proposicao(id_prop):
 
 @app.route('/proposicoes')
 def proposicoes():
-    
     # Conecte-se ao banco de dados
     connection = get_db_connection()
     cursor = connection.cursor()
     
-    # Obter parâmetros da query
+    # Get current page from the query string, default is page 1
     page = request.args.get('page', 1, type=int)
-    search = request.args.get('busca', '')
-    tipos = request.args.getlist('tipos') # Lista de tipos selecionados
-    date_start = request.args.get('data_inicio')
-    date_end = request.args.get('data_fim')
     
-    # Definir itens por página
+    # Define how many items per page
     per_page = 10
-    
-    # Construir a query base
-    query = 'SELECT * FROM proposicoes WHERE situacao = %s'
-    params = ['Aprovada']
-    count_query = 'SELECT COUNT(*) FROM proposicoes WHERE situacao = %s'
-    
-    # Adicionar filtros se existirem
-    if search:
-        query += ' AND (ementa LIKE %s OR tema LIKE %s)'
-        count_query += ' AND (ementa LIKE %s OR tema LIKE %s)'
-        search_param = f'%{search}%'
-        params.extend([search_param, search_param])
-    
-    if tipos:
-        placeholders = ', '.join(['%s'] * len(tipos))
-        query += f' AND tipo IN ({placeholders})'
-        count_query += f' AND tipo IN ({placeholders})'
-        params.extend(tipos)
-    
-    # Converter Mocao de volta para Moção para a query do banco
-    tipos_convertidos = []
-    if tipos:
-        for tipo in tipos:
-            if tipo == 'Mocao':
-                tipos_convertidos.append('Moção')
-            else:
-                tipos_convertidos.append(tipo)
-        
-        placeholders = ', '.join(['%s'] * len(tipos_convertidos))
-        query += f' AND tipo IN ({placeholders})'
-        count_query += f' AND tipo IN ({placeholders})'
-        params.extend(tipos_convertidos)
-    
-    if date_start:
-        query += ' AND DATE(data_hora) >= %s'
-        count_query += ' AND DATE(data_hora) >= %s'
-        params.append(date_start)
-    
-    if date_end:
-        query += ' AND DATE(data_hora) <= %s'
-        count_query += ' AND DATE(data_hora) <= %s'
-        params.append(date_end)
-    
-    # Contar total de registros para paginação
-    cursor.execute(count_query, params)
+
+    # Get the total number of records
+    cursor.execute('SELECT COUNT(*) FROM proposicoes WHERE situacao = %s', ('Aprovada',))
     total = cursor.fetchone()[0]
-    total_pages = ceil(total / per_page)
-    
-    # Adicionar paginação à query
-    query += ' LIMIT %s OFFSET %s'
-    params.extend([per_page, (page - 1) * per_page])
-    
-    # Executar query final
-    cursor.execute(query, params)
+    total_pages = ceil(total / per_page) # Calculate total number of pages
+    offset = (page - 1) * per_page # Calculate the offset for the SQL query
+
+    cursor.execute('SELECT * FROM proposicoes WHERE situacao = %s LIMIT %s OFFSET %s', ('Aprovada',per_page, offset))  # Fetch the data for the current page
     proposicoes = cursor.fetchall()
-    
+
     cursor.close()
     connection.close()
     
-    return render_template('proposicoes.html', 
-                         proposicoes=proposicoes, 
-                         page=page, 
-                         total_pages=total_pages,
-                         tipos=tipos)
+    # Renderiza o template e passa a paginação junto com os dados
+    return render_template('filtro.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
 
 # ATUALIZA O BANCO DE DADOS COM AS INFORMAÇÕES DO VEREADOR
 @app.route('/atualiza_vereadores')
@@ -473,65 +535,6 @@ def atualiza_vereadores():
     connection.close()
 
     return redirect(request.referrer)
-
-@app.route('/ranking')  
-def ranking():
-    return render_template('filtroranking.html')
-
-@app.route('/filtrar/<criterio>')
-def filtrar_ranking(criterio):
-    if criterio == 'proposicoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, COUNT(p.ver_id) AS qtd_proposicoes,
-                   COUNT(CASE WHEN p.tipo = 'Requerimento' THEN 1 END) as requerimentos,
-                   COUNT(CASE WHEN p.tipo = 'Moção' THEN 1 END) as mocoes,
-                   COUNT(CASE WHEN p.tipo = 'Projeto de Lei' THEN 1 END) as projetos_lei
-            FROM vereadores v
-            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY qtd_proposicoes DESC;
-        """
-    elif criterio == 'assiduidade':
-        query = """
-            SELECT v.ver_id, v.ver_nome, 
-                   SUM(a.presenca) as total_presencas,
-                   SUM(a.faltas) as total_faltas,
-                   SUM(a.justif) as total_justificadas,
-                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
-            FROM vereadores v
-            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY percentual_presenca DESC;
-        """
-    elif criterio == 'comissoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, COUNT(vc.ver_id) AS total_comissoes,
-                   GROUP_CONCAT(DISTINCT c.nome SEPARATOR ', ') as comissoes
-            FROM vereadores v
-            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
-            LEFT JOIN comissoes c ON vc.comissao_id = c.id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY total_comissoes DESC;
-        """
-    elif criterio == 'avaliacoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, 
-                   COUNT(a.id) as total_avaliacoes,
-                   ROUND(AVG(a.nota), 2) as media_avaliacoes
-            FROM vereadores v
-            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY media_avaliacoes DESC;
-        """
-    
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute(query)
-    resultado = cursor.fetchall()
-    cursor.close()
-    connection.close()
-
-    return jsonify(resultado)
 
 # BUSCA AS INFORMAÇÕES DE UM VEREADOR NO SITE DA CAMARA
 def get_vereadores(id):
@@ -692,7 +695,7 @@ vereador_cache = {}
 
 # Função de busca com cache
 async def buscar_vereador(nome_vereador, cursor):
-    if (nome_vereador) in vereador_cache:
+    if nome_vereador in vereador_cache:
         return vereador_cache[nome_vereador]
     await cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (nome_vereador,))
     result = await cursor.fetchone()
