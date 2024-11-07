@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Pagina Vereador{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="../static/lista-vereadores.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='vereador.css') }}">
+
+<!--     
+        {{ assiduidades }}
+        {{ vereador }}
+        {{ porcentagem_presenca }}
+        {{ comissoes }}
+        {{ proposicoes }}
+ -->
+
+{% endblock %}
+
+{% block content %}
+<div class="bg">
+    <div class="mx-10 my-10">
+        <div id="personal-info" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 p-2 rounded space-y-6">
+            <div id="nome-vereador" class="border border-gray-300 p-2 rounded text-center text-2xl font-bold">{{vereador['ver_nome']}} ({{ vereador['ver_partido'] }})</div>
+            <div id="header" class="flex flex-row flex-wrap space-y-6 gap-2 justify-center">
+                <div id="profile" class="px-4 flex-1 max-w-[350px] flex flex-col space-y-2 text-center justify-center items center">
+                    <div id="img" class="flex justify-center">
+                        <img class="max-w-xs max-h-64 rounded-lg" src="{{ vereador['ver_foto'] }}" alt="">
+                    </div>
+                    <div id="avaliacao">Avaliação 4.5 (40 avaliações)</div>
+                </div>
+                <div id="presenca" class="flex-1 px-6 border border-gray-300 rounded space-y-6 w-full min-w-[350px] max-w-[350px]">
+                    <p class="text-xl text-center font-bold">Presença em Plenário</p>
+                    <div class="flex flex-col space-y-2">
+                        <div class="space-y-4">
+                            <p>Presenças: ({{ ver_assiduidade['porc_presenca'] }}%)</p>
+                            <!-- Barra de porcentagem -->
+                            <div class="w-full bg-gray-300 h-2 rounded-full">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ ver_assiduidade['porc_presenca'] }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p>Ausências: ({{ ver_assiduidade['porc_faltas'] }}%)</p>
+                            <!-- Barra de porcentagem -->
+                            <div class="w-full bg-gray-300 h-2 rounded-full">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ ver_assiduidade['porc_faltas'] }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p>Faltas Justificadas: ({{ ver_assiduidade['porc_justificadas'] }}%)</p>
+                            <!-- Barra de porcentagem -->
+                            <div class="w-full bg-gray-300 h-2 rounded-full">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ ver_assiduidade['porc_justificadas'] }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="flex-1">{{ ver_assiduidade['comparacao_presencas']}}</p>
+                </div>
+                <div id="grafico-propostas" class="flex-1 px-6 border border-gray-300 rounded flex flex-col justify-center min-w-[350px]">
+                    <p class="text-xl text-center font-bold">Proposições Apresentadas</p>
+                    <div class="flex-1 max-h-[300px] overflow-auto">
+                        <!-- Embed the Plotly graph here -->
+                        {{ chart_html|safe}}
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+                <div class="flex flex-row justify-between flex-wrap gap-2">
+                    <div id="contato" class="border flex-1 border-gray-300 p-2 rounded max-w-[350px] min-w-[300px]">
+                        <p class="font-bold text-xl mb-4">Informações de Contato</p>
+                        <p>Telefone: {{ vereador['ver_tel1'] }} / {{vereador['ver_tel2'] }}</p>
+                        <p>Celular: {{ vereador['ver_celular'] }}</p>
+                        <p>Email: {{ vereador['ver_email'] }}</p>
+                    </div>
+                    <div id="sobre" class="border flex-1 border-gray-300 p-2 rounded min-w-[300px]">
+                        <p class="font-bold text-xl mb-4">Sobre:</p>
+                        <p>{{ vereador['ver_biografia'] }}</p>
+                    </div>
+                </div>
+                <div id="patrimonio"></div>
+            </div>
+        </div>
+        <div id="propostas">
+            <div id="aprovadas"></div>
+            <div id="comissoes"></div>
+        </div>
+        <div id="votações">
+            <div id="cards"></div>
+        </div>
+        <div id="comentários">
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

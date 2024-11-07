@@ -13,6 +13,8 @@ from math import ceil
 import aiomysql
 import locale
 import asyncio
+import plotly.graph_objects as go
+
 
 # diretório para os arquivos JSON de PROPOSIÇÕES
 DIRETORIO_JSON = "../rapagem_dados/ArquivosJson/"
@@ -166,6 +168,8 @@ async def pagina_vereador(vereador_id):
             print(response[0])
         proposicoes = {"qtd_requerimento":response[0],"qtd_mocao":response[1], "qtd_pl":response[2]}
 
+        chart_html = gerarGrafico(proposicoes)
+
         # Obter totais de assiduidade e calcular porcentagem de presença
         assiduidade_totais = assiduidade.get_assiduidade_totais()
         porcentagem_presenca = assiduidade.calcular_porcentagem_presenca(vereador_id)
@@ -174,15 +178,100 @@ async def pagina_vereador(vereador_id):
     connection1.close()
     connection2.close()
 
+    ver_assiduidade=comparar_assiduidades(assiduidades, assiduidade_totais)
+    print(f'presencas: {ver_assiduidade['porc_presenca']}')
+    print(f'presencas: {ver_assiduidade['porc_faltas']}')
+    print(f'presencas: {ver_assiduidade['porc_justificadas']}')
+    
+
     # Renderiza o template com os dados
-    return render_template('vereador.html',
-        assiduidades=assiduidades,
+    return render_template('new_vereador.html',
+        ver_assiduidade=ver_assiduidade,
         vereador=vereadorObj,
-        assiduidade_totais=assiduidade_totais,
         porcentagem_presenca=porcentagem_presenca,
         comissoes=comissoes,
-        proposicoes= proposicoes
+        proposicoes=proposicoes,
+        chart_html=chart_html
     )
+
+def gerarGrafico(proposicoes):
+    # Dados de exemplo (aqui você usa os dados reais da variável 'proposicoes')
+    categorias = ['Requerimentos', 'Moções', 'Proposições']
+    valores = [proposicoes['qtd_requerimento'], proposicoes['qtd_mocao'], proposicoes['qtd_pl']]
+
+    # Criando o gráfico
+    fig = go.Figure([go.Bar(x=categorias, y=valores,marker_color='#193D87')])
+
+    # Configurando o gráfico minimalista
+    fig.update_layout(
+        xaxis_visible=True,
+        yaxis_visible=True,
+        plot_bgcolor='rgba(0,0,0,0)',  # Remove o fundo
+        paper_bgcolor='rgba(0,0,0,0)',  # Remove o fundo da área do gráfico
+        xaxis_showgrid=False,  # Remove as linhas de grade do eixo X
+        yaxis_showgrid=False,  # Remove as linhas de grade do eixo Y
+        xaxis_title=None,  # Remove título do eixo X
+        yaxis_title=None,  # Remove título do eixo Y
+        showlegend=False,  # Remove a legenda
+        title=None,  # Remove o título do gráfico
+        margin=dict(t=10, b=10, l=10, r=10),
+        bargap=0.2,  # Menor valor = barras mais finas
+        bargroupgap=0.1,
+        height=300,  # Tamanho fixo para a altura do gráfico
+    )
+
+    # Convertendo o gráfico para HTML
+    chart_html = fig.to_html(full_html=False)
+    return chart_html
+
+def comparar_assiduidades(assiduidade_vereador, assiduidades):
+    total_participacoes = assiduidade_vereador[0]['faltas_totais'] + assiduidade_vereador[0]['presencas_totais'] + assiduidade_vereador[0]['justificadas_totais']
+
+    ver_presenca = round((assiduidade_vereador[0]['presencas_totais'] / total_participacoes), 2) * 100
+    ver_faltas = round((assiduidade_vereador[0]['faltas_totais'] / total_participacoes), 2) * 100
+    ver_justificadas = round((assiduidade_vereador[0]['justificadas_totais'] / total_participacoes), 2) * 100
+
+    vereadores = []
+
+    total_presenca_geral = 0
+    for vereador in assiduidades:
+        total_participacoes = vereador['faltas_totais'] + vereador['presencas_totais'] + vereador['justificadas_totais']
+        presencas = round((vereador['presencas_totais'] / total_participacoes), 2) * 100
+        faltas = round((vereador['faltas_totais'] / total_participacoes), 2) * 100
+        justificadas = round((vereador['justificadas_totais'] / total_participacoes), 2) * 100
+        total_presenca_geral += presencas
+
+        vereadores.append({
+            'presenca': presencas,
+            'faltas': faltas,
+            'justificadas': justificadas
+        })
+
+    # Ordenar vereadores pela presença
+    vereadores.sort(key=lambda a: a['presenca'], reverse=True)
+
+    # Calcular o 90º percentil
+    n = len(vereadores)
+    posicao_percentil_90 = (90 / 100) * (n + 1)
+
+   # Encontrar o valor do 90º percentil
+    if posicao_percentil_90.is_integer():
+        percentil_90 = float(vereadores[int(posicao_percentil_90) - 1]['presenca'])
+    else:
+        # Interpolar
+        pos1 = int(posicao_percentil_90) - 1
+        pos2 = pos1 + 1
+        percentil_90 = float(vereadores[pos1]['presenca']) + (posicao_percentil_90 - (pos1 + 1)) * (float(vereadores[pos2]['presenca']) - float(vereadores[pos1]['presenca']))
+
+    comparacao = "acima" if presencas > percentil_90 else "inferior"
+    comparacao_presencas = f"Este vereador tem presença {comparacao} a 90% dos vereadores."
+
+    return {
+        'porc_presenca': ver_presenca,
+        'porc_faltas': ver_faltas,
+        'porc_justificadas': ver_justificadas,
+        'comparacao_presencas': comparacao_presencas
+    }
 
 # Função para buscar os dados do vereador com cursor assíncrono
 async def getVereadorById(cursor, vereador_id):
@@ -233,10 +322,10 @@ def vereadorListaToObj(vereador):
         "ver_celular":vereador[5],
         "ver_email":vereador[6],
         "ver_gabinete":vereador[7],
-        "ver_posicionamento":vereador[8],
-        "ver_foto":vereador[9],
-        "ver_biografia":vereador[10],
-        "ver_patrimonio":vereador[11],
+        "ver_foto":vereador[8],
+        "ver_biografia":vereador[9],
+        "ver_patrimonio":vereador[10],
+        "posicao_politica":vereador[11]
     }
     return vereadorObj
 
