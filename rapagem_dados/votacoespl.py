@@ -1,115 +1,112 @@
-import camelot
-import pandas as pd
-import PyPDF2
+import pdfplumber
+import json
 import re
 import os
-import json
-from PyPDF2 import PdfReader
 
-# Lê todas as tabelas do PDF
-# filename = f"sessao_{i + 1}.pdf"
-# tables = camelot.read_pdf("votacao.pdf", pages='all', flavor='stream')
-
-# Variáveis para armazenar o autor e PL
-autor = ""
-pl = ""
-
+# Lista de vereadores para referência
 lista_vereadores = [
-    "Amélia Naomi",
-    "Dulce Rita",
-    "Fernando Petiti",
-    "Juliana Fraga",
-    "Juvenil Silvério",
-    "Lino Bispo",
-    "Marcão da Academia",
-    "Robertinho da Padaria",
-    "Walter Hayashi",
-    "Roberto do Eleven",
-    "Zé Luis",
-    "Dr. José Claudio",
-    "Thomaz Henrique",
-    "Roberto Chagas",
-    "Milton Vieira Filho",
-    "Rafael Pascucci",
-    "Marcelo Garcia",
-    "Renato Santiago",
-    "Júnior da Farmácia",
-    "Fabião Zagueiro",
+    "Amélia Naomi", "Dulce Rita", "Fernando Petiti", "Juliana Fraga",
+    "Juvenil Silvério", "Lino Bispo", "Marcão da Academia",
+    "Robertinho da Padaria", "Walter Hayashi", "Roberto do Eleven",
+    "Zé Luis", "Dr. José Claudio", "Thomaz Henrique", "Roberto Chagas",
+    "Milton Vieira Filho", "Rafael Pascucci", "Marcelo Garcia",
+    "Renato Santiago", "Júnior da Farmácia", "Fabião Zagueiro",
     "Rogério da Acasem"
 ]
 
-# Normaliza o texto
-def normalize_texto_linha(nome):
-    return nome.replace("\n", "").strip()
+# Padrões de regex para capturar diferentes informações
+padrao_projeto = (
+    r'(Projeto de Decreto Legislativo|Proposta de Emenda à Lei Orgânica|'
+    r'Projeto de Lei Complementar|Projeto de Resolução|Projeto de Lei) nº (\d+/\d{4})'
+)
+padrao_status = r"Resultado:\s*(Aprovada|Rejeitada)"
+padrao_voto = r'(?P<vereador>' + '|'.join(lista_vereadores) + r'):\s*(?P<voto>Favorável|Contrário)'
+padrao_autoria = r'Autoria:\s*Ver\.?\.?\s*([\w\s]+?)(?=\n|$)'
+padrao_presidente = r'Presidente:\s*([\w\s]+)'
 
-# Percorre todas as tabelas e busca pelas linhas com o nome e o voto dos vereadores
-def buscar_extrato_votacao(tables):
+def extrair_votacoes(pdf_path):
     votacoes = []
-    id_votacao = 1  # ID único para cada votação
+    projetos_processados = set()  # Conjunto para rastrear projetos já processados
 
-    for table_idx, table in enumerate(tables):
-        print(f"Realizando requisição {table_idx + 1}")
-        df = table.df
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            texto = page.extract_text()
 
-        # Verifica se há pelo menos 4 colunas e ignora as tabelas que não têm os dados desejados
-        if df.shape[1] < 2:
-            continue
+            if texto:
+                # Encontrar projetos de lei e seus status
+                projetos = re.finditer(padrao_projeto, texto)
+                status_matches = list(re.finditer(padrao_status, texto))
 
-        extrato_votacao_lista = []
-        vereador = ''
-        voto = ''
+                # Encontrar votos dos vereadores
+                votos = re.findall(padrao_voto, texto)
 
-        # Itera pelas linhas da tabela atual para capturar vereadores e votos
-        for i in range(len(df)):
-            coluna = df.iloc[i]
-            lista_voto = ["Contrário", "Favorável", "Presidente*"]
+                # Encontrar presidente
+                presidente = re.search(padrao_presidente, texto)
 
-            for j in range(0, len(coluna)):
-                texto_linha = normalize_texto_linha(coluna[j])
-                if texto_linha != '' and texto_linha not in lista_voto and texto_linha in lista_vereadores:
-                    vereador = texto_linha
+                # Estruturar dados
+                for projeto in projetos:
+                    tipo, numero = projeto.groups()
+                    chave_projeto = f"{tipo} {numero}"
+                    if chave_projeto not in projetos_processados:
+                        projetos_processados.add(chave_projeto)
 
-                elif texto_linha != '' and texto_linha in lista_voto:
-                    voto = texto_linha
+                        # Encontrar a autoria correspondente ao projeto
+                        # Procurar a autoria logo após o projeto
+                        match_autoria = re.search(padrao_autoria, texto[projeto.end():])
+                        if match_autoria:
+                            autoria = match_autoria.group(1).strip()
+                            if autoria not in lista_vereadores:
+                                # Tentar encontrar o nome do vereador mais próximo
+                                for vereador in lista_vereadores:
+                                    if vereador in texto[projeto.end():]:
+                                        autoria = vereador
+                                        break
+                        else:
+                            # Tentar encontrar o nome do vereador mais próximo
+                            autoria = "Desconhecida"
+                            for vereador in lista_vereadores:
+                                if vereador in texto[projeto.end():]:
+                                    autoria = vereador
+                                    break
 
-                if vereador != '' and voto != '':
-                    extrato = {"vereador": vereador, "voto": voto}
-                    extrato_votacao_lista.append(extrato)
-                    vereador = ''
-                    voto = ''
+                        # Encontrar o status correspondente ao projeto
+                        status = "Aprovada"  # Default status
+                        for status_match in status_matches:
+                            if projeto.end() < status_match.start():
+                                status = status_match.group(1)
+                                break
 
-        # Estrutura final da votação com o novo formato especificado
-        votacoes.append({
-            "id": id_votacao,
-            "num_pl": None,  # Defina ou substitua conforme necessário
-            "resultado": {
-                "status": "Aprovada",  # Exemplo de status
-                "vereadores": extrato_votacao_lista
-            },
-            "presidente": None,
-            "autoria_pl": None,
-            "tabela": table_idx + 1
-        })
-        id_votacao += 1  # Incrementa o ID único
+                        votacao = {
+                            "tipo": tipo,
+                            "projeto_de_lei": numero,
+                            "presidente": presidente.group(1) if presidente else "Sem presidente",
+                            "autoria": autoria,
+                            "status": status,
+                            "vereadores": [{"vereador": vereador, "voto": voto} for vereador, voto in votos]                                                  
+                        }
+                        votacoes.append(votacao)
 
-    # Retorna a lista de JSONs
     return votacoes
 
+def salvar_json(dados, json_path):
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(dados, f, ensure_ascii=False, indent=4)
+    print(f"Arquivo JSON salvo em: {json_path}")
+
+def processar_pdfs(pasta_pdfs, pasta_json):
+    for arquivo in os.listdir(pasta_pdfs):
+        if arquivo.endswith('.pdf'):
+            caminho_pdf = os.path.join(pasta_pdfs, arquivo)
+            nome_json = f"{os.path.splitext(arquivo)[0]}.json"
+            caminho_json = os.path.join(pasta_json, nome_json)
+
+            dados_pdf = extrair_votacoes(caminho_pdf)
+            salvar_json(dados_pdf, caminho_json)
+
+# Defina os caminhos para a pasta dos PDFs e a pasta onde os JSONs serão salvos
 pasta_pdfs = "downloaded_pdfs"
+pasta_json = "json"
 
-resultados = []
+# Processa todos os PDFs na pasta especificada
+processar_pdfs(pasta_pdfs, pasta_json)
 
-for i in range(23):
-    pdfs = os.path.join(pasta_pdfs, f"sessao_{i + 1}.pdf")
-    tables = camelot.read_pdf(pdfs, pages='all', flavor='stream')
-    votacao = buscar_extrato_votacao(tables)
-    resultados.extend(votacao)  # Adiciona cada votação com formato final ao resultado
-
-# Certifique-se de que a pasta 'json' existe
-os.makedirs("json", exist_ok=True)
-
-# Salva os resultados em um arquivo JSON dentro da pasta 'json'
-with open("json/resultados_votacao.json", "w", encoding="utf-8") as f:
-    json.dump(resultados, f, ensure_ascii=False, indent=4)
-
-print("Os resultados foram salvos em 'json/resultados_votacao.json'")

@@ -1,102 +1,941 @@
 [
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "48/2022",
-        "presidente": "Desconhecido",
-        "autoria": "Lino Bispo",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "39/2023",
-        "presidente": "Desconhecido",
-        "autoria": "Amélia Naomi",
-        "resultado": {
-            "status": "Rejeitada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "338/2023",
-        "presidente": "Desconhecido",
-        "autoria": "Fernando Petiti",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "212/2024",
-        "presidente": "Desconhecido",
-        "autoria": "Amélia Naomi",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "106/2021",
-        "presidente": "Desconhecido",
-        "autoria": "Amélia Naomi",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "386/2023",
-        "presidente": "Desconhecido",
-        "autoria": "Fernando Petiti",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "118/2024",
-        "presidente": "Desconhecido",
-        "autoria": "Marcão da Academia",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "274/2024",
-        "presidente": "Desconhecido",
-        "autoria": "Amélia Naomi",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "296/2024",
-        "presidente": "Desconhecido",
-        "autoria": "Zé Luis",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    },
-    {
-        "tipo": "Projeto de Lei",
-        "projeto_de_lei": "308/2024",
-        "presidente": "Desconhecido",
-        "autoria": "Zé Luis",
-        "resultado": {
-            "status": "Aprovada",
-            "vereadores": []
-        }
-    }
+ {
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "48/2022",
+    "presidente": "Sem presidente",
+    "autoria": "Lino Bispo",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Contrário"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "39/2023",
+    "presidente": "Sem presidente",
+    "autoria": "Dulce Rita",
+    "status": "Rejeitado",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Contrário"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "338/2023",
+    "presidente": "Sem presidente",
+    "autoria": "Fernando Petiti",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Contrário"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Contrário"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "212/2024",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Rogério da Acasem",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "106/2024",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Dulce Rita",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "386/2023",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Fernando Petiti",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "228/2024",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Marcão da Academia",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "274/2024",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Dr.José Claudio",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "296/2024",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Zé Luis",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  },
+
+{
+    "tipo": "Projeto de Lei",
+    "projeto_de_lei": "308/2024",
+    "presidente": "Roberto do Eleven",
+    "autoria": "Zé Luis",
+    "status": "Aprovada",
+    "vereadores": [
+      {
+        "vereador": "Amélia Naomi", 		
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dulce Rita",
+        "voto":	"Favorável"
+      },
+      {
+        "vereador": "Fernando Petiti",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juliana Fraga",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Juvenil Silvério",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Lino Bispo",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcão da Academia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Robertinho da Padaria",
+        "voto": "Ausente"
+      },
+      {
+        "vereador": "Walter Hayashi",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto do Eleven",
+        "voto": "Presidente"
+      },
+      {
+        "vereador": "Zé Luis",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Dr. José Claudio",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Thomaz Henrique",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Roberto Chagas",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Milton Vieira Filho",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rafael Pascucci",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Marcelo Garcia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Renato Santiago",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Júnior da Farmácia",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Fabião Zagueiro",
+        "voto": "Favorável"
+      },
+      {
+        "vereador": "Rogério da Acasem",
+        "voto": "Favorável"
+      }
+    ]
+  }
 ]
