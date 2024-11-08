@@ -1,0 +1,281 @@
+[
+    {
+        "tipo": "Moção",
+        "projeto_de_lei": "165/2024",
+        "presidente": "Roberto do Eleven",
+        "autoria": "Amélia Naomi",
+        "status": "Rejeitada",
+        "vereadores": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dulce Rita",
+                "voto": "Ausente"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Milton Vieira Filho",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Contrário"
+            }
+        ]
+    },
+    {
+        "tipo": "Moção",
+        "projeto_de_lei": "166/2024",
+        "presidente": "Roberto do Eleven",
+        "autoria": "Lino Bispo",
+        "status": "Aprovada",
+        "vereadores": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Dulce Rita",
+                "voto": "Ausente"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Abstenção"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Milton Vieira Filho",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Favorável"
+            }
+        ]
+    },
+    {
+        "tipo": "Moção",
+        "projeto_de_lei": "181/2024",
+        "presidente": "Roberto do Eleven",
+        "autoria": "Amélia Naomi",
+        "status": "Rejeitada",
+        "vereadores": [
+            {
+                "vereador": "Amélia Naomi",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Dulce Rita",
+                "voto": "Ausente"
+            },
+            {
+                "vereador": "Fernando Petiti",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Juliana Fraga",
+                "voto": "Favorável"
+            },
+            {
+                "vereador": "Juvenil Silvério",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Lino Bispo",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Marcão da Academia",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Robertinho da Padaria",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Walter Hayashi",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Roberto do Eleven",
+                "voto": "Presidente"
+            },
+            {
+                "vereador": "Zé Luis",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Dr. José Claudio",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Thomaz Henrique",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Roberto Chagas",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Milton Vieira Filho",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Rafael Pascucci",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Marcelo Garcia",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Renato Santiago",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Júnior da Farmácia",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Fabião Zagueiro",
+                "voto": "Contrário"
+            },
+            {
+                "vereador": "Rogério da Acasem",
+                "voto": "Contrário"
+            }
+        ]
+    }
+]
