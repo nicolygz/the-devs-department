@@ -10,160 +10,240 @@
 
 {% block content %}
 <div class="bg">
-    <div style="padding-top: 80px;">
-        <div>
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{vereador['ver_nome']}}</h1>
-        </div>
-        <div class="container" id="box">
-            <div class="flex-container-vereador">
-                <div class="card">
-                    <div class="card-img">
-                        <img src="{{ vereador['ver_foto']}}" alt=""></a>
+    <div class="mx-10 my-10 space-y-6">
+        <div id="personal-info" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 rounded space-y-6 min-h-[200px]">
+            <div id="nome-vereador" class="border border-gray-300 p-2 rounded text-center text-2xl font-black">{{vereador['ver_nome']}} ({{ vereador['ver_partido'] }})</div>
+            <div id="header" class="flex flex-row flex-wrap space-y-6 gap-2 justify-center">
+                <div id="profile" class="px-4 flex-1 max-w-[350px] flex flex-col space-y-2 text-center justify-center items center">
+                    <div id="img" class="flex justify-center">
+                        <img class="max-w-xs max-h-64 rounded-lg" src="{{ vereador['ver_foto'] }}" alt="">
                     </div>
-                    <div class="stars_card">
-                        <label for="star5" title="5 estrelas">★</label>
-                        <label for="star4" title="4 estrelas">★</label>
-                        <label for="star3" title="3 estrelas">☆</label>
-                        <label for="star2" title="2 estrelas">☆</label>
-                        <label for="star1" title="1 estrela">☆</label>
-                        <a id="notas_estrela">2.0</a>
+                    <div id="avaliacao" class="flex items-center justify-center">
+                        <div class="flex mr-2">
+                            <!-- Exibe as estrelas -->
+                            {% if avaliacao['qtd'] == 0 or vereador['ver_id'] != avaliacao['ver_id'] %}
+                                <p class="text-md text-gray-800">Não há avaliações.</p>
+                            {% elif vereador['ver_id'] == avaliacao['ver_id'] %}
+                                {% for i in range(5) %}
+                                    {% if i < avaliacao['avg']|int %}
+                                        <span class="fa fa-star text-yellow-400 text-xl"></span> <!-- Estrela cheia -->
+                                    {% elif i < avaliacao['avg']|int + 0.5 %}
+                                        <span class="fa fa-star-half-alt text-yellow-400 text-xl"></span> <!-- Estrela meia -->
+                                    {% else %}
+                                        <span class="fa fa-star text-gray-300 text-xl"></span> <!-- Estrela vazia -->
+                                    {% endif %}
+                                    {% endfor %}
+                                    <p class="text-md text-gray-800">{{ avaliacao['avg'] }} ({{ avaliacao['qtd'] }} avaliações)</p>
+                            {% endif %}
+                        </div>
                     </div>
-                    <ul class="card-text-container">
-                        <li>Telefone: {{ vereador['ver_tel1'] }}</li>
-                        <li>Telefone 2: {{ vereador['ver_tel2'] }}</li>
-                        <li>Celular: {{ vereador['ver_celular'] }}</li>
-                        <li>Email: <span id="email"> {{ vereador['ver_email'] }} </span></li>
-                    </ul>
-                    <span class="card-footer">{{ vereador['ver_partido'] }}</span>
+                </div>
+                <div id="presenca" class="flex-1 px-6 border border-gray-300 rounded space-y-6 w-full min-w-[350px] max-w-[350px]">
+                    <p class="text-xl text-center font-black">Presença em Plenário</p>
+                    <div class="flex flex-col space-y-2">
+                        <div class="space-y-4">
+                            <p>Presenças: ({{ ver_assiduidade['porc_presenca'] }}%)</p>
+                            <!-- Barra de porcentagem -->
+                            <div class="w-full bg-gray-300 h-2 rounded-full">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ ver_assiduidade['porc_presenca'] }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p>Ausências: ({{ ver_assiduidade['porc_faltas'] }}%)</p>
+                            <!-- Barra de porcentagem -->
+                            <div class="w-full bg-gray-300 h-2 rounded-full">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ ver_assiduidade['porc_faltas'] }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <p>Faltas Justificadas: ({{ ver_assiduidade['porc_justificadas'] }}%)</p>
+                            <!-- Barra de porcentagem -->
+                            <div class="w-full bg-gray-300 h-2 rounded-full">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ ver_assiduidade['porc_justificadas'] }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="flex-1">{{ ver_assiduidade['comparacao_presencas']}}</p>
+                </div>
+                <div id="grafico-propostas" class="flex-1 px-6 border border-gray-300 rounded flex flex-col justify-center min-w-[350px]">
+                    <p class="text-xl text-center font-black">Proposições Apresentadas ({{ proposicoes| length }})</p>
+                    <div class="flex-1 max-h-[300px] overflow-auto">
+                        <!-- Embed the Plotly graph here -->
+                        {{ chart_html|safe}}
+                    </div>
                 </div>
             </div>
-            <div class="container">
-                <div class="menu">
-                    <button onclick="showContent('resumo')">Biografia</button>
-                    <button onclick="showContent('proposicoes')">Proposições (92)</button>
-                </div>
-                <div id="resumo" class="content1">
-                    <section>
-                        <p> {{ vereador['ver_biografia'] }} </p>
-                        <br>
-                        <h3 class="font-bold text-xl">Patrimônio:</h3>
-                        <br>
-                        <p>O valor de seu patrimonio declarado é R${{ vereador['ver_patrimonio'] }}</p>
-                    </section>
-                </div>
-                <div id="proposicoes" class="content1" style="display: none;">
-                    <p>Projetos de Lei: {{ proposicoes['qtd_pl'] }}</p>
-                    <p>Requerimentos: {{ proposicoes['qtd_requerimento'] }}</p>
-                    <p>Moções: {{ proposicoes['qtd_mocao'] }}</p>
+            <div id="content" class="flex">
+                <div class="flex flex-row justify-between flex-wrap gap-2">
+                    <div id="contato" class="border flex-1 border-gray-300 p-2 rounded max-w-[350px] min-w-[300px]">
+                        <p class="font-black text-xl mb-4">Informações de Contato</p>
+                        <p>Telefone: {{ vereador['ver_tel1'] }} / {{vereador['ver_tel2'] }}</p>
+                        <p>Celular: {{ vereador['ver_celular'] }}</p>
+                        <p>Email: {{ vereador['ver_email'] }}</p>
+                    </div>
+                    <div id="sobre" class="border flex-1 border-gray-300 p-2 rounded min-w-[300px]">
+                        <p class="font-black text-xl mb-4">Sobre:</p>
+                        <p>{{ vereador['ver_biografia'] }}</p>
+                    </div>
+                    <div id="sobre" class="border flex-1 flex flex-col border-gray-300 p-2 rounded min-w-[300px] justify-center items-center">
+                        <p class="font-black text-xl mb-4">Patrimônio Declarado:</p>
+                        <p class="font-black text-3xl">R${{vereador['ver_patrimonio']}}</p>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div id="propostas" class="flex flex-col md:flex-row my-4 gap-4 max-h-[400px] min-h-[200px] overflow-auto">
+            <div id="aprovadas" class="border-gray-300 border rounded flex flex-1 flex-col gap-y-2 p-2 min-w-[400px]">
+                <p class="font-black text-xl mb-4 text-center">Propostas Aprovadas </p>
+                <div class="space-y-4 overflow-auto max-h-[300px]">
+                    {% for proposicao in proposicoes %}
+                        {% if proposicao['situacao'] == 'Aprovada' %}
+                        <div class="p-2 border border-gray-300 rounded relative hover:bg-gray-300">
+                            <a href="/proposicoes/{{ proposicao['id_prop'] }}">
+                                <p class="text-xl font-black">Proposição {{proposicao['id_prop']}}/{{proposicao['ano']}}</p>
+                                <p class="text-l font-black">{{ proposicao['tema']}}</p>
+                                <span class="text-sm">Assunto: {{ proposicao['assunto'] }}</span>
+                                <p class="absolute right-2 top-2">{{ proposicao['situacao'] }}</p>
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="comissoes" class="border-gray-300 border rounded flex flex-1 flex-col gap-y-2 p-2 min-w-[400px]">
+                <p class="font-black text-xl mb-4 text-center">Participação em Comissões ({{ comissoes| length }})</p>
+                <div class="space-y-4 overflow-auto max-h-[300px]">
+                    {% for comissao in comissoes %}
+                    <div class="p-2 border border-gray-300 rounded relative hover:bg-gray-300">
+                        <a href="{{comissao['link']}}">
+                            <p class="text-l font-black">{{ comissao['nome'] }}</p>
+                            <span class="text-sm font-italic">{{ comissao['data_inicio'].strftime('%d/%m/%Y') }} - {{ comissao['data_fim'].strftime('%d/%m/%Y') }}</span>
+                            <p class="absolute right-2 top-2">{{ comissao['cargo'] }}</p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>        
+        <!-- <div id="votações">
+            <div id="cards"></div>
+        </div> -->
+
+        <div id="mostrar-comentários" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 rounded space-y-6">
+            <p class="text-2xl font-black mb-2">Comentários:</p>
+            {% if comments|length == 0 %}
+            <p class="pl-2 text-gray-700">Seja o primeiro a comentar!</p>
+            {% else %}
+                {% for comment in comments %} 
+                    <div class="flex flex-col gap-y-2">
+                        <div class="flex gap-4">
+                            <div>
+                                <i class="fa-solid fa-circle-user text-3xl"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="flex-1 bg-gray-200 border rounded-2xl p-2">
+                                    <div class="header flex flex-row">
+                                        <p class="font-black italic text-l uppercase">{{ comment['nome'] }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-md font-thin">{{ comment['comment'] }}</p>
+                                    </div>
+                                </div>
+                                <div class="pt-1 pl-2">
+                                    <p style="font-size: 12px; font-weight: 100;">{{ comment['data'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+                <!-- Termina loop -->
+        </div>
+
+        <div id="criar-comentario" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 p-2 rounded space-y-6">
+            <!-- Adicionando o formulário com Tailwind CSS e Font Awesome para as estrelas -->
+            <form action="" class="space-y-4" onsubmit="enviarAvaliacao(event)">
+                <p class="text-2xl font-black mb-2">Deixe seu comentário e avaliação sobre: {{ vereador['ver_nome']}}:</p>
+                <div class="grid grid-cols-2 gap-4 max-w-2xl">
+                    <div>
+                        <!-- Nome -->
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome:</label>
+                        <input id="nome" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Nome">
+                    </div>
+                    <div>
+                        <!-- Nota -->
+                        <label for="nota" class="block text-sm font-medium text-gray-700 mb-1">Nota:</label>
+                        <div class="flex items-center">
+                            <!-- Ícones de estrela para a avaliação -->
+                            <span class="fa fa-star cursor-pointer text-2xl text-gray-300 hover:text-yellow-400" id="star1" onclick="rate(1)"></span>
+                            <span class="fa fa-star cursor-pointer text-2xl text-gray-300 hover:text-yellow-400" id="star2" onclick="rate(2)"></span>
+                            <span class="fa fa-star cursor-pointer text-2xl text-gray-300 hover:text-yellow-400" id="star3" onclick="rate(3)"></span>
+                            <span class="fa fa-star cursor-pointer text-2xl text-gray-300 hover:text-yellow-400" id="star4" onclick="rate(4)"></span>
+                            <span class="fa fa-star cursor-pointer text-2xl text-gray-300 hover:text-yellow-400" id="star5" onclick="rate(5)"></span>
+                        </div>
+                    </div>
+                </div>                
+                <div>
+                    <!-- Comentário -->
+                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Deixe um comentário:</label>
+                    <textarea id="comment" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" placeholder="Escreva seu comentário..."></textarea>
+                </div>
+                <!-- Campo escondido para armazenar o ID do vereador -->
+                <input type="hidden" id="idVereador" value="{{ vereador['ver_id'] }}">
+                <!-- Botão de envio -->
+                <button type="submit" class="mt-4 w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    Publicar
+                </button>
+            </form>
         </div>
     </div>
-
-    <div class="grid-container" id="traço"></div>
-
-    <div class="container" id="box_frequencia">
-        <div class="cabeçalho">
-            <div class="text-4xl p-4 mb-4">Frequência em Plenário (2021-2024)</div>
-        </div>
-        {% for registro in assiduidades %}
-        <div class="bar-container">
-            <div class="label">Presenças:</div>
-            <div class="bar">
-                <div class="progress"
-                    style="width: {{ (registro.presencas_totais / (registro.presencas_totais + registro.faltas_totais + registro.justificadas_totais)) * 100 }}%">
-                </div>
-            </div>
-            <div class="percentage">{{ registro.presencas_totais }}</div>
-        </div>
-        <div class="bar-container">
-            <div class="label">Ausências:</div>
-            <div class="bar">
-                <div class="progress"
-                    style="width: {{ (registro.faltas_totais / (registro.presencas_totais + registro.faltas_totais + registro.justificadas_totais)) * 100 }}%">
-                </div>
-            </div>
-            <div class="percentage">{{ registro.faltas_totais }}</div>
-        </div>
-        <div class="bar-container">
-            <div class="label">Ausências Justificadas:</div>
-            <div class="bar">
-                <div class="progress"
-                    style="width: {{ (registro.justificadas_totais / (registro.presencas_totais + registro.faltas_totais + registro.justificadas_totais)) * 100 }}%">
-                </div>
-            </div>
-            <div class="percentage">{{ registro.justificadas_totais }}</div>
-        </div>
-        {% endfor %}
-
-        <div class="note">⭐ Este vereador está entre os {{porcentagem_presenca}}% que menos faltam</div>
-
-    </div>
-    <br></br>
-    <div>
-        <h2 class="text-4xl p-4 mb-4">PARTICIPAÇÃO EM COMISSÕES</h2>
-        {% for comissao in comissoes %}
-            <div class="bg-white shadow-md flex mx-20 justify-center flex-col text-center rounded-lg p-4 mb-4">
-                <h1 class="text-lg font-semibold text-gray-800">{{ comissao['nome_comissao'] }}</h1>
-                <p class="text-gray-700">CARGO: {{ comissao['cargo'] }}</p>
-            </div>
-        {% endfor %}
-    </div>
-        
-    <br><br>
-
-    <div class="container" id="box_votaçao">
-        <div id="container">
-            <h2 class="text-4xl p-4 mb-4">VOTAÇÃO EM QUESTÕES-CHAVE</h2>
-            <div class="graphic-placeholder">
-                <p>Gráfico Placeholder</p>
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-    </div>
-    <br><br>
-
-    <div class="comment-section">
-        <h2 class="text-4xl p-4 mb-4">Comentários</h2>
-        <div class="comment">
-            <p><strong>José Carlos</strong> comentou em <span>20/08/2022</span></p>
-            <p>Esses caras são uns sem vergonha! Usam o dinheiro público para fazer bagunça.</p>
-        </div>
-
-        <div class="comment-form">
-            <h3>Dê sua opinião:</h3>
-            <div class="rating">
-                <span>Nota:</span>
-                <div class="stars">
-                    <input type="radio" id="star5" name="rating" value="5" />
-                    <label for="star5" title="5 estrelas">★</label>
-
-                    <input type="radio" id="star4" name="rating" value="4" />
-                    <label for="star4" title="4 estrelas">★</label>
-
-                    <input type="radio" id="star3" name="rating" value="3" />
-                    <label for="star3" title="3 estrelas">★</label>
-
-                    <input type="radio" id="star2" name="rating" value="2" />
-                    <label for="star2" title="2 estrelas">★</label>
-
-                    <input type="radio" id="star1" name="rating" value="1" />
-                    <label for="star1" title="1 estrela">★</label>
-                </div>
-            </div>
-            <textarea placeholder="Digite aqui seu comentário..."></textarea>
-            <button type="submit" id="botao_estrela">Publicar</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
 </div>
+<script>
+    let nota = 0;
 
-<br><br>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</div>
-</div>
+    function rate(stars) {
+    // Reset all stars to gray
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`star${i}`).classList.remove("text-yellow-400");
+        document.getElementById(`star${i}`).classList.add("text-gray-300");
+    }
+    // Highlight selected stars
+    for (let i = 1; i <= stars; i++) {
+        document.getElementById(`star${i}`).classList.remove("text-gray-300");
+        document.getElementById(`star${i}`).classList.add("text-yellow-400");
+    }
+
+    // Função para enviar o JSON ao backend
+    function enviarAvaliacao(event) {
+        event.preventDefault();
+
+        const id_vereador = document.getElementById("idVereador").value; // Obtendo o id do vereador
+        const nome = document.getElementById("nome").value;
+        const comentario = document.getElementById("comment").value;
+
+        const avaliacao = {
+            id_vereador: id_vereador,
+            nota: nota,
+            nome: nome,
+            comentario: comentario
+        };
+
+        fetch("URL_DO_SEU_BACKEND", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(avaliacao)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Avaliação enviada com sucesso!");
+        })
+        .catch(error => {
+            console.error("Erro ao enviar a avaliação:", error);
+        });
+    }
+}
+</script>
 
 {% endblock %}

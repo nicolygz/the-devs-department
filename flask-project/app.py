@@ -14,6 +14,7 @@ import aiomysql
 import locale
 import asyncio
 import plotly.graph_objects as go
+import time
 
 
 # diretório para os arquivos JSON de PROPOSIÇÕES
@@ -103,103 +104,130 @@ async def pagina_vereador(vereador_id):
     # Configura o locale para português do Brasil
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
+    # Start timing
+    start_time = time.time()
+
     # Cria conexões e cursores independentes
-    connection1 = await get_async_db_connection()
-    connection2 = await get_async_db_connection()
+    connection1_task = get_async_db_connection()
+    connection2_task = get_async_db_connection()
+    connection3_task = get_async_db_connection()
+    connection4_task = get_async_db_connection()
+    connection5_task = get_async_db_connection()
+    connection6_task = get_async_db_connection()
 
-    async with connection1.cursor() as cursor1, \
-               connection2.cursor() as cursor2:
-        
-        assiduidades = assiduidade.get_assiduidade_vereador(vereador_id)
+    conn1, conn2, conn3, conn4, conn5, conn6 = await asyncio.gather(connection1_task, connection2_task, connection3_task, connection4_task, connection5_task, connection6_task)
 
+    # End timing
+    end_time = time.time()
+    # Calculate duration
+    duration = end_time - start_time
+    print(f"Connection process took {duration:.2f} seconds")
+
+    async with conn1.cursor() as cursor1, \
+            conn2.cursor() as cursor2, \
+            conn3.cursor() as cursor3, \
+            conn4.cursor() as cursor4, \
+            conn5.cursor() as cursor5, \
+            conn6.cursor() as cursor6:
+
+        start_time = time.time()
         # Garante que cada função retorna uma tarefa única
         vereador_task = getVereadorById(cursor1, vereador_id)
-        comissoes_task = getComissoesByVereadorId(cursor2, vereador_id)
+        comissoesInfoGeral_task = getComissoesDetailByVereadorId(cursor2, vereador_id)
+        all_comissoes_task = getAllComissoes(cursor3)
+        proposicoes_task = getProposicoesByVereadorId(cursor4, vereador_id)
+        assiduidadesVereador_task = getAssiduidadeVereador(cursor5, vereador_id)
+        assiduidades_total_task = getAssiduidadesTotais(cursor6)
 
         # Aguarda as tarefas
-        vereador, comissoesBd = await asyncio.gather(vereador_task, comissoes_task)
+        vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal = await asyncio.gather(
+            vereador_task, 
+            comissoesInfoGeral_task, 
+            proposicoes_task,
+            all_comissoes_task,
+            assiduidadesVereador_task,
+            assiduidades_total_task
+        )
+
+        end_time = time.time()
+        # Calculate duration
+        duration = end_time - start_time
+        print(f"MySQL & assiduidade process took {duration:.2f} seconds")
 
         # Criar o objeto vereador e formatar o patrimônio
-        vereadorObj = vereadorListaToObj(vereador)
+        vereadorObj = vereadorListaToObj(vereadorInfo)
         vereadorObj['ver_patrimonio'] = locale.currency(
             float(vereadorObj['ver_patrimonio']), symbol=True, grouping=True
         ).replace(" R$", "")
-        
-        # Conectar no banco
-        connection = get_db_connection()
-        cursor = connection.cursor()
 
-        # Transformar cada comissão em objeto
-        comissoes = []
-        for comissaoDetalhe in comissoesBd:
-
-            # Realizar busca da proposição
-            cursor.execute('SELECT * FROM comissoes WHERE id = %s', (comissaoDetalhe[2],))
-            comissao = cursor.fetchone()
-            
-            comissaoObj = comissaoListaToObj(comissao)
-
-            comissaoDetalheObj = comissaoDetalheToObj(comissaoDetalhe)
-
-            obj = {
-                "nome_comissao":comissaoObj['nome'],
-                "data_inicio":comissaoObj['data_inicio'],
-                "data_fim":comissaoObj['data_fim'],
-                "link":comissaoObj['link'],
-                "cargo":comissaoDetalheObj['cargo'],
-                "comissao_id":comissaoDetalheObj['id'],
-            }
-            comissoes.append(obj)
-        
-        query = """
-            SELECT 
-            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_requerimento,
-            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_mocao,
-            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_pl
-        FROM 
-            proposicoes
-        WHERE 
-            ver_id = %s;
-        """
-        cursor.execute(query, ('Requerimento','Moção', 'Projeto de Lei', vereador_id))
-
-        response = cursor.fetchone()
-        if response:
-            print(response[0])
-        proposicoes = {"qtd_requerimento":response[0],"qtd_mocao":response[1], "qtd_pl":response[2]}
-
-        chart_html = gerarGrafico(proposicoes)
-
-        # Obter totais de assiduidade e calcular porcentagem de presença
-        assiduidade_totais = assiduidade.get_assiduidade_totais()
-        porcentagem_presenca = assiduidade.calcular_porcentagem_presenca(vereador_id)
-
-    # Fecha a conexão
-    connection1.close()
-    connection2.close()
-
-    ver_assiduidade=comparar_assiduidades(assiduidades, assiduidade_totais)
-    print(f'presencas: {ver_assiduidade['porc_presenca']}')
-    print(f'presencas: {ver_assiduidade['porc_faltas']}')
-    print(f'presencas: {ver_assiduidade['porc_justificadas']}')
+    listaComissoesObj=[]
     
+    for comissao in all_comissoes:
+        comissaoObj = comissaoListaToObj(comissao)
+        listaComissoesObj.append(comissaoObj)
+
+    listaInfoGeralComissao = []
+
+    for comissao in comissoesInfoGeral:
+        infoGeralComissao = comissaoDetalheToObj(comissao)
+        listaInfoGeralComissao.append(infoGeralComissao)
+
+    listaComissoes = gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj)
+
+    listaProposicoesObj = []
+    for proposicao in proposicoesByVereador:
+        proposicaoObj = proposicaoListaToObj(proposicao)
+        listaProposicoesObj.append(proposicaoObj)
+
+    chart_html = gerarGrafico(listaProposicoesObj)
+    ver_assiduidade=comparar_assiduidades(assiduidadesVereador, assiduidadesTotal)
+    comments = [
+        {'nome':'Pedro','data':'06-02-2024','comment':'Esse cara é um excelente legislador!'},
+        {'nome':'João','data':'02-02-2024','comment':'Ótimo trabalho vereadasodna sndoasnpdap sdh asod haos dioas oi dhoas dasdao dais odas dvaus gdiua idasi dga psgdas dag dasdador, continue assim!'},
+    ]
+
+    notas = [4,3,2,5,2,4,1,2,5,4,3,4,5,5,4,5,5,4,5,4,5,4,5,4,5,4,5]
+    avaliacao= {'ver_id':35,'avg':sum(notas) / len(notas), 'qtd':len(notas)}
 
     # Renderiza o template com os dados
-    return render_template('new_vereador.html',
+    return render_template('vereador.html',
         ver_assiduidade=ver_assiduidade,
         vereador=vereadorObj,
-        porcentagem_presenca=porcentagem_presenca,
-        comissoes=comissoes,
-        proposicoes=proposicoes,
-        chart_html=chart_html
+        comissoes=listaComissoes,
+        proposicoes=listaProposicoesObj,
+        chart_html=chart_html,
+        comments=comments,
+        avaliacao=avaliacao
     )
 
-def gerarGrafico(proposicoes):
-    # Dados de exemplo (aqui você usa os dados reais da variável 'proposicoes')
-    categorias = ['Requerimentos', 'Moções', 'Proposições']
-    valores = [proposicoes['qtd_requerimento'], proposicoes['qtd_mocao'], proposicoes['qtd_pl']]
+def gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj):
 
-    # Criando o gráfico
+    comissoes =[]
+
+    for comissao in listaInfoGeralComissao:
+        for i in range(len(listaComissoesObj)):
+            if listaComissoesObj[i]['id'] == comissao['comissao_id']:
+                comissaoObj = {
+                    'comissao_id':comissao['comissao_id'], 
+                    'cargo':comissao['cargo'],
+                    'nome':listaComissoesObj[i]['nome'],
+                    'data_inicio':listaComissoesObj[i]['data_inicio'],
+                    'data_fim':listaComissoesObj[i]['data_fim'],
+                    'link':listaComissoesObj[i]['link']
+                }
+                comissoes.append(comissaoObj)
+    return comissoes
+    
+
+
+def gerarGrafico(listaProposicoesObj):
+    # Dados de exemplo (aqui você usa os dados reais da variável 'proposicoes')
+    categorias = ['Requerimentos', 'Moções', 'Projetos de Lei']
+
+    requerimento, mocao, projeto_lei = calcularQtdProposicoes(listaProposicoesObj)
+
+    valores = [requerimento,mocao, projeto_lei]
+
     fig = go.Figure([go.Bar(x=categorias, y=valores,marker_color='#193D87')])
 
     # Configurando o gráfico minimalista
@@ -224,21 +252,35 @@ def gerarGrafico(proposicoes):
     chart_html = fig.to_html(full_html=False)
     return chart_html
 
-def comparar_assiduidades(assiduidade_vereador, assiduidades):
-    total_participacoes = assiduidade_vereador[0]['faltas_totais'] + assiduidade_vereador[0]['presencas_totais'] + assiduidade_vereador[0]['justificadas_totais']
+def calcularQtdProposicoes(listaProposicoesObj):
+    requerimento=0
+    mocao=0
+    projeto_lei=0
+    for proposicao in listaProposicoesObj:
+        if proposicao['tipo'] == 'Requerimento':
+            requerimento+=1
+        if proposicao['tipo'] == 'Moção':
+            mocao+=1
+        if proposicao['tipo'] == 'Projeto de Lei':
+            projeto_lei+=1
+    return requerimento, mocao, projeto_lei
 
-    ver_presenca = round((assiduidade_vereador[0]['presencas_totais'] / total_participacoes), 2) * 100
-    ver_faltas = round((assiduidade_vereador[0]['faltas_totais'] / total_participacoes), 2) * 100
-    ver_justificadas = round((assiduidade_vereador[0]['justificadas_totais'] / total_participacoes), 2) * 100
+def comparar_assiduidades(assiduidade_vereador, assiduidadeAllVereadores):
+
+    total_participacoes = assiduidade_vereador['faltas'] + assiduidade_vereador['presencas'] + assiduidade_vereador['justificadas']
+
+    ver_presenca = round((assiduidade_vereador['presencas'] / total_participacoes), 2) * 100
+    ver_faltas = round((assiduidade_vereador['faltas'] / total_participacoes), 2) * 100
+    ver_justificadas = round((assiduidade_vereador['justificadas'] / total_participacoes), 2) * 100
 
     vereadores = []
 
     total_presenca_geral = 0
-    for vereador in assiduidades:
-        total_participacoes = vereador['faltas_totais'] + vereador['presencas_totais'] + vereador['justificadas_totais']
-        presencas = round((vereador['presencas_totais'] / total_participacoes), 2) * 100
-        faltas = round((vereador['faltas_totais'] / total_participacoes), 2) * 100
-        justificadas = round((vereador['justificadas_totais'] / total_participacoes), 2) * 100
+    for vereador in assiduidadeAllVereadores:
+        total_participacoes = vereador['faltas'] + vereador['presencas'] + vereador['justificadas']
+        presencas = round((vereador['presencas'] / total_participacoes), 2) * 100
+        faltas = round((vereador['faltas'] / total_participacoes), 2) * 100
+        justificadas = round((vereador['justificadas'] / total_participacoes), 2) * 100
         total_presenca_geral += presencas
 
         vereadores.append({
@@ -263,6 +305,7 @@ def comparar_assiduidades(assiduidade_vereador, assiduidades):
         pos2 = pos1 + 1
         percentil_90 = float(vereadores[pos1]['presenca']) + (posicao_percentil_90 - (pos1 + 1)) * (float(vereadores[pos2]['presenca']) - float(vereadores[pos1]['presenca']))
 
+
     comparacao = "acima" if presencas > percentil_90 else "inferior"
     comparacao_presencas = f"Este vereador tem presença {comparacao} a 90% dos vereadores."
 
@@ -280,17 +323,97 @@ async def getVereadorById(cursor, vereador_id):
     return vereador
 
 # Função para buscar as comissões do vereador com cursor assíncrono
-async def getComissoesByVereadorId(cursor, vereador_id):
+async def getComissoesDetailByVereadorId(cursor, vereador_id):
     await cursor.execute('SELECT * FROM vereadores_comissoes WHERE ver_id = %s', (vereador_id,))
     comissoes = await cursor.fetchall()
     return comissoes
 
+# Função para buscar as comissões do vereador com cursor assíncrono
+async def getProposicoesByVereadorId(cursor, vereador_id):
+    await cursor.execute('SELECT * FROM proposicoes WHERE ver_id = %s', (vereador_id,))
+    proposicoesByVereador = await cursor.fetchall()
+
+    return proposicoesByVereador
+
 # Função para buscar uma comissão específica com cursor assíncrono
-async def getComissaoById(cursor, comissao_id):
-    print(f"Buscando comissão com ID: {comissao_id}")  # Verifica o ID
-    await cursor.execute('SELECT * FROM comissoes WHERE id = %s', (comissao_id,))
-    comissao = await cursor.fetchone()
-    return comissao
+async def getAllComissoes(cursor):
+    await cursor.execute('SELECT * FROM comissoes')
+    comissoes = await cursor.fetchall()
+    return comissoes
+
+async def getAssiduidadeVereador(cursor, ver_id):
+    query = """
+    SELECT 
+        ver_id,
+        SUM(faltas) AS faltas_totais,
+        SUM(presenca) AS presencas_totais,
+        SUM(justif) AS justificadas_totais
+    FROM 
+        assiduidade
+    WHERE 
+        ver_id = %s
+    GROUP BY 
+        ver_id;
+    """
+    await cursor.execute(query, (ver_id,))
+    assiduidadeVereador = await cursor.fetchall()
+
+    assiduidadeObj = assiduidadeToObj(assiduidadeVereador)
+
+    return assiduidadeObj
+
+def assiduidadeToObj(assiduidadeVereador):
+    return {
+        'ver_id':assiduidadeVereador[0][0],
+        'faltas':assiduidadeVereador[0][1],
+        'presencas':assiduidadeVereador[0][2],
+        'justificadas':assiduidadeVereador[0][3],
+    }
+
+
+async def getAssiduidadesTotais(cursor):
+    query = """
+    SELECT 
+        ver_id,
+        SUM(faltas) AS faltas_totais,
+        SUM(presenca) AS presencas_totais,
+        SUM(justif) AS justificadas_totais
+    FROM 
+        assiduidade
+    GROUP BY 
+        ver_id;
+    """
+    await cursor.execute(query)
+    assiduidadesTotais = await cursor.fetchall()
+
+    listaAssiduidades = []
+
+    for assid in assiduidadesTotais:
+        assidObj = {
+            'ver_id':assid[0],
+            'faltas':assid[1],
+            'presencas':assid[2],
+            'justificadas':assid[3]
+        }
+        listaAssiduidades.append(assidObj)
+    return listaAssiduidades
+
+def proposicaoListaToObj(proposicao):
+    proposicaoObj = {
+        "requerimento_num": proposicao[0],
+        "assunto": proposicao[1],
+        "processo": proposicao[2],
+        "protocolo": proposicao[3],
+        "id_prop": proposicao[4],
+        "data": proposicao[5],
+        "situacao": proposicao[6],
+        "tipo": proposicao[7],
+        "autorId": proposicao[8],
+        "tema": proposicao[9],
+        "ano": proposicao[5].year,
+        "numero": proposicao[11],
+    }
+    return proposicaoObj
 
 def comissaoListaToObj(comissao):
     comissaoObj = {
