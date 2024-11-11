@@ -73,12 +73,6 @@ def test_connection():
 def home():
     return render_template('home.html')
 
-
-
-
-
-
-
 @app.route('/ranking')
 def geral():
     # Conectar ao banco de dados
@@ -151,21 +145,31 @@ def filtrar_ranking(criterio):
             GROUP BY v.ver_id
             ORDER BY media_avaliacoes DESC;
         """
-    elif criterio == 'todos':  # Exibir todos os vereadores com todos os critérios
+    elif criterio == 'todos':  # Exibir todos os vereadores com todos os critérios relevantes
         query = """
-            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto,
-                   COALESCE(ROUND(AVG(a.nota), 2), 'N/A') as media_avaliacoes,  -- Valor padrão 'N/A' para a avaliação
-                   COALESCE(COUNT(p.ver_id), 0) AS qtd_proposicoes,
-                   COALESCE(ROUND((SUM(a2.presenca) * 100.0) / (SUM(a2.presenca) + SUM(a2.faltas) + SUM(a2.justif)), 2), 0) as percentual_presenca,
-                   COALESCE(COUNT(vc.ver_id), 0) AS total_comissoes
-            FROM vereadores v
-            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
-            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
-            LEFT JOIN assiduidade a2 ON v.ver_id = a2.ver_id
-            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
-            GROUP BY v.ver_id
-            ORDER BY media_avaliacoes DESC, qtd_proposicoes DESC, percentual_presenca DESC, total_comissoes DESC;
-        """
+             SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio,
+               COALESCE(ROUND(AVG(a.nota), 2), 'N/A') as media_avaliacoes,  -- Média de avaliações
+               COALESCE(COUNT(p.ver_id), 0) AS qtd_proposicoes,  -- Quantidade de proposições
+               COALESCE(ROUND((SUM(a2.presenca) * 100.0) / (SUM(a2.presenca) + SUM(a2.faltas) + SUM(a2.justif)), 2), 0) as percentual_presenca,  -- Percentual de presença
+               COALESCE(COUNT(vc.ver_id), 0) AS total_comissoes  -- Total de comissões
+        FROM vereadores v
+        LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+        LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+        LEFT JOIN assiduidade a2 ON v.ver_id = a2.ver_id
+        LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+        GROUP BY v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio  -- Incluindo dados pessoais no GROUP BY
+        ORDER BY media_avaliacoes DESC, qtd_proposicoes DESC, percentual_presenca DESC, total_comissoes DESC;
+    """
+
+
+
+    elif criterio == 'patrimonio':  # Vai exibir o patrimônio dos vereadores em ordem decrescente
+     query = """
+        SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio
+        FROM vereadores v
+        ORDER BY v.ver_patrimonio DESC;
+    """
+
     else:
         return jsonify({"error": "Critério inválido"}), 400
 
