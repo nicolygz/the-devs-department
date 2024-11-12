@@ -102,9 +102,6 @@ def vereadores():
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
 
-def tem_palavrao(nome, comentario):
-    return False
-    
 @app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
 
 
@@ -161,8 +158,10 @@ async def pagina_vereador(vereador_id):
         json_data = json.loads(dados.decode('utf-8'))
 
         # Validar o comentário
-        if tem_palavrao(json_data['nome'], json_data['comentario']):
-             return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
+        # if tem_palavrao(json_data['nome'], json_data['comentario']):
+        #      return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
+        if verificaTexto(json_data['nome']) == None or verificaTexto(json_data['comentario']) == None:
+            return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
         else:
             # Chamar uma função para adicionar no banco de dados
             if add_avaliacao_no_banco_de_dados(json_data):
