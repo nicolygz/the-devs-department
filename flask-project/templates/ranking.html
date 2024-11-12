@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %} RANKING {% endblock %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='filtroproposicoes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='respofiltroproposicoes.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='ranking.css') }}">
+<link rel="stylesheet" href="../static/ranking.css">
+{% endblock %}
+
+
+
+{% block content %}
+<!-- Posicionamento Político -->
+<section class="posicionamento text-center my-8">
+    <h2 class="text-3xl mb-2"><strong>Posicionamento Político da Câmara (2021-2024)</strong></h2>
+
+    <!-- Barra do Termômetro -->
+    <div class="relative w-full max-w-4xl mx-auto p-12">
+        <div class="flex items-center justify-between">
+            <span class="text-lg text-gray-800">Esquerda</span>
+            <span class="text-lg text-gray-800">Centro</span>
+            <span class="text-lg text-gray-800">Direita</span>
+        </div>
+
+        <!-- Termômetro (barra de posicionamento) -->
+        <div class="relative w-full h-4 bg-gray-300 rounded-full mt-2">
+            <div id="posicao" class="absolute top-0 left-0 w-10 h-4 bg-orange-500 rounded-full"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Obtém o valor da média de posicionamento passado pelo Flask
+    const mediaPosicao = {{ media_posicao | tojson }};
+    
+    // Valores mínimos e máximos da escala (-2 para Esquerda, 2 para Direita)
+    const minPosicao = -2;
+    const maxPosicao = 2;
+
+    // Converte mediaPosicao para uma posição percentual na barra (0 a 100%)
+    const posicaoPercentual = ((mediaPosicao - minPosicao) / (maxPosicao - minPosicao)) * 100;
+
+    // Ajusta a posição do indicador na barra
+    const indicador = document.getElementById('posicao');
+    indicador.style.left = `calc(${posicaoPercentual}% - 10px)`;  // Subtrai 10px para centralizar
+</script>
+
+
+
+
+<!-- Ranking dos Vereadores -->
+<section class="ranking-container my-12">
+    <h2 class="text-[#2A4B91] text-4xl mb-4 text-center text-[56px]"><strong>RANKING DOS VEREADORES</strong></h2>
+
+   <div class="ordenar text-center mb-5 ml-[40%] mt-12">
+  <label for="ordenar" class="text-lg text-gray-800 mb-2 mr-[130px]"><strong>Ordenar por</strong></label>
+  <br>
+  <div class="relative inline-block p-2">
+    <select id="ordenar" class="block w-full h-[50px] p-2 text-base rounded-lg border border-gray-300 shadow-md hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none pr-10">
+                <option value="todos" selected>Em destaque</option>
+                <option value="proposicoes">Nº de proposições</option>
+                <option value="assiduidade">Assiduidade</option>
+                <option value="comissoes">Participação em comissões</option>
+                <option value="avaliacoes">Avaliações</option>
+                <option value="patrimonio">Patrimônio</option>
+            </select>
+            <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 pointer-events-none mr-2">▼</span>
+        </div>
+    </div>
+
+    <!-- Container para exibir o ranking dos vereadores -->
+    <div id="ranking-list" class="flex flex-col items-center gap-3 relative m-12">
+        <!-- Conteúdo do ranking será preenchido aqui via JavaScript -->
+        <div id="ranking-loading" class="text-gray-500">Carregando...</div>
+    </div>
+</section>
+
+<script>
+// Função para buscar dados do filtro selecionado e atualizar o ranking
+function carregarRanking(criterio = 'todos') {
+    const url = `/filtrar/${criterio}`;
+
+    // Faz a requisição AJAX para a rota de filtro
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro na resposta da rede");
+            }
+            return response.json();
+        })
+        .then(data => {
+            const rankingList = document.getElementById("ranking-list");
+            rankingList.innerHTML = ""; // Limpa o ranking atual
+
+            if (data.length === 0) {
+                rankingList.innerHTML = "<div class='text-gray-500'>Nenhum vereador encontrado para este critério.</div>";
+                return;
+            }
+
+            // Atualiza o ranking com os dados recebidos
+            data.forEach((vereador, index) => {
+                const vereadorCard = `
+                    <div class="relative w-full">
+                        <!-- Colocação fora do card -->
+                        <div class="absolute left-[-30px] top-1/2 transform -translate-y-1/2 text-lg font-bold text-[#2A4B91] flex justify-center items-center" style="width: 20px;"> ${index + 1}º </div>
+
+                        <!-- Card do vereador -->
+                        <div class="flex items-center w-full bg-white border border-gray-300 rounded-lg p-5 shadow-md">
+                            <!-- Foto do vereador -->
+                            <img class="w-10 h-10 rounded-full mr-3" src="${vereador.ver_foto}" alt="Foto de ${vereador.ver_nome}">
+                            
+                            <!-- Detalhes do vereador -->
+                            <div class="flex-1">
+                                <div class="text-base font-semibold text-gray-800">${vereador.ver_nome} (${vereador.ver_partido})</div>
+                                <div class="text-sm text-gray-500">${vereador.ver_posicionamento || ''}</div>
+                            </div>
+                            
+                            <!-- Nota e estrela -->
+                            <div class="text-yellow-500 font-semibold text-lg flex items-center">
+                                ${vereador.media_avaliacoes || 'N/A'} <span class="ml-1">★</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                rankingList.insertAdjacentHTML("beforeend", vereadorCard);
+            });
+        })
+        .catch(error => {
+            // Em caso de erro, apenas exibe uma lista vazia
+            console.error("Erro ao carregar o ranking:", error);
+            const rankingList = document.getElementById("ranking-list");
+            rankingList.innerHTML = "<div class='text-gray-500'>Carregando vereadores...</div>";
+            carregarRanking('todos'); // Tenta recarregar a lista padrão
+        });
+}
+
+// Carrega o ranking com todos os vereadores ao inicializar a página
+window.addEventListener('DOMContentLoaded', () => {
+    carregarRanking(); // Carrega todos os vereadores ao iniciar
+});
+
+// Função para atualizar o ranking com o filtro selecionado
+document.getElementById("ordenar").addEventListener("change", function() {
+    const criterio = this.value;
+    carregarRanking(criterio); // Atualiza o ranking com o critério selecionado
+});
+</script>
+
+
+
+{% endblock %}
