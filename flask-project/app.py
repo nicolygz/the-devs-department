@@ -13,9 +13,6 @@ from math import ceil
 import aiomysql
 import locale
 import asyncio
-import plotly.graph_objects as go
-import time
-
 
 # diretório para os arquivos JSON de PROPOSIÇÕES
 DIRETORIO_JSON = "../rapagem_dados/ArquivosJson/"
@@ -76,9 +73,129 @@ def test_connection():
 def home():
     return render_template('home.html')
 
-@app.route('/visao-geral')
+@app.route('/ranking')
 def geral():
-    return render_template('visao-geral.html')
+    # Conectar ao banco de dados
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)  # Retorna os resultados como dicionários
+
+    # Query para pegar todos os vereadores
+    query_vereadores = """
+    SELECT ver_id, ver_nome, ver_partido, ver_tel1, ver_tel2, ver_celular, ver_email, ver_foto
+    FROM vereadores
+    ORDER BY ver_nome ASC;
+    """
+    cursor.execute(query_vereadores)
+    vereadores = cursor.fetchall()  # Pega todos os vereadores
+
+    # Query para calcular a média da posição política
+    query_media_posicao = """
+    SELECT AVG(posicao_politica) AS media_posicao
+    FROM vereadores;
+    """
+    cursor.execute(query_media_posicao)
+    resultado_media = cursor.fetchone()  # Pega o resultado da média
+
+    # Verificar se a média foi calculada corretamente
+    media_posicao = None
+    if resultado_media and resultado_media['media_posicao'] is not None:
+        media_posicao = resultado_media['media_posicao']
+
+    # Fechar a conexão com o banco após executar as queries
+    cursor.close()
+    connection.close()
+
+    # Renderiza o template 'ranking.html' com os dados
+    return render_template('ranking.html', vereadores=vereadores, media_posicao=media_posicao)
+
+
+@app.route('/filtrar/<criterio>')
+def filtrar_ranking(criterio):
+    # Definir a query com base no critério selecionado
+    if criterio == 'proposicoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, COUNT(p.ver_id) AS qtd_proposicoes
+            FROM vereadores v
+            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+            GROUP BY v.ver_id
+            ORDER BY qtd_proposicoes DESC;
+        """
+    elif criterio == 'assiduidade':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto,
+                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
+            FROM vereadores v
+            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id
+            ORDER BY percentual_presenca DESC;
+        """
+    elif criterio == 'comissoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, COUNT(vc.ver_id) AS total_comissoes
+            FROM vereadores v
+            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+            GROUP BY v.ver_id
+            ORDER BY total_comissoes DESC;
+        """
+    elif criterio == 'avaliacoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, ROUND(AVG(a.nota), 2) as media_avaliacoes
+            FROM vereadores v
+            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id
+            ORDER BY media_avaliacoes DESC;
+        """
+    elif criterio == 'todos':  # Exibir todos os vereadores com todos os critérios relevantes
+        query = """
+             SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio,
+               COALESCE(ROUND(AVG(a.nota), 2), 'N/A') as media_avaliacoes,  -- Média de avaliações
+               COALESCE(COUNT(p.ver_id), 0) AS qtd_proposicoes,  -- Quantidade de proposições
+               COALESCE(ROUND((SUM(a2.presenca) * 100.0) / (SUM(a2.presenca) + SUM(a2.faltas) + SUM(a2.justif)), 2), 0) as percentual_presenca,  -- Percentual de presença
+               COALESCE(COUNT(vc.ver_id), 0) AS total_comissoes  -- Total de comissões
+        FROM vereadores v
+        LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+        LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+        LEFT JOIN assiduidade a2 ON v.ver_id = a2.ver_id
+        LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+        GROUP BY v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio  -- Incluindo dados pessoais no GROUP BY
+        ORDER BY media_avaliacoes DESC, qtd_proposicoes DESC, percentual_presenca DESC, total_comissoes DESC;
+    """
+
+
+
+    elif criterio == 'patrimonio':  # Vai exibir o patrimônio dos vereadores em ordem decrescente
+     query = """
+        SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio
+        FROM vereadores v
+        ORDER BY v.ver_patrimonio DESC;
+    """
+
+    else:
+        return jsonify({"error": "Critério inválido"}), 400
+
+    # Conectar ao banco de dados e executar a query
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+
+    # Substituir valores `None` por valores padrão
+    for item in resultado:
+        item['media_avaliacoes'] = item.get('media_avaliacoes', 'N/A')  # Estático como 'N/A' se não houver avaliação
+        item['ver_partido'] = item.get('ver_partido', '')  # Partido vazio se não houver
+        item['ver_foto'] = item.get('ver_foto', 'caminho/padrao.jpg')  # Caminho padrão para a foto se ausente
+
+    cursor.close()
+    connection.close()
+
+    return jsonify(resultado)
+
+
+
+
+
+
+
 
 @app.route('/vereadores')
 def vereadores():
@@ -88,7 +205,7 @@ def vereadores():
     cursor = connection.cursor()
 
     # Execute a query to fetch vereadores
-    cursor.execute('SELECT * FROM vereadores')
+    cursor.execute('SELECT * FROM vereadores')  # Replace 'vereadores' with your actual table name
     vereadores = cursor.fetchall()
 
     # Clean up
@@ -97,306 +214,95 @@ def vereadores():
 
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
-
-def tem_palavrao(nome, comentario):
-    return False
     
-@app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
+@app.route('/vereadores/<int:vereador_id>')
 async def pagina_vereador(vereador_id):
-
-    print(request.method)
-    if request.method == 'POST':
-        
-        dados = request.get_data()
-        # Decodifica para string e converte para JSON
-        json_data = json.loads(dados.decode('utf-8'))
-
-        # Validar o comentário
-        if tem_palavrao(json_data['nome'], json_data['comentario']):
-             return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
-        else:
-            # Chamar uma função para adicionar no banco de dados
-            if add_avaliacao_no_banco_de_dados(json_data):
-                # Buscar as avaliações do vereador no banco de dados
-                avaliacoes = get_avaliacoes_by_vereador_id(json_data['id_vereador'])
-                
-                # Formatar a resposta com a lista de avaliações
-                avalicoes_json = [avaliacao.to_dict() for avaliacao in avaliacoes]
-                return jsonify({"message": "Avaliação recebida com sucesso!", "avaliacoes": avalicoes_json}), 200
-        
     
-    if request.method == 'GET':
-        # Configura o locale para português do Brasil
-        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+    # Configura o locale para português do Brasil
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-        # Start timing
-        start_time = time.time()
+    # Cria conexões e cursores independentes
+    connection1 = await get_async_db_connection()
+    connection2 = await get_async_db_connection()
 
-        # Cria conexões e cursores independentes
-        connection1_task = get_async_db_connection()
-        connection2_task = get_async_db_connection()
-        connection3_task = get_async_db_connection()
-        connection4_task = get_async_db_connection()
-        connection5_task = get_async_db_connection()
-        connection6_task = get_async_db_connection()
-        connection7_task = get_async_db_connection()
+    async with connection1.cursor() as cursor1, \
+               connection2.cursor() as cursor2:
+        
+        assiduidades = assiduidade.get_assiduidade_vereador(vereador_id)
 
-        conn1, conn2, conn3, conn4, conn5, conn6, conn7 = await asyncio.gather(
-            connection1_task, 
-            connection2_task, 
-            connection3_task, 
-            connection4_task, 
-            connection5_task, 
-            connection6_task,
-            connection7_task)
+        # Garante que cada função retorna uma tarefa única
+        vereador_task = getVereadorById(cursor1, vereador_id)
+        comissoes_task = getComissoesByVereadorId(cursor2, vereador_id)
 
-        # End timing
-        end_time = time.time()
-        # Calculate duration
-        duration = end_time - start_time
-        print(f"Connection process took {duration:.2f} seconds")
+        # Aguarda as tarefas
+        vereador, comissoesBd = await asyncio.gather(vereador_task, comissoes_task)
 
-        async with conn1.cursor() as cursor1, \
-                conn2.cursor() as cursor2, \
-                conn3.cursor() as cursor3, \
-                conn4.cursor() as cursor4, \
-                conn5.cursor() as cursor5, \
-                conn6.cursor() as cursor6, \
-                conn7.cursor() as cursor7:
+        # Criar o objeto vereador e formatar o patrimônio
+        vereadorObj = vereadorListaToObj(vereador)
+        vereadorObj['ver_patrimonio'] = locale.currency(
+            float(vereadorObj['ver_patrimonio']), symbol=True, grouping=True
+        ).replace(" R$", "")
+        
+        # Conectar no banco
+        connection = get_db_connection()
+        cursor = connection.cursor()
 
-            start_time = time.time()
+        # Transformar cada comissão em objeto
+        comissoes = []
+        for comissaoDetalhe in comissoesBd:
+
+            # Realizar busca da proposição
+            cursor.execute('SELECT * FROM comissoes WHERE id = %s', (comissaoDetalhe[2],))
+            comissao = cursor.fetchone()
             
-            # Garante que cada função retorna uma tarefa única
-            vereador_task = getVereadorById(cursor1, vereador_id)
-            comissoesInfoGeral_task = getComissoesDetailByVereadorId(cursor2, vereador_id)
-            all_comissoes_task = getAllComissoes(cursor3)
-            proposicoes_task = getProposicoesByVereadorId(cursor4, vereador_id)
-            assiduidadesVereador_task = getAssiduidadeVereador(cursor5, vereador_id)
-            assiduidades_total_task = getAssiduidadesTotais(cursor6)
-            extrato_votacao_task = getExtratoVotacaoByVereadorId(cursor7, vereador_id)
+            comissaoObj = comissaoListaToObj(comissao)
 
-            # Aguarda as tarefas
-            vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal, extrato_votacao= await asyncio.gather(
-                vereador_task, 
-                comissoesInfoGeral_task, 
-                proposicoes_task,
-                all_comissoes_task,
-                assiduidadesVereador_task,
-                assiduidades_total_task,
-                extrato_votacao_task
-            )
+            comissaoDetalheObj = comissaoDetalheToObj(comissaoDetalhe)
 
-            lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
-            temas_unicos = sorted(set(item['tema'] for item in lista_extrato_votacao))
+            obj = {
+                "nome_comissao":comissaoObj['nome'],
+                "data_inicio":comissaoObj['data_inicio'],
+                "data_fim":comissaoObj['data_fim'],
+                "link":comissaoObj['link'],
+                "cargo":comissaoDetalheObj['cargo'],
+                "comissao_id":comissaoDetalheObj['id'],
+            }
+            comissoes.append(obj)
+        
+        query = """
+            SELECT 
+            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_requerimento,
+            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_mocao,
+            COUNT(CASE WHEN tipo = %s THEN 1 END) AS qtd_pl
+        FROM 
+            proposicoes
+        WHERE 
+            ver_id = %s;
+        """
+        cursor.execute(query, ('Requerimento','Moção', 'Projeto de Lei', vereador_id))
 
-            end_time = time.time()
-            # Calculate duration
-            duration = end_time - start_time
-            print(f"MySQL & assiduidade process took {duration:.2f} seconds")
+        response = cursor.fetchone()
+        if response:
+            print(response[0])
+        proposicoes = {"qtd_requerimento":response[0],"qtd_mocao":response[1], "qtd_pl":response[2]}
 
-            # Criar o objeto vereador e formatar o patrimônio
-            vereadorObj = vereadorListaToObj(vereadorInfo)
-            vereadorObj['ver_patrimonio'] = locale.currency(
-                float(vereadorObj['ver_patrimonio']), symbol=True, grouping=True
-            ).replace(" R$", "")
+        # Obter totais de assiduidade e calcular porcentagem de presença
+        assiduidade_totais = assiduidade.get_assiduidade_totais()
+        porcentagem_presenca = assiduidade.calcular_porcentagem_presenca(vereador_id)
 
-            listaComissoesObj=[]
+    # Fecha a conexão
+    connection1.close()
+    connection2.close()
 
-            for comissao in all_comissoes:
-                comissaoObj = comissaoListaToObj(comissao)
-                listaComissoesObj.append(comissaoObj)
-
-            listaInfoGeralComissao = []
-
-            for comissao in comissoesInfoGeral:
-                infoGeralComissao = comissaoDetalheToObj(comissao)
-                listaInfoGeralComissao.append(infoGeralComissao)
-
-            listaComissoes = gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj)
-
-            listaProposicoesObj = []
-            for proposicao in proposicoesByVereador:
-                proposicaoObj = proposicaoListaToObj(proposicao)
-                listaProposicoesObj.append(proposicaoObj)
-
-            chart_html = gerarGrafico(listaProposicoesObj)
-            ver_assiduidade=comparar_assiduidades(assiduidadesVereador, assiduidadesTotal)
-            avaliacoes = [
-                {'nome':'Pedro','date':'06-02-2024','comment':'Esse cara é um excelente legislador!'},
-                {'nome':'João','date':'02-02-2024','comment':'Ótimo trabalho vereadasodna sndoasnpdap sdh asod haos dioas oi dhoas dasdao dais odas dvaus gdiua idasi dga psgdas dag dasdador, continue assim!'},
-            ]
-
-            notas = [4,3,2,5,2,4,1,2,5,4,3,4,5,5,4,5,5,4,5,4,5,4,5,4,5,4,5]
-            avaliacao= {'ver_id':35,'avg':sum(notas) / len(notas), 'qtd':len(notas)}
-
-            # Renderiza o template com os dados
-            return render_template('vereador.html',
-                ver_assiduidade=ver_assiduidade,
-                vereador=vereadorObj,
-                comissoes=listaComissoes,
-                proposicoes=listaProposicoesObj,
-                chart_html=chart_html,
-                avaliacoes=avaliacoes,
-                avaliacao=avaliacao,
-                lista_extrato_votacao=lista_extrato_votacao,
-                temas=temas_unicos
-            )
-
-def extratoVotacaoListaToObj(extrato_votacao):
-    lista_extrato_votacao = []
-    
-    for extrato in extrato_votacao:
-        extrato_Obj = {
-            'id_prop':extrato[0],
-            'num_pl':extrato[1],
-            'ano_pl':extrato[2],
-            'resultado':extrato[3],
-            'presidente':extrato[4],
-            'ementa':extrato[5],
-            'tema':extrato[6],
-            'id_vereador':extrato[7],
-            'voto':extrato[8],
-        }
-        lista_extrato_votacao.append(extrato_Obj)
-    return lista_extrato_votacao
-
-def gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj):
-
-    comissoes =[]
-
-    for comissao in listaInfoGeralComissao:
-        for i in range(len(listaComissoesObj)):
-            if listaComissoesObj[i]['id'] == comissao['comissao_id']:
-                comissaoObj = {
-                    'comissao_id':comissao['comissao_id'], 
-                    'cargo':comissao['cargo'],
-                    'nome':listaComissoesObj[i]['nome'],
-                    'data_inicio':listaComissoesObj[i]['data_inicio'],
-                    'data_fim':listaComissoesObj[i]['data_fim'],
-                    'link':listaComissoesObj[i]['link']
-                }
-                comissoes.append(comissaoObj)
-    return comissoes
-    
-
-
-def gerarGrafico(listaProposicoesObj):
-    # Dados de exemplo (aqui você usa os dados reais da variável 'proposicoes')
-    categorias = ['Requerimentos', 'Moções', 'Projetos de Lei']
-
-    requerimento, mocao, projeto_lei = calcularQtdProposicoes(listaProposicoesObj)
-
-    valores = [requerimento,mocao, projeto_lei]
-
-    fig = go.Figure([go.Bar(x=categorias, y=valores,marker_color='#193D87')])
-
-    # Configurando o gráfico minimalista
-    fig.update_layout(
-        xaxis_visible=True,
-        yaxis_visible=True,
-        plot_bgcolor='rgba(0,0,0,0)',  # Remove o fundo
-        paper_bgcolor='rgba(0,0,0,0)',  # Remove o fundo da área do gráfico
-        xaxis_showgrid=False,  # Remove as linhas de grade do eixo X
-        yaxis_showgrid=False,  # Remove as linhas de grade do eixo Y
-        xaxis_title=None,  # Remove título do eixo X
-        yaxis_title=None,  # Remove título do eixo Y
-        showlegend=False,  # Remove a legenda
-        title=None,  # Remove o título do gráfico
-        margin=dict(t=10, b=10, l=10, r=10),
-        bargap=0.2,  # Menor valor = barras mais finas
-        bargroupgap=0.1,
-        height=300,  # Tamanho fixo para a altura do gráfico
+    # Renderiza o template com os dados
+    return render_template('vereador.html',
+        assiduidades=assiduidades,
+        vereador=vereadorObj,
+        assiduidade_totais=assiduidade_totais,
+        porcentagem_presenca=porcentagem_presenca,
+        comissoes=comissoes,
+        proposicoes= proposicoes
     )
-
-    # Convertendo o gráfico para HTML
-    chart_html = fig.to_html(full_html=False)
-    return chart_html
-
-def calcularQtdProposicoes(listaProposicoesObj):
-    requerimento=0
-    mocao=0
-    projeto_lei=0
-    for proposicao in listaProposicoesObj:
-        if proposicao['tipo'] == 'Requerimento':
-            requerimento+=1
-        if proposicao['tipo'] == 'Moção':
-            mocao+=1
-        if proposicao['tipo'] == 'Projeto de Lei':
-            projeto_lei+=1
-    return requerimento, mocao, projeto_lei
-
-def comparar_assiduidades(assiduidade_vereador, assiduidadeAllVereadores):
-
-    total_participacoes = assiduidade_vereador['faltas'] + assiduidade_vereador['presencas'] + assiduidade_vereador['justificadas']
-
-    ver_presenca = round((assiduidade_vereador['presencas'] / total_participacoes), 2) * 100
-    ver_faltas = round((assiduidade_vereador['faltas'] / total_participacoes), 2) * 100
-    ver_justificadas = round((assiduidade_vereador['justificadas'] / total_participacoes), 2) * 100
-
-    vereadores = []
-
-    total_presenca_geral = 0
-    for vereador in assiduidadeAllVereadores:
-        total_participacoes = vereador['faltas'] + vereador['presencas'] + vereador['justificadas']
-        presencas = round((vereador['presencas'] / total_participacoes), 2) * 100
-        faltas = round((vereador['faltas'] / total_participacoes), 2) * 100
-        justificadas = round((vereador['justificadas'] / total_participacoes), 2) * 100
-        total_presenca_geral += presencas
-
-        vereadores.append({
-            'presenca': presencas,
-            'faltas': faltas,
-            'justificadas': justificadas
-        })
-
-    # Ordenar vereadores pela presença
-    vereadores.sort(key=lambda a: a['presenca'], reverse=True)
-
-    # Calcular o 90º percentil
-    n = len(vereadores)
-    posicao_percentil_90 = (90 / 100) * (n + 1)
-
-   # Encontrar o valor do 90º percentil
-    if posicao_percentil_90.is_integer():
-        percentil_90 = float(vereadores[int(posicao_percentil_90) - 1]['presenca'])
-    else:
-        # Interpolar
-        pos1 = int(posicao_percentil_90) - 1
-        pos2 = pos1 + 1
-        percentil_90 = float(vereadores[pos1]['presenca']) + (posicao_percentil_90 - (pos1 + 1)) * (float(vereadores[pos2]['presenca']) - float(vereadores[pos1]['presenca']))
-
-
-    comparacao = "acima" if presencas > percentil_90 else "inferior"
-    comparacao_presencas = f"Este vereador tem presença {comparacao} a 90% dos vereadores."
-
-    return {
-        'porc_presenca': ver_presenca,
-        'porc_faltas': ver_faltas,
-        'porc_justificadas': ver_justificadas,
-        'comparacao_presencas': comparacao_presencas
-    }
-
-# Função para buscar a consolidação de dados de Votação
-async def getExtratoVotacaoByVereadorId(cursor, vereador_id):
-    await cursor.execute(""" 
-        SELECT 
-            p.id_prop as id_prop,
-            v.num_pl AS numero_pl,
-            v.ano_pl AS ano_pl,
-            v.resultado AS resultado,
-            ver.ver_nome AS presidente,
-            p.ementa AS ementa,
-            p.tema AS tema,
-            e.ver_id AS vereador_id,
-            e.voto AS voto
-        FROM votacao v
-        RIGHT JOIN extrato_votacao e ON v.id = e.votacao_id 
-        INNER JOIN proposicoes p ON p.numero = v.num_pl AND p.ano = v.ano_pl
-        LEFT JOIN vereadores ver ON v.presidente = ver.ver_id
-        WHERE e.ver_id = %s AND p.tema <> ''
-    """, (vereador_id,))
-    resultado = await cursor.fetchall()
-    return resultado
 
 # Função para buscar os dados do vereador com cursor assíncrono
 async def getVereadorById(cursor, vereador_id):
@@ -405,97 +311,17 @@ async def getVereadorById(cursor, vereador_id):
     return vereador
 
 # Função para buscar as comissões do vereador com cursor assíncrono
-async def getComissoesDetailByVereadorId(cursor, vereador_id):
+async def getComissoesByVereadorId(cursor, vereador_id):
     await cursor.execute('SELECT * FROM vereadores_comissoes WHERE ver_id = %s', (vereador_id,))
     comissoes = await cursor.fetchall()
     return comissoes
 
-# Função para buscar as comissões do vereador com cursor assíncrono
-async def getProposicoesByVereadorId(cursor, vereador_id):
-    await cursor.execute('SELECT * FROM proposicoes WHERE ver_id = %s', (vereador_id,))
-    proposicoesByVereador = await cursor.fetchall()
-
-    return proposicoesByVereador
-
 # Função para buscar uma comissão específica com cursor assíncrono
-async def getAllComissoes(cursor):
-    await cursor.execute('SELECT * FROM comissoes')
-    comissoes = await cursor.fetchall()
-    return comissoes
-
-async def getAssiduidadeVereador(cursor, ver_id):
-    query = """
-    SELECT 
-        ver_id,
-        SUM(faltas) AS faltas_totais,
-        SUM(presenca) AS presencas_totais,
-        SUM(justif) AS justificadas_totais
-    FROM 
-        assiduidade
-    WHERE 
-        ver_id = %s
-    GROUP BY 
-        ver_id;
-    """
-    await cursor.execute(query, (ver_id,))
-    assiduidadeVereador = await cursor.fetchall()
-
-    assiduidadeObj = assiduidadeToObj(assiduidadeVereador)
-
-    return assiduidadeObj
-
-def assiduidadeToObj(assiduidadeVereador):
-    return {
-        'ver_id':assiduidadeVereador[0][0],
-        'faltas':assiduidadeVereador[0][1],
-        'presencas':assiduidadeVereador[0][2],
-        'justificadas':assiduidadeVereador[0][3],
-    }
-
-
-async def getAssiduidadesTotais(cursor):
-    query = """
-    SELECT 
-        ver_id,
-        SUM(faltas) AS faltas_totais,
-        SUM(presenca) AS presencas_totais,
-        SUM(justif) AS justificadas_totais
-    FROM 
-        assiduidade
-    GROUP BY 
-        ver_id;
-    """
-    await cursor.execute(query)
-    assiduidadesTotais = await cursor.fetchall()
-
-    listaAssiduidades = []
-
-    for assid in assiduidadesTotais:
-        assidObj = {
-            'ver_id':assid[0],
-            'faltas':assid[1],
-            'presencas':assid[2],
-            'justificadas':assid[3]
-        }
-        listaAssiduidades.append(assidObj)
-    return listaAssiduidades
-
-def proposicaoListaToObj(proposicao):
-    proposicaoObj = {
-        "requerimento_num": proposicao[0],
-        "assunto": proposicao[1],
-        "processo": proposicao[2],
-        "protocolo": proposicao[3],
-        "id_prop": proposicao[4],
-        "data": proposicao[5],
-        "situacao": proposicao[6],
-        "tipo": proposicao[7],
-        "autorId": proposicao[8],
-        "tema": proposicao[9],
-        "ano": proposicao[5].year,
-        "numero": proposicao[11],
-    }
-    return proposicaoObj
+async def getComissaoById(cursor, comissao_id):
+    print(f"Buscando comissão com ID: {comissao_id}")  # Verifica o ID
+    await cursor.execute('SELECT * FROM comissoes WHERE id = %s', (comissao_id,))
+    comissao = await cursor.fetchone()
+    return comissao
 
 def comissaoListaToObj(comissao):
     comissaoObj = {
@@ -527,13 +353,13 @@ def vereadorListaToObj(vereador):
         "ver_celular":vereador[5],
         "ver_email":vereador[6],
         "ver_gabinete":vereador[7],
-        "ver_foto":vereador[8],
-        "ver_biografia":vereador[9],
-        "ver_patrimonio":vereador[10],
-        "posicao_politica":vereador[11]
+        "ver_posicionamento":vereador[8],
+        "ver_foto":vereador[9],
+        "ver_biografia":vereador[10],
+        "ver_patrimonio":vereador[11],
     }
     return vereadorObj
-
+ 
 @app.route('/proposicoes/<int:id_prop>')
 def pagina_proposicao(id_prop):
     # Conectar no banco
@@ -583,84 +409,30 @@ def pagina_proposicao(id_prop):
 
 @app.route('/proposicoes')
 def proposicoes():
-    
     # Conecte-se ao banco de dados
     connection = get_db_connection()
     cursor = connection.cursor()
     
-    # Obter parâmetros da query
+    # Get current page from the query string, default is page 1
     page = request.args.get('page', 1, type=int)
-    search = request.args.get('busca', '')
-    tipos = request.args.getlist('tipos') # Lista de tipos selecionados
-    date_start = request.args.get('data_inicio')
-    date_end = request.args.get('data_fim')
     
-    # Definir itens por página
+    # Define how many items per page
     per_page = 10
-    
-    # Construir a query base
-    query = 'SELECT * FROM proposicoes WHERE situacao = %s'
-    params = ['Aprovada']
-    count_query = 'SELECT COUNT(*) FROM proposicoes WHERE situacao = %s'
-    
-    # Adicionar filtros se existirem
-    if search:
-        query += ' AND (ementa LIKE %s OR tema LIKE %s)'
-        count_query += ' AND (ementa LIKE %s OR tema LIKE %s)'
-        search_param = f'%{search}%'
-        params.extend([search_param, search_param])
-    
-    if tipos:
-        placeholders = ', '.join(['%s'] * len(tipos))
-        query += f' AND tipo IN ({placeholders})'
-        count_query += f' AND tipo IN ({placeholders})'
-        params.extend(tipos)
-    
-    # Converter Mocao de volta para Moção para a query do banco
-    tipos_convertidos = []
-    if tipos:
-        for tipo in tipos:
-            if tipo == 'Mocao':
-                tipos_convertidos.append('Moção')
-            else:
-                tipos_convertidos.append(tipo)
-        
-        placeholders = ', '.join(['%s'] * len(tipos_convertidos))
-        query += f' AND tipo IN ({placeholders})'
-        count_query += f' AND tipo IN ({placeholders})'
-        params.extend(tipos_convertidos)
-    
-    if date_start:
-        query += ' AND DATE(data_hora) >= %s'
-        count_query += ' AND DATE(data_hora) >= %s'
-        params.append(date_start)
-    
-    if date_end:
-        query += ' AND DATE(data_hora) <= %s'
-        count_query += ' AND DATE(data_hora) <= %s'
-        params.append(date_end)
-    
-    # Contar total de registros para paginação
-    cursor.execute(count_query, params)
+
+    # Get the total number of records
+    cursor.execute('SELECT COUNT(*) FROM proposicoes WHERE situacao = %s', ('Aprovada',))
     total = cursor.fetchone()[0]
-    total_pages = ceil(total / per_page)
-    
-    # Adicionar paginação à query
-    query += ' LIMIT %s OFFSET %s'
-    params.extend([per_page, (page - 1) * per_page])
-    
-    # Executar query final
-    cursor.execute(query, params)
+    total_pages = ceil(total / per_page) # Calculate total number of pages
+    offset = (page - 1) * per_page # Calculate the offset for the SQL query
+
+    cursor.execute('SELECT * FROM proposicoes WHERE situacao = %s LIMIT %s OFFSET %s', ('Aprovada',per_page, offset))  # Fetch the data for the current page
     proposicoes = cursor.fetchall()
-    
+
     cursor.close()
     connection.close()
     
-    return render_template('proposicoes.html', 
-                         proposicoes=proposicoes, 
-                         page=page, 
-                         total_pages=total_pages,
-                         tipos=tipos)
+    # Renderiza o template e passa a paginação junto com os dados
+    return render_template('filtro.html', proposicoes=proposicoes, page=page, total_pages=total_pages)
 
 # ATUALIZA O BANCO DE DADOS COM AS INFORMAÇÕES DO VEREADOR
 @app.route('/atualiza_vereadores')
@@ -767,65 +539,6 @@ def atualiza_vereadores():
     connection.close()
 
     return redirect(request.referrer)
-
-@app.route('/ranking')  
-def ranking():
-    return render_template('filtroranking.html')
-
-@app.route('/filtrar/<criterio>')
-def filtrar_ranking(criterio):
-    if criterio == 'proposicoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, COUNT(p.ver_id) AS qtd_proposicoes,
-                   COUNT(CASE WHEN p.tipo = 'Requerimento' THEN 1 END) as requerimentos,
-                   COUNT(CASE WHEN p.tipo = 'Moção' THEN 1 END) as mocoes,
-                   COUNT(CASE WHEN p.tipo = 'Projeto de Lei' THEN 1 END) as projetos_lei
-            FROM vereadores v
-            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY qtd_proposicoes DESC;
-        """
-    elif criterio == 'assiduidade':
-        query = """
-            SELECT v.ver_id, v.ver_nome, 
-                   SUM(a.presenca) as total_presencas,
-                   SUM(a.faltas) as total_faltas,
-                   SUM(a.justif) as total_justificadas,
-                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
-            FROM vereadores v
-            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY percentual_presenca DESC;
-        """
-    elif criterio == 'comissoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, COUNT(vc.ver_id) AS total_comissoes,
-                   GROUP_CONCAT(DISTINCT c.nome SEPARATOR ', ') as comissoes
-            FROM vereadores v
-            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
-            LEFT JOIN comissoes c ON vc.comissao_id = c.id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY total_comissoes DESC;
-        """
-    elif criterio == 'avaliacoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, 
-                   COUNT(a.id) as total_avaliacoes,
-                   ROUND(AVG(a.nota), 2) as media_avaliacoes
-            FROM vereadores v
-            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY media_avaliacoes DESC;
-        """
-    
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute(query)
-    resultado = cursor.fetchall()
-    cursor.close()
-    connection.close()
-
-    return jsonify(resultado)
 
 # BUSCA AS INFORMAÇÕES DE UM VEREADOR NO SITE DA CAMARA
 def get_vereadores(id):
@@ -986,7 +699,7 @@ vereador_cache = {}
 
 # Função de busca com cache
 async def buscar_vereador(nome_vereador, cursor):
-    if (nome_vereador) in vereador_cache:
+    if nome_vereador in vereador_cache:
         return vereador_cache[nome_vereador]
     await cursor.execute("SELECT ver_id FROM vereadores WHERE ver_nome = %s", (nome_vereador,))
     result = await cursor.fetchone()
