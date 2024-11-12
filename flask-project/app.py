@@ -15,6 +15,7 @@ import locale
 import asyncio
 import plotly.graph_objects as go
 import time
+from better_profanity import profanity
 
 
 # diretório para os arquivos JSON de PROPOSIÇÕES
@@ -27,6 +28,9 @@ from rapagem_dados import assiduidade
 load_dotenv()  # Adicione esta linha para carregar o .env
 
 app = Flask(__name__)
+
+arquivo = 'static/badWords.txt'
+profanity.load_censor_words_from_file(arquivo)
 
 id_vereadores = [35,238,38,247,40,43,246,44,45,47,244,242,243,245,50,240,234,249,239,55,237]
 
@@ -97,8 +101,51 @@ def vereadores():
 
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
+
+
+# Funções para a verificação do texto
+def aliaseTxt(texto):
+    substituicoes = {
+        '@': 'a',
+        '2': 'a',
+        '4': 'a',
+        '#': 'a',
+        '3': 'e',
+        '1': 'i',
+        '0': 'o',
+        '5': 's',
+        '7': 't'
+    }
+    for letter in texto.lower():
+        if letter in substituicoes:
+            newletter = substituicoes[letter]
+            texto = texto.replace(letter, newletter)
+    return texto
+
+def letrasRepetidas(texto):
+    novoTexto= []
+    for letra in texto:
+        if len(novoTexto) == 0:
+            novoTexto.append(letra)
+        elif len(novoTexto) != 0 and letra != novoTexto[-1]:
+            novoTexto.append(letra)
+    novoTexto = ''.join(novoTexto)
+    return novoTexto
+
+def verificaTexto(texto):
+    textoAliase =  aliaseTxt(texto)
+    if profanity.contains_profanity(textoAliase.lower()) == True:
+        return None
+    else:
+        newText = letrasRepetidas(textoAliase)
+        if profanity.contains_profanity(newText.lower()) == True:
+            print('Frase inválida')
+            return newText
+        else: 
+            print('Frase válida')
+            return texto
     
-@app.route('/vereadores/<int:vereador_id>')
+@app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
 async def pagina_vereador(vereador_id):
     
     # Configura o locale para português do Brasil
@@ -188,6 +235,24 @@ async def pagina_vereador(vereador_id):
 
     notas = [4,3,2,5,2,4,1,2,5,4,3,4,5,5,4,5,5,4,5,4,5,4,5,4,5,4,5]
     avaliacao= {'ver_id':35,'avg':sum(notas) / len(notas), 'qtd':len(notas)}
+
+    if request.method == 'POST':
+        dados_json = request.data.decode('utf-8')
+        print(dados_json)
+        # dados = json.loads(dados_json)
+        # print(dados)
+        # nome = request.form.get('nome')
+        # comentario = request.form.get('comment')
+        # idver = request.form.get('idVereador')
+        # nota = request.form.get('nota')
+        # validacao = verificaTexto(comentario)
+        # if validacao != None:
+        #     print(nome)
+        #     print()
+        #     print(validacao)
+        #     print()
+        #     print(idver)
+        #     print(nota)
 
     # Renderiza o template com os dados
     return render_template('vereador.html',

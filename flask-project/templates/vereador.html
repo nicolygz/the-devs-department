@@ -162,7 +162,7 @@
 
         <div id="criar-comentario" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 p-2 rounded space-y-6">
             <!-- Adicionando o formulário com Tailwind CSS e Font Awesome para as estrelas -->
-            <form action="" class="space-y-4" onsubmit="enviarAvaliacao(event)">
+            <form action="" class="space-y-4" onsubmit="enviarAvaliacao(event)" method="post">
                 <p class="text-2xl font-black mb-2">Deixe seu comentário e avaliação sobre: {{ vereador['ver_nome']}}:</p>
                 <div class="grid grid-cols-2 gap-4 max-w-2xl">
                     <div>
@@ -182,14 +182,14 @@
                             <span class="fa fa-star cursor-pointer text-2xl text-gray-300 hover:text-yellow-400" id="star5" onclick="rate(5)"></span>
                         </div>
                     </div>
-                </div>                
+                </div>
                 <div>
                     <!-- Comentário -->
                     <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Deixe um comentário:</label>
                     <textarea id="comment" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" placeholder="Escreva seu comentário..."></textarea>
                 </div>
                 <!-- Campo escondido para armazenar o ID do vereador -->
-                <input type="hidden" id="idVereador" value="{{ vereador['ver_id'] }}">
+                <input type="hidden" id="idVereador" value="{{ vereador['ver_id'] }}" name="id_ver">
                 <!-- Botão de envio -->
                 <button type="submit" class="mt-4 w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400">
                     Publicar
@@ -228,7 +228,9 @@
             comentario: comentario
         };
 
-        fetch("URL_DO_SEU_BACKEND", {
+        console.log(avaliacao)
+
+        fetch(`/vereadores/${id_vereador}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
