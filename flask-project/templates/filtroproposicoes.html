@@ -2,7 +2,6 @@
     <input name="busca" class="filtro-digito" type="text" placeholder="Buscar por palavras-chave, tag, importância, setor" value="{{ request.args.get('busca', '') }}">
     <article class="filtro-bf">
         <button type="submit" class="btn-buscar">Buscar</button>
-        <button type="button" class="btn-filtrar">Filtrar</button>
     </article>
     <article class="break"></article>
     <article class="filtro-data">
@@ -13,9 +12,9 @@
     </article>
 
     <article class="filtro-tipo">
-        <button type="button" class="btn-tipo {% if 'Requerimento' in tipos %}ativo{% endif %}" data-tipo="Requerimento">Requerimento</button>
-        <button type="button" class="btn-tipo {% if 'Mocao' in tipos %}ativo{% endif %}" data-tipo="Mocao">Moção</button>
-        <button type="button" class="btn-tipo lei {% if 'Projeto de Lei' in tipos %}ativo{% endif %}" data-tipo="Projeto de Lei">Projeto de Lei</button>
+        <button type="button" class="btn-tipo btn-padrao {% if 'Requerimento' in tipos %}ativo{% endif %}" data-tipo="Requerimento">Requerimento</button>
+        <button type="button" class="btn-tipo btn-padrao {% if 'Mocao' in tipos %}ativo{% endif %}" data-tipo="Mocao">Moção</button>
+        <button type="button" class="btn-tipo btn-padrao lei {% if 'Projeto de Lei' in tipos %}ativo{% endif %}" data-tipo="Projeto de Lei">Projeto de Lei</button>
     </article>
     <!-- Inputs hidden para tipos serão inseridos via JavaScript -->
 </form>
