@@ -187,6 +187,7 @@ async def pagina_vereador(vereador_id):
             )
 
             lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
+            temas_unicos = sorted(set(item['tema'] for item in lista_extrato_votacao))
 
             end_time = time.time()
             # Calculate duration
@@ -237,7 +238,8 @@ async def pagina_vereador(vereador_id):
                 chart_html=chart_html,
                 avaliacoes=avaliacoes,
                 avaliacao=avaliacao,
-                lista_extrato_votacao=lista_extrato_votacao
+                lista_extrato_votacao=lista_extrato_votacao,
+                temas=temas_unicos
             )
 
 def extratoVotacaoListaToObj(extrato_votacao):
