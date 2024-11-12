@@ -147,6 +147,16 @@ def verificaTexto(texto):
             print('Frase válida')
             return texto
     
+def AddAvaliacaoNoBancoDeDados(nome, nota, comentario, ver_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute(""""INSERT INTO avaliacao (nome, nota, comentario, ver_id) VALUES (%s, %s, %s, %s) """,
+                     (nome, nota, comentario, ver_id))
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
 @app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
 async def pagina_vereador(vereador_id):
 
@@ -164,7 +174,7 @@ async def pagina_vereador(vereador_id):
             return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
         else:
             # Chamar uma função para adicionar no banco de dados
-            if add_avaliacao_no_banco_de_dados(json_data):
+            if AddAvaliacaoNoBancoDeDados(json_data['nome'], json_data['nota'], json_data['comentario'], vereador_id):
                 # Buscar as avaliações do vereador no banco de dados
                 avaliacoes = get_avaliacoes_by_vereador_id(json_data['id_vereador'])
                 
