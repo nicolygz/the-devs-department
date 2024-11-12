@@ -18,23 +18,25 @@
                     <div id="img" class="flex justify-center">
                         <img class="max-w-xs max-h-64 rounded-lg" src="{{ vereador['ver_foto'] }}" alt="">
                     </div>
-                    <div id="avaliacao" class="flex items-center justify-center">
-                        <div class="flex mr-2">
+                    <div id="avaliacao" class="flex items-center flex-row justify-center">
+                        <div class="flex mr-2 items-center space-x-2 ">
                             <!-- Exibe as estrelas -->
-                            {% if avaliacao['qtd'] == 0 or vereador['ver_id'] != avaliacao['ver_id'] %}
-                                <p class="text-md text-gray-800">Não há avaliações.</p>
-                            {% elif vereador['ver_id'] == avaliacao['ver_id'] %}
-                                {% for i in range(5) %}
-                                    {% if i < avaliacao['avg']|int %}
-                                        <span class="fa fa-star text-yellow-400 text-xl"></span> <!-- Estrela cheia -->
-                                    {% elif i < avaliacao['avg']|int + 0.5 %}
-                                        <span class="fa fa-star-half-alt text-yellow-400 text-xl"></span> <!-- Estrela meia -->
-                                    {% else %}
-                                        <span class="fa fa-star text-gray-300 text-xl"></span> <!-- Estrela vazia -->
+                             <div>
+                                 {% if avaliacao['qtd'] == 0 or vereador['ver_id'] != avaliacao['ver_id'] %}
+                                     <p class="text-md text-gray-800">Não há avaliações.</p>
+                                 {% elif vereador['ver_id'] == avaliacao['ver_id'] %}
+                                     {% for i in range(5) %}
+                                         {% if i < avaliacao['avg']|int %}
+                                             <span class="fa fa-star text-yellow-400 text-xl"></span> <!-- Estrela cheia -->
+                                         {% elif i < avaliacao['avg']|int + 0.5 %}
+                                             <span class="fa fa-star-half-alt text-yellow-400 text-xl"></span> <!-- Estrela meia -->
+                                         {% else %}
+                                             <span class="fa fa-star text-gray-300 text-xl"></span> <!-- Estrela vazia -->
+                                         {% endif %}
+                                     {% endfor %}
                                     {% endif %}
-                                    {% endfor %}
-                                    <p class="text-md text-gray-800">{{ avaliacao['avg'] }} ({{ avaliacao['qtd'] }} avaliações)</p>
-                            {% endif %}
+                                </div>
+                                <p class="text-md text-gray-800">{{ avaliacao['avg'] }} ({{ avaliacao['qtd'] }} avaliações)</p>
                         </div>
                     </div>
                 </div>
@@ -139,10 +141,10 @@
         </div>        
         <div id="mostrar-comentários" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 rounded space-y-6">
             <p class="text-2xl font-black mb-2">Comentários:</p>
-            {% if comments|length == 0 %}
+            {% if avaliacoes|length == 0 %}
             <p class="pl-2 text-gray-700">Seja o primeiro a comentar!</p>
             {% else %}
-                {% for comment in comments %} 
+                {% for avaliacao in avaliacoes %} 
                     <div class="flex flex-col gap-y-2">
                         <div class="flex gap-4">
                             <div>
@@ -151,14 +153,14 @@
                             <div class="flex flex-col">
                                 <div class="flex-1 bg-gray-200 border rounded-2xl p-2">
                                     <div class="header flex flex-row">
-                                        <p class="font-black italic text-l uppercase">{{ comment['nome'] }}</p>
+                                        <p class="font-black italic text-l uppercase">{{ avaliacao['nome'] }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-md font-thin">{{ comment['comment'] }}</p>
+                                        <p class="text-md font-thin">{{ avaliacao['avaliacao'] }}</p>
                                     </div>
                                 </div>
                                 <div class="pt-1 pl-2">
-                                    <p style="font-size: 12px; font-weight: 100;">{{ comment['data'] }}</p>
+                                    <p style="font-size: 12px; font-weight: 100;">{{ avaliacao['datahora'] }}</p>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +172,7 @@
 
         <div id="criar-comentario" class="flex min-w-[350px] p-5 flex-col flex-wrap justify-center border border-gray-300 p-2 rounded space-y-6">
             <!-- Adicionando o formulário com Tailwind CSS e Font Awesome para as estrelas -->
-            <form action="" class="space-y-4" onsubmit="enviarAvaliacao(event)">
+            <form class="space-y-4" method="post" onsubmit="enviarAvaliacao(event)">
                 <p class="text-2xl font-black mb-2">Deixe seu comentário e avaliação sobre: {{ vereador['ver_nome']}}:</p>
                 <div class="grid grid-cols-2 gap-4 max-w-2xl">
                     <div>
@@ -193,8 +195,8 @@
                 </div>                
                 <div>
                     <!-- Comentário -->
-                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Deixe um comentário:</label>
-                    <textarea id="comment" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" placeholder="Escreva seu comentário..."></textarea>
+                    <label for="avaliacao" class="block text-sm font-medium text-gray-700 mb-1">Deixe um comentário:</label>
+                    <textarea id="avaliacao" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" placeholder="Escreva seu comentário..."></textarea>
                 </div>
                 <!-- Campo escondido para armazenar o ID do vereador -->
                 <input type="hidden" id="idVereador" value="{{ vereador['ver_id'] }}">
@@ -210,25 +212,31 @@
     let nota = 0;
 
     function rate(stars) {
-    // Reset all stars to gray
-    for (let i = 1; i <= 5; i++) {
-        document.getElementById(`star${i}`).classList.remove("text-yellow-400");
-        document.getElementById(`star${i}`).classList.add("text-gray-300");
-    }
-    // Highlight selected stars
-    for (let i = 1; i <= stars; i++) {
-        document.getElementById(`star${i}`).classList.remove("text-gray-300");
-        document.getElementById(`star${i}`).classList.add("text-yellow-400");
-    }
+        nota=stars;
+        // Reset all stars to gray
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById(`star${i}`).classList.remove("text-yellow-400");
+            document.getElementById(`star${i}`).classList.add("text-gray-300");
+        }
+        // Highlight selected stars
+        for (let i = 1; i <= stars; i++) {
+            document.getElementById(`star${i}`).classList.remove("text-gray-300");
+            document.getElementById(`star${i}`).classList.add("text-yellow-400");
+        }
+}
 
-    // Função para enviar o JSON ao backend
     function enviarAvaliacao(event) {
         event.preventDefault();
-
-        const id_vereador = document.getElementById("idVereador").value; // Obtendo o id do vereador
+    
+        const id_vereador = document.getElementById("idVereador").value;
         const nome = document.getElementById("nome").value;
-        const comentario = document.getElementById("comment").value;
-
+        const comentario = document.getElementById("avaliacao").value;
+    
+        if (!nota) {
+            alert("Por favor, selecione uma nota para o vereador.");
+            return;
+        }
+    
         const avaliacao = {
             id_vereador: id_vereador,
             nota: nota,
@@ -236,7 +244,9 @@
             comentario: comentario
         };
 
-        fetch("URL_DO_SEU_BACKEND", {
+        console.log(avaliacao)
+    
+        fetch(`/vereadores/${id_vereador}`, { 
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -245,13 +255,12 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert("Avaliação enviada com sucesso!");
+            alert(data.message);
         })
         .catch(error => {
             console.error("Erro ao enviar a avaliação:", error);
         });
     }
-}
 </script>
 
 {% endblock %}

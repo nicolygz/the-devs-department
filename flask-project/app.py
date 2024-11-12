@@ -97,123 +97,148 @@ def vereadores():
 
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
+
+def tem_palavrao(nome, comentario):
+    return False
     
-@app.route('/vereadores/<int:vereador_id>')
+@app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
 async def pagina_vereador(vereador_id):
-    
-    # Configura o locale para português do Brasil
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-    # Start timing
-    start_time = time.time()
-
-    # Cria conexões e cursores independentes
-    connection1_task = get_async_db_connection()
-    connection2_task = get_async_db_connection()
-    connection3_task = get_async_db_connection()
-    connection4_task = get_async_db_connection()
-    connection5_task = get_async_db_connection()
-    connection6_task = get_async_db_connection()
-    connection7_task = get_async_db_connection()
-
-    conn1, conn2, conn3, conn4, conn5, conn6, conn7 = await asyncio.gather(
-        connection1_task, 
-        connection2_task, 
-        connection3_task, 
-        connection4_task, 
-        connection5_task, 
-        connection6_task,
-        connection7_task)
-
-    # End timing
-    end_time = time.time()
-    # Calculate duration
-    duration = end_time - start_time
-    print(f"Connection process took {duration:.2f} seconds")
-
-    async with conn1.cursor() as cursor1, \
-            conn2.cursor() as cursor2, \
-            conn3.cursor() as cursor3, \
-            conn4.cursor() as cursor4, \
-            conn5.cursor() as cursor5, \
-            conn6.cursor() as cursor6, \
-            conn7.cursor() as cursor7:
-
-        start_time = time.time()
+    print(request.method)
+    if request.method == 'POST':
         
-        # Garante que cada função retorna uma tarefa única
-        vereador_task = getVereadorById(cursor1, vereador_id)
-        comissoesInfoGeral_task = getComissoesDetailByVereadorId(cursor2, vereador_id)
-        all_comissoes_task = getAllComissoes(cursor3)
-        proposicoes_task = getProposicoesByVereadorId(cursor4, vereador_id)
-        assiduidadesVereador_task = getAssiduidadeVereador(cursor5, vereador_id)
-        assiduidades_total_task = getAssiduidadesTotais(cursor6)
-        extrato_votacao_task = getExtratoVotacaoByVereadorId(cursor7, vereador_id)
+        dados = request.get_data()
+        # Decodifica para string e converte para JSON
+        json_data = json.loads(dados.decode('utf-8'))
 
-        # Aguarda as tarefas
-        vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal, extrato_votacao= await asyncio.gather(
-            vereador_task, 
-            comissoesInfoGeral_task, 
-            proposicoes_task,
-            all_comissoes_task,
-            assiduidadesVereador_task,
-            assiduidades_total_task,
-            extrato_votacao_task
-        )
+        # Validar o comentário
+        if tem_palavrao(json_data['nome'], json_data['comentario']):
+             return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
+        else:
+            # Chamar uma função para adicionar no banco de dados
+            if add_avaliacao_no_banco_de_dados(json_data):
+                # Buscar as avaliações do vereador no banco de dados
+                avaliacoes = get_avaliacoes_by_vereador_id(json_data['id_vereador'])
+                
+                # Formatar a resposta com a lista de avaliações
+                avalicoes_json = [avaliacao.to_dict() for avaliacao in avaliacoes]
+                return jsonify({"message": "Avaliação recebida com sucesso!", "avaliacoes": avalicoes_json}), 200
+        
+    
+    if request.method == 'GET':
+        # Configura o locale para português do Brasil
+        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-        lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
+        # Start timing
+        start_time = time.time()
 
+        # Cria conexões e cursores independentes
+        connection1_task = get_async_db_connection()
+        connection2_task = get_async_db_connection()
+        connection3_task = get_async_db_connection()
+        connection4_task = get_async_db_connection()
+        connection5_task = get_async_db_connection()
+        connection6_task = get_async_db_connection()
+        connection7_task = get_async_db_connection()
+
+        conn1, conn2, conn3, conn4, conn5, conn6, conn7 = await asyncio.gather(
+            connection1_task, 
+            connection2_task, 
+            connection3_task, 
+            connection4_task, 
+            connection5_task, 
+            connection6_task,
+            connection7_task)
+
+        # End timing
         end_time = time.time()
         # Calculate duration
         duration = end_time - start_time
-        print(f"MySQL & assiduidade process took {duration:.2f} seconds")
+        print(f"Connection process took {duration:.2f} seconds")
 
-        # Criar o objeto vereador e formatar o patrimônio
-        vereadorObj = vereadorListaToObj(vereadorInfo)
-        vereadorObj['ver_patrimonio'] = locale.currency(
-            float(vereadorObj['ver_patrimonio']), symbol=True, grouping=True
-        ).replace(" R$", "")
+        async with conn1.cursor() as cursor1, \
+                conn2.cursor() as cursor2, \
+                conn3.cursor() as cursor3, \
+                conn4.cursor() as cursor4, \
+                conn5.cursor() as cursor5, \
+                conn6.cursor() as cursor6, \
+                conn7.cursor() as cursor7:
 
-    listaComissoesObj=[]
-    
-    for comissao in all_comissoes:
-        comissaoObj = comissaoListaToObj(comissao)
-        listaComissoesObj.append(comissaoObj)
+            start_time = time.time()
+            
+            # Garante que cada função retorna uma tarefa única
+            vereador_task = getVereadorById(cursor1, vereador_id)
+            comissoesInfoGeral_task = getComissoesDetailByVereadorId(cursor2, vereador_id)
+            all_comissoes_task = getAllComissoes(cursor3)
+            proposicoes_task = getProposicoesByVereadorId(cursor4, vereador_id)
+            assiduidadesVereador_task = getAssiduidadeVereador(cursor5, vereador_id)
+            assiduidades_total_task = getAssiduidadesTotais(cursor6)
+            extrato_votacao_task = getExtratoVotacaoByVereadorId(cursor7, vereador_id)
 
-    listaInfoGeralComissao = []
+            # Aguarda as tarefas
+            vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal, extrato_votacao= await asyncio.gather(
+                vereador_task, 
+                comissoesInfoGeral_task, 
+                proposicoes_task,
+                all_comissoes_task,
+                assiduidadesVereador_task,
+                assiduidades_total_task,
+                extrato_votacao_task
+            )
 
-    for comissao in comissoesInfoGeral:
-        infoGeralComissao = comissaoDetalheToObj(comissao)
-        listaInfoGeralComissao.append(infoGeralComissao)
+            lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
 
-    listaComissoes = gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj)
+            end_time = time.time()
+            # Calculate duration
+            duration = end_time - start_time
+            print(f"MySQL & assiduidade process took {duration:.2f} seconds")
 
-    listaProposicoesObj = []
-    for proposicao in proposicoesByVereador:
-        proposicaoObj = proposicaoListaToObj(proposicao)
-        listaProposicoesObj.append(proposicaoObj)
+            # Criar o objeto vereador e formatar o patrimônio
+            vereadorObj = vereadorListaToObj(vereadorInfo)
+            vereadorObj['ver_patrimonio'] = locale.currency(
+                float(vereadorObj['ver_patrimonio']), symbol=True, grouping=True
+            ).replace(" R$", "")
 
-    chart_html = gerarGrafico(listaProposicoesObj)
-    ver_assiduidade=comparar_assiduidades(assiduidadesVereador, assiduidadesTotal)
-    comments = [
-        {'nome':'Pedro','data':'06-02-2024','comment':'Esse cara é um excelente legislador!'},
-        {'nome':'João','data':'02-02-2024','comment':'Ótimo trabalho vereadasodna sndoasnpdap sdh asod haos dioas oi dhoas dasdao dais odas dvaus gdiua idasi dga psgdas dag dasdador, continue assim!'},
-    ]
+            listaComissoesObj=[]
 
-    notas = [4,3,2,5,2,4,1,2,5,4,3,4,5,5,4,5,5,4,5,4,5,4,5,4,5,4,5]
-    avaliacao= {'ver_id':35,'avg':sum(notas) / len(notas), 'qtd':len(notas)}
+            for comissao in all_comissoes:
+                comissaoObj = comissaoListaToObj(comissao)
+                listaComissoesObj.append(comissaoObj)
 
-    # Renderiza o template com os dados
-    return render_template('vereador.html',
-        ver_assiduidade=ver_assiduidade,
-        vereador=vereadorObj,
-        comissoes=listaComissoes,
-        proposicoes=listaProposicoesObj,
-        chart_html=chart_html,
-        comments=comments,
-        avaliacao=avaliacao,
-        lista_extrato_votacao=lista_extrato_votacao
-    )
+            listaInfoGeralComissao = []
+
+            for comissao in comissoesInfoGeral:
+                infoGeralComissao = comissaoDetalheToObj(comissao)
+                listaInfoGeralComissao.append(infoGeralComissao)
+
+            listaComissoes = gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj)
+
+            listaProposicoesObj = []
+            for proposicao in proposicoesByVereador:
+                proposicaoObj = proposicaoListaToObj(proposicao)
+                listaProposicoesObj.append(proposicaoObj)
+
+            chart_html = gerarGrafico(listaProposicoesObj)
+            ver_assiduidade=comparar_assiduidades(assiduidadesVereador, assiduidadesTotal)
+            avaliacoes = [
+                {'nome':'Pedro','date':'06-02-2024','comment':'Esse cara é um excelente legislador!'},
+                {'nome':'João','date':'02-02-2024','comment':'Ótimo trabalho vereadasodna sndoasnpdap sdh asod haos dioas oi dhoas dasdao dais odas dvaus gdiua idasi dga psgdas dag dasdador, continue assim!'},
+            ]
+
+            notas = [4,3,2,5,2,4,1,2,5,4,3,4,5,5,4,5,5,4,5,4,5,4,5,4,5,4,5]
+            avaliacao= {'ver_id':35,'avg':sum(notas) / len(notas), 'qtd':len(notas)}
+
+            # Renderiza o template com os dados
+            return render_template('vereador.html',
+                ver_assiduidade=ver_assiduidade,
+                vereador=vereadorObj,
+                comissoes=listaComissoes,
+                proposicoes=listaProposicoesObj,
+                chart_html=chart_html,
+                avaliacoes=avaliacoes,
+                avaliacao=avaliacao,
+                lista_extrato_votacao=lista_extrato_votacao
+            )
 
 def extratoVotacaoListaToObj(extrato_votacao):
     lista_extrato_votacao = []
