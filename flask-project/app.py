@@ -114,8 +114,16 @@ async def pagina_vereador(vereador_id):
     connection4_task = get_async_db_connection()
     connection5_task = get_async_db_connection()
     connection6_task = get_async_db_connection()
+    connection7_task = get_async_db_connection()
 
-    conn1, conn2, conn3, conn4, conn5, conn6 = await asyncio.gather(connection1_task, connection2_task, connection3_task, connection4_task, connection5_task, connection6_task)
+    conn1, conn2, conn3, conn4, conn5, conn6, conn7 = await asyncio.gather(
+        connection1_task, 
+        connection2_task, 
+        connection3_task, 
+        connection4_task, 
+        connection5_task, 
+        connection6_task,
+        connection7_task)
 
     # End timing
     end_time = time.time()
@@ -128,9 +136,11 @@ async def pagina_vereador(vereador_id):
             conn3.cursor() as cursor3, \
             conn4.cursor() as cursor4, \
             conn5.cursor() as cursor5, \
-            conn6.cursor() as cursor6:
+            conn6.cursor() as cursor6, \
+            conn7.cursor() as cursor7:
 
         start_time = time.time()
+        
         # Garante que cada função retorna uma tarefa única
         vereador_task = getVereadorById(cursor1, vereador_id)
         comissoesInfoGeral_task = getComissoesDetailByVereadorId(cursor2, vereador_id)
@@ -138,16 +148,20 @@ async def pagina_vereador(vereador_id):
         proposicoes_task = getProposicoesByVereadorId(cursor4, vereador_id)
         assiduidadesVereador_task = getAssiduidadeVereador(cursor5, vereador_id)
         assiduidades_total_task = getAssiduidadesTotais(cursor6)
+        extrato_votacao_task = getExtratoVotacaoByVereadorId(cursor7, vereador_id)
 
         # Aguarda as tarefas
-        vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal = await asyncio.gather(
+        vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal, extrato_votacao= await asyncio.gather(
             vereador_task, 
             comissoesInfoGeral_task, 
             proposicoes_task,
             all_comissoes_task,
             assiduidadesVereador_task,
-            assiduidades_total_task
+            assiduidades_total_task,
+            extrato_votacao_task
         )
+
+        lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
 
         end_time = time.time()
         # Calculate duration
@@ -197,8 +211,27 @@ async def pagina_vereador(vereador_id):
         proposicoes=listaProposicoesObj,
         chart_html=chart_html,
         comments=comments,
-        avaliacao=avaliacao
+        avaliacao=avaliacao,
+        lista_extrato_votacao=lista_extrato_votacao
     )
+
+def extratoVotacaoListaToObj(extrato_votacao):
+    lista_extrato_votacao = []
+    
+    for extrato in extrato_votacao:
+        extrato_Obj = {
+            'id_prop':extrato[0],
+            'num_pl':extrato[1],
+            'ano_pl':extrato[2],
+            'resultado':extrato[3],
+            'presidente':extrato[4],
+            'ementa':extrato[5],
+            'tema':extrato[6],
+            'id_vereador':extrato[7],
+            'voto':extrato[8],
+        }
+        lista_extrato_votacao.append(extrato_Obj)
+    return lista_extrato_votacao
 
 def gerarComissoesLista(listaInfoGeralComissao, listaComissoesObj):
 
@@ -315,6 +348,28 @@ def comparar_assiduidades(assiduidade_vereador, assiduidadeAllVereadores):
         'porc_justificadas': ver_justificadas,
         'comparacao_presencas': comparacao_presencas
     }
+
+# Função para buscar a consolidação de dados de Votação
+async def getExtratoVotacaoByVereadorId(cursor, vereador_id):
+    await cursor.execute(""" 
+        SELECT 
+            p.id_prop as id_prop,
+            v.num_pl AS numero_pl,
+            v.ano_pl AS ano_pl,
+            v.resultado AS resultado,
+            ver.ver_nome AS presidente,
+            p.ementa AS ementa,
+            p.tema AS tema,
+            e.ver_id AS vereador_id,
+            e.voto AS voto
+        FROM votacao v
+        RIGHT JOIN extrato_votacao e ON v.id = e.votacao_id 
+        INNER JOIN proposicoes p ON p.numero = v.num_pl AND p.ano = v.ano_pl
+        LEFT JOIN vereadores ver ON v.presidente = ver.ver_id
+        WHERE e.ver_id = %s AND p.tema <> ''
+    """, (vereador_id,))
+    resultado = await cursor.fetchall()
+    return resultado
 
 # Função para buscar os dados do vereador com cursor assíncrono
 async def getVereadorById(cursor, vereador_id):
