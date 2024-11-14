@@ -147,20 +147,33 @@ def verificaTexto(texto):
 def AddAvaliacaoNoBancoDeDados(nome, nota, comentario, ver_id):
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute(""""INSERT INTO avaliacao (nome, nota, comentario, ver_id) VALUES (%s, %s, %s, %s) """,
-                     (nome, nota, comentario, ver_id))
+    cursor.execute("INSERT INTO avaliacao (nome, nota, comentario, ver_id) VALUES (%s, %s, %s, %s) ", (nome, nota, comentario, ver_id))
     connection.commit()
     cursor.close()
     connection.close()
 
-def  getavaliacaoesByvereadorId (ver_id):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute('SELECT*FROM avaliacao WHERE ver_id=%',(ver_id))
-    avalia=cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return avalia
+async def getavaliacaoesByvereadorId (cursor, ver_id):
+    await cursor.execute("SELECT * FROM avaliacao WHERE ver_id = %s", (ver_id,))
+    avaliacoes = await cursor.fetchall()
+    return avaliacoes
+
+def avaliacoes_lista_to_obj(avaliacoes_vereador):
+    lista = []
+    listaNotas = []
+    for avaliacao in avaliacoes_vereador:
+        obj = {
+            'id': avaliacao[0],
+            'nome': avaliacao[1],
+            'nota': avaliacao[2],
+            'comentario': avaliacao[3],
+            'datahora': avaliacao[4],
+            'id_vereador': avaliacao[5]
+        }
+        listaNotas.append(avaliacao[2])
+        lista.append(obj)
+    avg = sum(listaNotas)/ len(listaNotas)
+    return lista, avg
+
   
 @app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
 async def pagina_vereador(vereador_id):
@@ -175,19 +188,21 @@ async def pagina_vereador(vereador_id):
         # Validar o comentário
         # if tem_palavrao(json_data['nome'], json_data['comentario']):
         #      return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
-        nome = verificaTexto(json_data^['nome'])
+        nome = verificaTexto(json_data['nome'])
         comentario = verificaTexto(json_data['comentario'])
         if nome == None or comentario == None:
             return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
         else:
+            avalicoes_json = []
+            
             # Chamar uma função para adicionar no banco de dados
             if AddAvaliacaoNoBancoDeDados(json_data['nome'], json_data['nota'], json_data['comentario'], vereador_id):
                 # Buscar as avaliações do vereador no banco de dados
-                avalia =  getavaliacaoesByvereadorId(json_data['id_vereador'])
+                avaliacoes =  getavaliacaoesByvereadorId(json_data['id_vereador'])
                 
                 # Formatar a resposta com a lista de avaliações
                 avalicoes_json = [avaliacao.to_dict() for avaliacao in avaliacoes]
-                return jsonify({"message": "Avaliação recebida com sucesso!", "avaliacoes": avalicoes_json}), 200
+            return jsonify({"message": "Avaliação recebida com sucesso!", "avaliacoes": avalicoes_json}), 200
         
     
     if request.method == 'GET':
@@ -205,15 +220,18 @@ async def pagina_vereador(vereador_id):
         connection5_task = get_async_db_connection()
         connection6_task = get_async_db_connection()
         connection7_task = get_async_db_connection()
+        connection8_task = get_async_db_connection()
+        
 
-        conn1, conn2, conn3, conn4, conn5, conn6, conn7 = await asyncio.gather(
+        conn1, conn2, conn3, conn4, conn5, conn6, conn7, conn8 = await asyncio.gather(
             connection1_task, 
             connection2_task, 
             connection3_task, 
             connection4_task, 
             connection5_task, 
             connection6_task,
-            connection7_task)
+            connection7_task,
+            connection8_task)
 
         # End timing
         end_time = time.time()
@@ -227,7 +245,8 @@ async def pagina_vereador(vereador_id):
                 conn4.cursor() as cursor4, \
                 conn5.cursor() as cursor5, \
                 conn6.cursor() as cursor6, \
-                conn7.cursor() as cursor7:
+                conn7.cursor() as cursor7, \
+                conn8.cursor() as cursor8:
 
             start_time = time.time()
             
@@ -239,18 +258,20 @@ async def pagina_vereador(vereador_id):
             assiduidadesVereador_task = getAssiduidadeVereador(cursor5, vereador_id)
             assiduidades_total_task = getAssiduidadesTotais(cursor6)
             extrato_votacao_task = getExtratoVotacaoByVereadorId(cursor7, vereador_id)
+            avaliacoes_task =  getavaliacaoesByvereadorId(cursor8, vereador_id)
 
             # Aguarda as tarefas
-            vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal, extrato_votacao= await asyncio.gather(
+            vereadorInfo, comissoesInfoGeral, proposicoesByVereador, all_comissoes, assiduidadesVereador, assiduidadesTotal, extrato_votacao, avaliacoes_vereador= await asyncio.gather(
                 vereador_task, 
                 comissoesInfoGeral_task, 
                 proposicoes_task,
                 all_comissoes_task,
                 assiduidadesVereador_task,
                 assiduidades_total_task,
-                extrato_votacao_task
+                extrato_votacao_task,
+                avaliacoes_task
             )
-
+            
             lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
 
             end_time = time.time()
@@ -285,13 +306,9 @@ async def pagina_vereador(vereador_id):
 
             chart_html = gerarGrafico(listaProposicoesObj)
             ver_assiduidade=comparar_assiduidades(assiduidadesVereador, assiduidadesTotal)
-            avaliacoes = [
-                {'nome':'Pedro','date':'06-02-2024','comment':'Esse cara é um excelente legislador!'},
-                {'nome':'João','date':'02-02-2024','comment':'Ótimo trabalho vereadasodna sndoasnpdap sdh asod haos dioas oi dhoas dasdao dais odas dvaus gdiua idasi dga psgdas dag dasdador, continue assim!'},
-            ]
-
-            notas = [4,3,2,5,2,4,1,2,5,4,3,4,5,5,4,5,5,4,5,4,5,4,5,4,5,4,5]
-            avaliacao= {'ver_id':35,'avg':sum(notas) / len(notas), 'qtd':len(notas)}
+            
+            avaliacoes, avg = avaliacoes_lista_to_obj(avaliacoes_vereador)
+            avaliacao = {'ver_id': vereador_id,'avg': avg, 'qtd': len(avaliacoes)}
 
             # Renderiza o template com os dados
             return render_template('vereador.html',

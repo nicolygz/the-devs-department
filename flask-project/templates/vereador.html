@@ -19,7 +19,7 @@
                         <img class="max-w-xs max-h-64 rounded-lg" src="{{ vereador['ver_foto'] }}" alt="">
                     </div>
                     <div id="avaliacao" class="flex items-center flex-row justify-center">
-                        <div class="flex mr-2 items-center space-x-2 ">
+                        <div class="flex flex-col mr-2 items-center space-x-2 ">
                             <!-- Exibe as estrelas -->
                              <div>
                                  {% if avaliacao['qtd'] == 0 or vereador['ver_id'] != avaliacao['ver_id'] %}
@@ -156,7 +156,7 @@
                                         <p class="font-black italic text-l uppercase">{{ avaliacao['nome'] }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-md font-thin">{{ avaliacao['avaliacao'] }}</p>
+                                        <p class="text-md font-thin">{{ avaliacao['comentario'] }}</p>
                                     </div>
                                 </div>
                                 <div class="pt-1 pl-2">
@@ -196,7 +196,7 @@
                 <div>
                     <!-- Comentário -->
                     <label for="avaliacao" class="block text-sm font-medium text-gray-700 mb-1">Deixe um comentário:</label>
-                    <textarea id="avaliacao" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" placeholder="Escreva seu comentário..."></textarea>
+                    <textarea id="comentario" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="4" placeholder="Escreva no minimo 20 caracteres"></textarea>
                 </div>
                 <!-- Campo escondido para armazenar o ID do vereador -->
                 <input type="hidden" id="idVereador" value="{{ vereador['ver_id'] }}" name="id_ver">
@@ -230,7 +230,8 @@
     
         const id_vereador = document.getElementById("idVereador").value;
         const nome = document.getElementById("nome").value;
-        const comentario = document.getElementById("avaliacao").value;
+        const comentario = document.getElementById("comentario").value;
+        console.log(comentario)
     
         if (!nota) {
             alert("Por favor, selecione uma nota para o vereador.");
@@ -256,6 +257,11 @@
         .then(response => response.json())
         .then(data => {
             alert(data.message);
+            document.getElementById("nome").value = ''
+            document.getElementById("comentario").value = ''
+            rate(0)
+
+            window.location.reload();
         })
         .catch(error => {
             console.error("Erro ao enviar a avaliação:", error);
