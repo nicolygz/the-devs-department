@@ -80,9 +80,122 @@ def test_connection():
 def home():
     return render_template('home.html')
 
-@app.route('/visao-geral')
+@app.route('/ranking')
 def geral():
-    return render_template('visao-geral.html')
+    # Conectar ao banco de dados
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)  # Retorna os resultados como dicionários
+
+    # Query para pegar todos os vereadores
+    query_vereadores = """
+    SELECT ver_id, ver_nome, ver_partido, ver_tel1, ver_tel2, ver_celular, ver_email, ver_foto
+    FROM vereadores
+    ORDER BY ver_nome ASC;
+    """
+    cursor.execute(query_vereadores)
+    vereadores = cursor.fetchall()  # Pega todos os vereadores
+
+    # Query para calcular a média da posição política
+    query_media_posicao = """
+    SELECT AVG(posicao_politica) AS media_posicao
+    FROM vereadores;
+    """
+    cursor.execute(query_media_posicao)
+    resultado_media = cursor.fetchone()  # Pega o resultado da média
+
+    # Verificar se a média foi calculada corretamente
+    media_posicao = None
+    if resultado_media and resultado_media['media_posicao'] is not None:
+        media_posicao = resultado_media['media_posicao']
+
+    # Fechar a conexão com o banco após executar as queries
+    cursor.close()
+    connection.close()
+
+    # Renderiza o template 'ranking.html' com os dados
+    return render_template('ranking.html', vereadores=vereadores, media_posicao=media_posicao)
+
+
+@app.route('/filtrar/<criterio>')
+def filtrar_ranking(criterio):
+    # Definir a query com base no critério selecionado
+    if criterio == 'proposicoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, COUNT(p.ver_id) AS qtd_proposicoes
+            FROM vereadores v
+            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+            GROUP BY v.ver_id
+            ORDER BY qtd_proposicoes DESC;
+        """
+    elif criterio == 'assiduidade':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto,
+                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
+            FROM vereadores v
+            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id
+            ORDER BY percentual_presenca DESC;
+        """
+    elif criterio == 'comissoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, COUNT(vc.ver_id) AS total_comissoes
+            FROM vereadores v
+            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+            GROUP BY v.ver_id
+            ORDER BY total_comissoes DESC;
+        """
+    elif criterio == 'avaliacoes':
+        query = """
+            SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, ROUND(AVG(a.nota), 2) as media_avaliacoes
+            FROM vereadores v
+            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+            GROUP BY v.ver_id
+            ORDER BY media_avaliacoes DESC;
+        """
+    elif criterio == 'todos':  # Exibir todos os vereadores com todos os critérios relevantes
+        query = """
+             SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio,
+               COALESCE(ROUND(AVG(a.nota), 2), 'N/A') as media_avaliacoes,  -- Média de avaliações
+               COALESCE(COUNT(p.ver_id), 0) AS qtd_proposicoes,  -- Quantidade de proposições
+               COALESCE(ROUND((SUM(a2.presenca) * 100.0) / (SUM(a2.presenca) + SUM(a2.faltas) + SUM(a2.justif)), 2), 0) as percentual_presenca,  -- Percentual de presença
+               COALESCE(COUNT(vc.ver_id), 0) AS total_comissoes  -- Total de comissões
+        FROM vereadores v
+        LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
+        LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
+        LEFT JOIN assiduidade a2 ON v.ver_id = a2.ver_id
+        LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
+        GROUP BY v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio  -- Incluindo dados pessoais no GROUP BY
+        ORDER BY media_avaliacoes DESC, qtd_proposicoes DESC, percentual_presenca DESC, total_comissoes DESC;
+    """
+
+
+
+    elif criterio == 'patrimonio':  # Vai exibir o patrimônio dos vereadores em ordem decrescente
+     query = """
+        SELECT v.ver_id, v.ver_nome, v.ver_partido, v.ver_foto, v.ver_patrimonio
+        FROM vereadores v
+        ORDER BY v.ver_patrimonio DESC;
+    """
+
+    else:
+        return jsonify({"error": "Critério inválido"}), 400
+
+    # Conectar ao banco de dados e executar a query
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+
+    # Substituir valores `None` por valores padrão
+    for item in resultado:
+        item['media_avaliacoes'] = item.get('media_avaliacoes', 'N/A')  # Estático como 'N/A' se não houver avaliação
+        item['ver_partido'] = item.get('ver_partido', '')  # Partido vazio se não houver
+        item['ver_foto'] = item.get('ver_foto', 'caminho/padrao.jpg')  # Caminho padrão para a foto se ausente
+
+    cursor.close()
+    connection.close()
+
+    return jsonify(resultado)
 
 @app.route('/vereadores')
 def vereadores():
@@ -273,6 +386,7 @@ async def pagina_vereador(vereador_id):
             )
             
             lista_extrato_votacao = extratoVotacaoListaToObj(extrato_votacao)
+            temas_unicos = sorted(set(item['tema'] for item in lista_extrato_votacao))
 
             end_time = time.time()
             # Calculate duration
@@ -319,7 +433,8 @@ async def pagina_vereador(vereador_id):
                 chart_html=chart_html,
                 avaliacoes=avaliacoes,
                 avaliacao=avaliacao,
-                lista_extrato_votacao=lista_extrato_votacao
+                lista_extrato_votacao=lista_extrato_votacao,
+                temas=temas_unicos
             )
 
 def extratoVotacaoListaToObj(extrato_votacao):
@@ -847,65 +962,6 @@ def atualiza_vereadores():
     connection.close()
 
     return redirect(request.referrer)
-
-@app.route('/ranking')  
-def ranking():
-    return render_template('filtroranking.html')
-
-@app.route('/filtrar/<criterio>')
-def filtrar_ranking(criterio):
-    if criterio == 'proposicoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, COUNT(p.ver_id) AS qtd_proposicoes,
-                   COUNT(CASE WHEN p.tipo = 'Requerimento' THEN 1 END) as requerimentos,
-                   COUNT(CASE WHEN p.tipo = 'Moção' THEN 1 END) as mocoes,
-                   COUNT(CASE WHEN p.tipo = 'Projeto de Lei' THEN 1 END) as projetos_lei
-            FROM vereadores v
-            LEFT JOIN proposicoes p ON v.ver_id = p.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY qtd_proposicoes DESC;
-        """
-    elif criterio == 'assiduidade':
-        query = """
-            SELECT v.ver_id, v.ver_nome, 
-                   SUM(a.presenca) as total_presencas,
-                   SUM(a.faltas) as total_faltas,
-                   SUM(a.justif) as total_justificadas,
-                   ROUND((SUM(a.presenca) * 100.0) / (SUM(a.presenca) + SUM(a.faltas) + SUM(a.justif)), 2) as percentual_presenca
-            FROM vereadores v
-            LEFT JOIN assiduidade a ON v.ver_id = a.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY percentual_presenca DESC;
-        """
-    elif criterio == 'comissoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, COUNT(vc.ver_id) AS total_comissoes,
-                   GROUP_CONCAT(DISTINCT c.nome SEPARATOR ', ') as comissoes
-            FROM vereadores v
-            LEFT JOIN vereadores_comissoes vc ON v.ver_id = vc.ver_id
-            LEFT JOIN comissoes c ON vc.comissao_id = c.id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY total_comissoes DESC;
-        """
-    elif criterio == 'avaliacoes':
-        query = """
-            SELECT v.ver_id, v.ver_nome, 
-                   COUNT(a.id) as total_avaliacoes,
-                   ROUND(AVG(a.nota), 2) as media_avaliacoes
-            FROM vereadores v
-            LEFT JOIN avaliacao a ON v.ver_id = a.ver_id
-            GROUP BY v.ver_id, v.ver_nome
-            ORDER BY media_avaliacoes DESC;
-        """
-    
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    cursor.execute(query)
-    resultado = cursor.fetchall()
-    cursor.close()
-    connection.close()
-
-    return jsonify(resultado)
 
 # BUSCA AS INFORMAÇÕES DE UM VEREADOR NO SITE DA CAMARA
 def get_vereadores(id):

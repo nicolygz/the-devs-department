@@ -94,16 +94,59 @@
                 </div>
             </div>
         </div>
-        <div id="votações">
-            {% for votacao in lista_extrato_votacao %}
-            <div id="cards">
-                {{ votacao['id_prop']}}
-                {{ votacao['num_pl']}}
-                {{ votacao['ano_pl']}}
-                {{ votacao['presidente']}}
-                {{ votacao['ementa']}}
+        <div id="votações" class="flex flex-col border border-gray-300 rounded p-2">
+            <div class="p-2 rounded text-center text-2xl font-black">
+                COMO VOTOU EM QUESTÕES-CHAVE:
             </div>
-            {% endfor %}
+            {% for tema in temas %}
+            <div class="space-y-4 my-2">
+                <div id="cards" style="color: #2a4b91;" class="text-2xl text-center font-black">
+                    {{ tema }}
+                </div>
+                <div class="space-y-2 flex flex-col justify-start gap-2 relative">
+                    {% for votacao in lista_extrato_votacao %}
+                    {% if votacao['tema'] == tema %}
+                    <div class="w-full h-full px-2 py-4 border border-gray-300 rounded relative">
+                        <a href="/proposicoes/{{ votacao['id_prop'] }}">
+                            <div class="grid grid-cols-12 items-center gap-2">
+                                <!-- Coluna do Voto ocupando aproximadamente 20% -->
+                                <div class="col-span-2">
+                                    <span class="w-full text-center border text-md rounded p-1 block
+                                        {% if votacao['voto'] == 'Favorável' %} bg-green-200
+                                        {% elif votacao['voto'] == 'Contrário' %} bg-red-200
+                                        {% elif votacao['voto'] == 'Ausente' %} bg-yellow-200
+                                        {% elif votacao['voto'] == 'Voto Secreto' %} bg-gray-300
+                                        {% elif votacao['voto'] == 'Voto secreto' %} bg-gray-300
+                                        {% elif votacao['voto'] == 'Votação Secreta' %} bg-gray-300
+                                        {% else %} bg-white
+                                        {% endif %}
+                                        hover:bg-opacity-80
+                                    ">
+                                        {{ votacao['voto'] }}
+                                    </span>
+                                </div>
+                            
+                                <!-- Coluna de Proposição e Ementa ocupando aproximadamente 80% -->
+                                <div class="col-span-10 space-y-2">
+                                    <div class="flex flex-row justify-between">
+                                        <p class="text-lg font-black">Proposição {{votacao['num_pl']}}/{{votacao['ano_pl']}}</p>
+                                        <p class="text-lg font-black">Presidente: {{votacao['presidente']}}</p>
+                                        <p class="text-lg font-black">Id: {{votacao['id_prop']}}</p>
+                                    </div>
+                                    <p class="text-sm">
+                                        {{ votacao['ementa'] }}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        
         </div>
         
         <div id="propostas" class="flex flex-col md:flex-row my-4 gap-4 max-h-[400px] min-h-[200px] overflow-auto">
@@ -231,7 +274,6 @@
         const id_vereador = document.getElementById("idVereador").value;
         const nome = document.getElementById("nome").value;
         const comentario = document.getElementById("comentario").value;
-        console.log(comentario)
     
         if (!nota) {
             alert("Por favor, selecione uma nota para o vereador.");

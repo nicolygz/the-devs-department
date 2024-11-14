@@ -1,4 +1,3 @@
-
 .filtro {
   display: flex;
   flex-wrap: wrap;
@@ -17,8 +16,10 @@
   border: 1px solid #e2e4e4;
   color: #000000;
   width: 55%;
-  height: 1.875rem;
+  height: 2.5rem;
   padding-left: 0.625rem;
+  display: flex;
+  align-items: center;
 }
 
 .filtro-bf {
@@ -41,7 +42,7 @@
 }
 
 
-.btn-buscar, .btn-filtrar, .btn-tipo {
+.btn-buscar, .btn-tipo {
   padding: 0.625rem 1.25rem;
   border: none;
   border-radius: 6.25rem;
@@ -56,6 +57,9 @@
   font-size: 0.85rem;
   color: #000000;
   box-shadow: 0px 0px 0px transparent;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .filtro-flex {
@@ -91,8 +95,9 @@
 #data-inicio, #data-fim {
   border: 1px solid #e2e4e4;
   border-radius: 6.25rem;
-  height: 2rem;
+  height: 2.5rem;
   width: 10rem;
+  padding: 0.625rem;
 }
 
 .break {
