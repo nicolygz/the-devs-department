@@ -284,7 +284,7 @@ def avaliacoes_lista_to_obj(avaliacoes_vereador):
         }
         listaNotas.append(avaliacao[2])
         lista.append(obj)
-    avg = sum(listaNotas)/ len(listaNotas)
+    avg = round(sum(listaNotas)/ len(listaNotas), 1)
     return lista, avg
 
   
