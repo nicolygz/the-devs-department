@@ -102,9 +102,6 @@ def vereadores():
     # Pass the vereadores data to the template
     return render_template("lista-vereadores.html", vereadores = vereadores)
 
-@app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
-
-
 # Funções para a verificação do texto
 def aliaseTxt(texto):
     substituicoes = {
@@ -156,7 +153,15 @@ def AddAvaliacaoNoBancoDeDados(nome, nota, comentario, ver_id):
     cursor.close()
     connection.close()
 
-
+def  getavaliacaoesByvereadorId (ver_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute('SELECT*FROM avaliacao WHERE ver_id=%',(ver_id))
+    avalia=cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return avalia
+  
 @app.route('/vereadores/<int:vereador_id>', methods=['GET', 'POST'])
 async def pagina_vereador(vereador_id):
 
@@ -170,13 +175,15 @@ async def pagina_vereador(vereador_id):
         # Validar o comentário
         # if tem_palavrao(json_data['nome'], json_data['comentario']):
         #      return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
-        if verificaTexto(json_data['nome']) == None or verificaTexto(json_data['comentario']) == None:
+        nome = verificaTexto(json_data^['nome'])
+        comentario = verificaTexto(json_data['comentario'])
+        if nome == None or comentario == None:
             return jsonify({"message": "Comentário inválido, contém palavrão!"}), 403
         else:
             # Chamar uma função para adicionar no banco de dados
             if AddAvaliacaoNoBancoDeDados(json_data['nome'], json_data['nota'], json_data['comentario'], vereador_id):
                 # Buscar as avaliações do vereador no banco de dados
-                avaliacoes = get_avaliacoes_by_vereador_id(json_data['id_vereador'])
+                avalia =  getavaliacaoesByvereadorId(json_data['id_vereador'])
                 
                 # Formatar a resposta com a lista de avaliações
                 avalicoes_json = [avaliacao.to_dict() for avaliacao in avaliacoes]
