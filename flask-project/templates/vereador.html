@@ -114,10 +114,10 @@
                                     <span class="w-full text-center border text-md rounded p-1 block
                                         {% if votacao['voto'] == 'Favorável' %} bg-green-200
                                         {% elif votacao['voto'] == 'Contrário' %} bg-red-200
-                                        {% elif votacao['voto'] == 'Ausente' %} bg-yellow-200
-                                        {% elif votacao['voto'] == 'Voto Secreto' %} bg-gray-300
-                                        {% elif votacao['voto'] == 'Voto secreto' %} bg-gray-300
-                                        {% elif votacao['voto'] == 'Votação Secreta' %} bg-gray-300
+                                        {% elif votacao['voto'] == 'Ausente' %} bg-gray-300
+                                        {% elif votacao['voto'] == 'Voto Secreto' %} bg-yellow-200
+                                        {% elif votacao['voto'] == 'Voto secreto' %} bg-yellow-200
+                                        {% elif votacao['voto'] == 'Votação Secreta' %} bg-yellow-200
                                         {% else %} bg-white
                                         {% endif %}
                                         hover:bg-opacity-80
