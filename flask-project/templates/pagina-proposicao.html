@@ -1,25 +1,34 @@
 {% extends 'base.html' %}
 
-{% block extra_css%} 
+{% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='pagProp.css') }}">
-<link rel="stylesheet" href="../static/pagProp.css">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block title %}Proposições{% endblock %}
 
 {% block content %}
-    <main class="propositions">
-        <a href="/proposicoes" class="backAnc">voltar</a>
-        <h1 class="PropTitle">PROPOSIÇÃO {{ proposicao['id_prop']}}/{{ proposicao['ano'] }}</h1>
-        <section class="ProposicaoItem">
-            <a href="/vereador/{{ proposicao['autorId'] }}"><h3 class="Author">Autor: {{ nome_vereador }}</h3></a>
-            <section class="ProposicaoInfos">
-                <section class="PropDetails"><h3>Situação Atual: </h3> <p>{{proposicao['situacao']}}</p></section>
-                <section class="PropDetails"><h3>Data: </h3> <p>{{proposicao['data']}}</p></section>
+<main class="propositions flex flex-col items-center justify-center w-full gap-12 mt-12">
+    <a href="/proposicoes" class="backAnc self-start ml-32 mt-4 text-lg font-bold text-white bg-blue-900 px-5 py-2 rounded-3xl shadow-md border border-black hover:bg-white hover:text-blue-800 border border-blue-800 transition">voltar</a>
+    <h1 class="PropTitle text-3xl font-bold text-blue-900">PROPOSIÇÃO {{ proposicao['id_prop']}}/{{ proposicao['ano'] }}</h1>
+    <section class="ProposicaoItem border border-gray-300 rounded-xl p-5 w-2/3 bg-white shadow-lg">
+        <a href="/vereador/{{ proposicao['autorId'] }}" class="text-lg font-semibold text-blue-900 hover:underline">
+            <h3 class="Author">Autor: {{ nome_vereador }}</h3>
+        </a>
+        <p class="text-lg font-bold">{{proposicao['tipo']}}: {{proposicao['numero']}}/{{proposicao['ano']}}</p>
+        <section class="ProposicaoInfos flex justify-between mt-4">
+            <section class="PropDetails flex items-center gap-4 text-lg">
+                <h3 class="font-semibold">Situação Atual:</h3> 
+                <p class="border border-gray-300 rounded p-1 py-0 bg-green-200">{{proposicao['situacao']}}</p>
             </section>
-            <section class="ProposicaoDesc">
-                <p>{{ proposicao['assunto'] }}</p>
+            <section class="PropDetails flex items-center gap-4 text-lg">
+                <h3 class="font-semibold">Data:</h3> 
+                <p>{{proposicao['data']}}</p>
             </section>
         </section>
-    </main>
+        <section class="ProposicaoDesc mt-4 text-justify">
+            <p>{{ proposicao['assunto'] }}</p>
+        </section>
+    </section>
+</main>
 {% endblock %}

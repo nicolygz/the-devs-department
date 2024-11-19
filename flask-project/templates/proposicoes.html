@@ -35,12 +35,20 @@
       </div>
       <div class="flex flex-row justify-between">
         
-        <p>{{prop[6]}}</p>
-        <p>{{prop[5]}}</p>
+        <p class="border border-gray-300 rounded p-2 bg-green-200">{{prop[6]}}</p>
+        
+        <p>
+          <span class="font-semibold mr-3">Data:</span> 
+          {{prop[5]}}</p>
       </div>
     </div>
     <div class= "col-span-2 flex justify-center items-center">
-      <btn href="" class="p-2 border border-gray-300 bg-blue-900 text-white rounded cursor-pointer">Saiba Mais</btn>
+
+      <section class="descricao">
+        <a href="/proposicoes/{{ prop[4] }}" class="link-pagProp">
+          <btn href="" class="backAnc self-start ml-32 mt-4 text-lg font-bold text-white bg-blue-900 px-5 py-2 rounded-3xl shadow-md border border-black hover:bg-white hover:text-blue-800 border border-blue-800 transition ">Saiba Mais</btn>
+        </a>
+      </section>
     </div>
   </div>
   {% endfor %}
