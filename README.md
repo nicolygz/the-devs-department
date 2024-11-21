@@ -94,8 +94,8 @@ Você pode acessar o [PDF do backlog](misc/backlog.pdf) ou consultá-lo na pasta
 
 | Função           | Nome                  | Links                                                                                                                                      |  
 |-------------------|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------|  
-| **Product Owner** | Pedro Alves           | [LinkedIn](https://www.linkedin.com/in/pedro-alves-579a93140/) • [GitHub](https://github.com/pphvaz)                                       |  
-| **Scrum Master**  | Nicoly Guedes         | [LinkedIn](https://www.linkedin.com/in/nicoly-guedes-dev/) • [GitHub](https://github.com/nicolygz)                                         |  
+| **Scrum Master** | Pedro Alves           | [LinkedIn](https://www.linkedin.com/in/pedro-alves-579a93140/) • [GitHub](https://github.com/pphvaz)                                       |  
+| **Product Owner**  | Nicoly Guedes         | [LinkedIn](https://www.linkedin.com/in/nicoly-guedes-dev/) • [GitHub](https://github.com/nicolygz)                                         |  
 | **Dev Team**      | Guilherme Almeida     | [LinkedIn](https://www.linkedin.com/in/guilherme-almeida-profile/) • [GitHub](https://github.com/AlmdGuilherme)                            |  
 | **Dev Team**      | Gustavo Almeida       | [LinkedIn](https://www.linkedin.com/in/gustavo-almeida-camargo/) • [GitHub](https://github.com/GustavoAC0802)                              |  
 | **Dev Team**      | Pedro Martins         | [LinkedIn](https://www.linkedin.com/in/pedro-henrique-martins-55a0752a4/) • [GitHub](https://github.com/pedro-h-martins)                   |  
