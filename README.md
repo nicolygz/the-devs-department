@@ -84,7 +84,7 @@ O projeto integra conhecimentos aprendidos em sala, incluindo:
 
 Você pode acessar o [PDF do backlog](misc/backlog.pdf) ou consultá-lo na pasta [misc](/misc) deste repositório.  
 
-![Evolução do Projeto](misc/imagens/evoluçãoo.png)  
+![Evolução do Projeto](misc/imagens/mvp.png)  
 
 ---
 
