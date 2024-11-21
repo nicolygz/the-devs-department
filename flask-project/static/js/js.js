@@ -1,14 +1,4 @@
-let buttons = document.querySelectorAll(".btn-tipo");
-
-document.addEventListener("click", function(evt) {
-
-  if (evt.target.classList.contains("btn-tipo")) {
-
-    evt.target.classList.toggle("ativo");
-    
-  }
-});
- const config = {
+const config = {
                     type: 'bar',
                     data: {
                         labels: ['10', '30', '50', '75', '100', '130'],

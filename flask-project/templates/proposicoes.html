@@ -1,151 +1,157 @@
-{% extends 'base.html' %} 
-{% block extra_css%}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='listProp.css') }}"
-/>
-<link rel="stylesheet" href="../static/listProp.css" />
-{% endblock %} 
-{% block title %}Lista de Proposições{% endblock %} {% block
-content %}
+{% extends 'base.html' %}
+
+{% block title %}Lista de Proposições{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='filtroproposicoes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='respofiltroproposicoes.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='listProp.css') }}">
+<link rel="stylesheet" href="../static/listProp.css">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
 <main class="list-prop">
   <h1 class="list-title">PROPOSIÇÕES APRESENTADAS</h1>
   <p class="pag-descricao">
     Tenha uma visão geral do desempenho dos vereadores, faltas no período e
     proposições apresentadas
   </p>
-  <section class="navBar">{% block filtro %} {% endblock %}</section>
-    {% for prop in proposicoes %}
-    <section class="prop-infos hover:bg-gray-200">
-      <section class="proposicao">
-          <section class="detalhes-prop title">
-            <h4>PROPOSIÇÃO</h4>
-            <p>n°{{prop[4]}}/</p><p>{{prop[5].strftime('%Y')}}</p>
-          </section>
-          <section class="detalhes-prop title">
-            <h4>TEMA:</h4>
-            {% if prop[9] == '' or prop[9] == 'Sem tema'%}
-            <p>-</p>
-            {% else %}
-            <p>{{prop[9]}}</p>
-            {% endif %}
-          </section>
-          <section class="detalhes-prop situation-aprovada">
-            <h4>SITUAÇÃO ATUAL:</h4>
-            <p>{{prop[6]}}</p>
-          </section>
-          <section class="detalhes-prop title">
-            <h4>TIPO:</h4>
-            <p>{{prop[7]}}</p>
-        </section>
-        <section class="detalhes-prop date">
-          <h4>DATA:</h4>
-          <p>{{prop[5].strftime('%d/%m/%Y')}}</p>
-        </section>
-      </section>
+  <section class="navBar">
+    {% include 'filtroproposicoes.html' %}
+  </section>
+  <div class="space-y-4" style="margin: 0 80px">
+  {% for prop in proposicoes %}
+  <div class="grid grid-cols-12 border border-gray-300 rounded p-2 w-full ">
+    <div class="space-y-4 col-span-10">
+      <div class="flex flex-row justify-between">
+        <p>{{prop[7]}}: {{prop[11]}}/{{prop[10]}}</p> 
+        <div class="flex-1 flex justify-center"> 
+          <p>{{prop[9]}}</p>
+        </div>
+      </div>
+      <div>
+        <p>{{prop[1]}}</p>
+      </div>
+      <div class="flex flex-row justify-between">
+        
+        <p class="border border-gray-300 rounded p-2 bg-green-200">{{prop[6]}}</p>
+        
+        <p>
+          <span class="font-semibold mr-3">Data:</span> 
+          {{prop[5]}}</p>
+      </div>
+    </div>
+    <div class= "col-span-2 flex justify-center items-center">
+
       <section class="descricao">
         <a href="/proposicoes/{{ prop[4] }}" class="link-pagProp">
-          <p class="descricao-prop">
-            {{prop[1]}}
-          </p>
+          <btn href="" class="backAnc self-start ml-32 mt-4 text-lg font-bold text-white bg-blue-900 px-5 py-2 rounded-3xl shadow-md border border-black hover:bg-white hover:text-blue-800 border border-blue-800 transition ">Saiba Mais</btn>
         </a>
       </section>
-    </section>
-    {% endfor %}
-  
+    </div>
+  </div>
+  {% endfor %}
+  </div>
   <!-- Pagination Links -->
-<div class="mt-4 flex justify-center mb-10">
-  <nav aria-label="Pagination">
-    <ul class="inline-flex items-center space-x-2">
+  <div class="mt-4 flex justify-center mb-10">
+    <nav aria-label="Pagination">
+      <ul class="inline-flex items-center space-x-2">
 
-      <!-- Previous Button -->
-      {% if page > 1 %}
+        <!-- Previous Button -->
+        {% if page > 1 %}
         {% if page == 2 %}
-          <!-- Active "Previous" Button -->
-          <a href="?page={{ page - 1 }}" class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
-            « 
+        <!-- Active "Previous" Button -->
+        <a href="{{ url_for('proposicoes', page=page-1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+          class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
+          «
+        </a>
+        <li>
+          <a href="{{ url_for('proposicoes', page=1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+            class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
+            1
           </a>
-          <li>
-            <a href="?page={{ 1 }}" class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
-              1
-            </a>
-          </li>
+        </li>
         {% else %}
-          <!-- Active "Previous" Button -->
-          <a href="?page={{ page - 1 }}" class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
-            « 
+        <!-- Active "Previous" Button -->
+        <a href="{{ url_for('proposicoes', page=page-1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+          class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 bg-white hover:bg-gray-200">
+          «
+        </a>
+        <li>
+          <a href="{{ url_for('proposicoes', page=1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+            class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
+            1
           </a>
-          <li>
-            <a href="?page={{ 1 }}" class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
-              1
-            </a>
-          </li>
-          <li>
-            <span class="px-4 py-2 text-black bg-white">...</span>
-          </li>
+        </li>
+        <li>
+          <span class="px-4 py-2 text-black bg-white">...</span>
+        </li>
         {% endif %}
-      {% else %}
+        {% else %}
         <!-- Inactive "Previous" Button -->
         <span class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-400 bg-gray-100 cursor-not-allowed">
           «
         </span>
-        
-      {% endif %}
-      <!-- Page Numbers -->
-      {% for p in range(1, total_pages + 1) %}
+
+        {% endif %}
+        <!-- Page Numbers -->
+        {% for p in range(1, total_pages + 1) %}
         {% if p == page and p != total_pages %}
-          {% if page == total_pages - 1%}
-            <li>
-              <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
-            </li>
-            <li>
-              <a href="?page={{ page + 1 }}" class="px-4 py-2 border bg-gray-300 text-black bg-white hover:bg-gray-200">
-                {{ page + 1 }}
-              </a>
-            </li>
-          {% else %}
-          <li>
-            <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
-          </li>
-          <li>
-            <a href="?page={{ page + 1 }}" class="px-4 py-2 border bg-gray-300 text-black bg-white hover:bg-gray-200">
-              {{ page + 1 }}
-            </a>
-          </li>
-          <li>
-            <span class="px-4 py-2 text-black bg-white">...</span>
-          </li>
-          <li>
-            <a href="?page={{total_pages}}" class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
-              {{total_pages}}
-            </a>
-          </li>
-        {% endif %}
-        {% else %}
-          {% if p == total_pages and p == page %}
-          <li>
-            <a href="?page={{ p }}" class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">
-              {{p}}
-            </a>
-          </li>
-          <li>
-            <span class="px-4 py-2.5 border border-gray-300 rounded-r-md text-gray-400 bg-gray-100 cursor-not-allowed">
-              »
-            </span>
-          </li>
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      <!-- Next Button -->
-      {% if page < total_pages %}
+        {% if page == total_pages - 1%}
         <li>
-          <a href="?page={{ page + 1 }}" class="px-4 py-2.5 border border-gray-300 rounded-r-md text-black bg-white hover:bg-gray-200">
-            »
+          <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
+        </li>
+        <li>
+          <a href="{{ url_for('proposicoes', page=page+1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+            class="px-4 py-2 border bg-gray-300 text-black bg-white hover:bg-gray-200">
+            {{ page + 1 }}
           </a>
         </li>
-      {% endif %}
-    </ul>
-  </nav>
-</div>
+        {% else %}
+        <li>
+          <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
+        </li>
+        <li>
+          <a href="{{ url_for('proposicoes', page=page+1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+            class="px-4 py-2 border bg-gray-300 text-black bg-white hover:bg-gray-200">
+            {{ page + 1 }}
+          </a>
+        </li>
+        <li>
+          <span class="px-4 py-2 text-black bg-white">...</span>
+        </li>
+        <li>
+          <a href="{{ url_for('proposicoes', page=total_pages, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+            class="px-4 py-2 border border-gray-300 text-black bg-white hover:bg-gray-200">
+            {{total_pages}}
+          </a>
+        </li>
+        {% endif %}
+        {% else %}
+        {% if p == total_pages and p == page %}
+        <li>
+          <span class="px-4 py-2 border border-gray-300 bg-blue-900 text-white">{{ p }}</span>
+        </li>
+        <li>
+          <span class="px-4 py-2.5 border border-gray-300 rounded-r-md text-gray-400 bg-gray-100 cursor-not-allowed">
+            »
+          </span>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- Next Button -->
+        {% if page < total_pages %} <li>
+          <a href="{{ url_for('proposicoes', page=page+1, busca=request.args.get('busca',''), tipos=request.args.getlist('tipos'), data_inicio=request.args.get('data_inicio',''), data_fim=request.args.get('data_fim','')) }}"
+            class="px-4 py-2.5 border border-gray-300 rounded-r-md text-black bg-white hover:bg-gray-200">
+            »
+          </a>
+          </li>
+          {% endif %}
+      </ul>
+    </nav>
+  </div>
 </main>
-{% endblock %}
+<script src="{{ url_for('static', filename='js/filtroproposicoes.js') }}"></script>
+{% endblock %} 
