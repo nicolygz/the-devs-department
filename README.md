@@ -61,7 +61,7 @@ O projeto integra conhecimentos aprendidos em sala, incluindo:
 - Avaliação pública do trabalho legislativo.  
 
 **Demonstração:**  
-[![Demonstração](misc/imagens/sprint3.png)](https://youtu.be/o4FedTRK9qg)  
+[![Demonstração](misc/imagens/sprint3.png)](https://youtu.be/tFMLtHVunYI?si=ox1gBWzMg7QMXPEP)  
 
 ---
 
@@ -111,7 +111,7 @@ Você pode acessar o [PDF do backlog](misc/backlog.pdf) ou consultá-lo na pasta
 - [Jira do Projeto](https://guedesdeabreunicoly.atlassian.net/jira/software/projects/SCRUM/boards/1)  
 - [Vídeo Sprint 1](https://www.youtube.com/watch?v=Mvr1f5ndZ1o)  
 - [Vídeo Sprint 2](https://www.youtube.com/watch?v=o4FedTRK9qg)
- - [Vídeo Sprint 3]()
+ - [Vídeo Sprint 3](https://youtu.be/tFMLtHVunYI?si=ox1gBWzMg7QMXPEP)
 
 
 ---
