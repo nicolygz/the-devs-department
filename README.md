@@ -61,7 +61,7 @@ O projeto integra conhecimentos aprendidos em sala, incluindo:
 - Avaliação pública do trabalho legislativo.  
 
 **Demonstração:**  
-[![Demonstração](misc/imagens/demonstracao.jpg)](https://youtu.be/o4FedTRK9qg)  
+[![Demonstração](misc/imagens/sprint3.png)](https://youtu.be/o4FedTRK9qg)  
 
 ---
 
