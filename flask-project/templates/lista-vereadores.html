@@ -10,13 +10,14 @@
 
 {% block content %}
 <div styles="padding-top: 80px;" class="content-flex">
-    <form class="filtro-container">
+    <form class="filtro-container" method="get" action="{{ url_for('vereadores') }}">
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="Busque o vereador por nome, partido ou temas...">
-            <i class="fas fa-filter filter-icon"></i> <!-- Ícone de filtro -->
+            <input type="text" name="busca" class="search-input" placeholder="Busque o vereador por nome ou partido..."
+                value="{{ filtros.busca }}">
+            <i class="fas fa-filter filter-icon"></i> <!-- Ícone do Filtro -->
         </div>
-        <button type="button" class="custom-button">Pesquisar</button>
+        <button type="submit" class="custom-button">Pesquisar</button>
     </form>
 </div>
 <div class="resultados-encontrados">{{ vereadores|length }} resultados encontrados</div>

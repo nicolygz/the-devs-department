@@ -199,21 +199,47 @@ def filtrar_ranking(criterio):
 
 @app.route('/vereadores')
 def vereadores():
-    
-   # Get a database connection
     connection = get_db_connection()
     cursor = connection.cursor()
 
-    # Execute a query to fetch vereadores
-    cursor.execute('SELECT * FROM vereadores')
+    # Obter parâmetros de filtro
+    busca = request.args.get('busca', '').strip()
+
+    # Construir a query base
+    query = '''
+        SELECT DISTINCT v.* 
+        FROM vereadores v 
+        WHERE 1=1
+    '''
+    params = []
+
+    # Adicionar filtros condicionais
+    if busca:
+        termos = busca.split()
+        if len(termos) > 1:
+            nome = termos[0]
+            partido = termos[1]
+            query += ' AND (v.ver_nome LIKE %s AND v.ver_partido LIKE %s)'
+            params.extend([f'%{nome}%', f'%{partido}%'])
+        else:
+            query += ' AND (v.ver_nome LIKE %s OR v.ver_partido LIKE %s)'
+            params.extend([f'%{busca}%', f'%{busca}%'])
+
+    # Ordenar por nome
+    query += ' ORDER BY v.ver_nome'
+
+    # Executar query
+    cursor.execute(query, params)
     vereadores = cursor.fetchall()
 
-    # Clean up
     cursor.close()
     connection.close()
 
-    # Pass the vereadores data to the template
-    return render_template("lista-vereadores.html", vereadores = vereadores)
+    return render_template("lista-vereadores.html", 
+                         vereadores=vereadores,
+                         filtros={
+                             'busca': busca
+                         })
 
 # Funções para a verificação do texto
 def aliaseTxt(texto):
